@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* styles/globals.css */
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@100..900&display=swap');
+
+
+@layer components {
+    /* main */  
+    .main-container {
+      @apply  flex min-h-screen flex-1 flex-col w-screen z-0;
+    }
+
+    .img-darken {
+        transition: filter 0.3s ease-in-out;
+      }
+      
+      .img-darken:hover {
+        filter: brightness(0.6); /* Riduci la luminosità per scurire l'immagine */
+      }
+
+}

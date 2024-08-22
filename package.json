@@ -1,0 +1,50 @@
+{
+  "name": "folio",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@aws-sdk/credential-providers": "^3.616.0",
+    "@clerk/nextjs": "^4.21.15",
+    "@hookform/resolvers": "^3.9.0",
+    "@mongodb-js/zstd": "^1.2.0",
+    "@radix-ui/react-label": "^2.1.0",
+    "@radix-ui/react-select": "^2.1.1",
+    "@radix-ui/react-slot": "^1.1.0",
+    "@uploadthing/react": "^5.2.0",
+    "aws4": "^1.13.0",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.1",
+    "flowbite-react": "^0.10.1",
+    "kerberos": "^2.1.0",
+    "lucide-react": "^0.414.0",
+    "mongodb": "^6.8.0",
+    "mongodb-client-encryption": "^6.0.1",
+    "mongoose": "^8.5.1",
+    "next": "^13.4.10",
+    "react": "^18",
+    "react-dom": "^18",
+    "react-hook-form": "^7.52.1",
+    "realm-web": "^2.0.1",
+    "snappy": "^7.2.2",
+    "supports-color": "^9.4.0",
+    "tailwind-merge": "^2.4.0",
+    "tailwindcss-animate": "^1.0.7",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "autoprefixer": "^10.4.19",
+    "daisyui": "^4.12.10",
+    "postcss": "^8.4.39",
+    "tailwindcss": "^3.4.6",
+    "typescript": "^5"
+  }
+}
