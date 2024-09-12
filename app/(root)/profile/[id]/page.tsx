@@ -1,6 +1,6 @@
 import { currentUser } from "@clerk/nextjs";
-import { fetchUser, fetchUserPosts, fetchUserSavedBooks, saveBook } from "@/lib/actions/user.actions";
-import { UserPosts } from "@/components/post/UserPosts";
+import { fetchUser, fetchUserPosts, fetchUserSavedBooks } from "@/lib/actions/user.actions";
+
 
 async function page({ params }: { params: { id: string } }) {
     if (!params.id) return null;
@@ -42,6 +42,7 @@ async function page({ params }: { params: { id: string } }) {
 
     return totaleLike;
   }
+  {/**  <UserPosts userPosts={filterUserPostsData(userPosts.posts)} userSavedBooks={filterUserSavedBooks(userSavedBooks.savedBooks)} /> */}
     return(
         <div className="flex justify-center ">
         <div className="w-full relative h-full ">
@@ -54,7 +55,7 @@ async function page({ params }: { params: { id: string } }) {
               </div>
             </div>
               
-            <UserPosts userPosts={filterUserPostsData(userPosts.posts)} userSavedBooks={filterUserSavedBooks(userSavedBooks.savedBooks)} />
+          
           </div>
         </div>
       </div>
