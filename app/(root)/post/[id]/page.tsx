@@ -26,9 +26,9 @@ async function page({ params }: { params: { id: string } }) {
 
 
   return (
-    <div className="h-full flex-col flex justify-start items-center">
-      <section className="flex h-auto justify-center flex-col w-2/3">
-        <div className="grid w-full md:grid-cols-2 grid-cols-1 ">
+    <div className="h-full flex-col flex justify-start items-center ">
+      <section className="flex h-auto justify-center flex-col lg:w-2/3 w-full ">
+        <div className="grid w-full  md:grid-cols-2 grid-cols-1 ">
           <div className="bg-zinc-50 min-h-48 pt-6 p-5 border flex flex-col justify-between">
             <div>
               <p className="text-2xl">{post.book.title}</p>
@@ -39,7 +39,7 @@ async function page({ params }: { params: { id: string } }) {
               <p>{formattedDateTime} </p>
             </div>
           </div>
-          <div className="bg-zinc-100 md:row-span-2 min-h-48 flex justify-center items-center p-5 lg:p-0">
+          <div className="bg-gradient-to-b from-white to-zinc-200 md:row-span-2 min-h-48 flex justify-center items-center p-5 lg:p-0">
             <img src={post.image} alt="" className="w-auto h-64" />
           </div>
           {elements.map((element: any, index: number) => {
@@ -87,7 +87,7 @@ async function page({ params }: { params: { id: string } }) {
           })}
         </div>
       </section>
-      <section className="flex h-16 justify-center flex-row w-2/3 bg-slate-950 text-zinc-50 mt-10">
+      <section className="flex h-16 justify-center flex-row w-2/3 bg-slate-950 text-zinc-50 mt-10 mb-10">
         <div className="w-1/2 flex justify-center items-center hover:bg-slate-900  cursor-pointer ">
           <p className="font-fontMain lg:text-2xl text-md">Compra</p>
         </div>
