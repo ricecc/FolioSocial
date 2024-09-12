@@ -47,10 +47,10 @@ async function page({ params }: { params: { id: string } }) {
               return (
                 <div key={index} className="col-span-1  p-4 min-h-48 border flex justify-between flex-col ">
                   <div className="flex justify-center items-center min-h-24">
-                    <p className="font-fontMain">"{element.data.quote}"</p>
+                    <p className=" ">"{element.data.quote}"</p>
                   </div>
                   <div className="flex flex-row justify-between items-center">
-                    <span>page:12</span>
+                    <span >page:12</span>
                     <div className="flex fle-row">
                       <SaveToggle fromUserId={userInfo._id.toString()} type={"quote"} toElement={element.data._id.toString()}  isSaved={userInfo.quoteSaved.includes(element.data._id)}></SaveToggle>
                       <HeartToggle fromUserId={userInfo._id.toString()} type={"quote"} toElement={element.data._id.toString()} numLike={element.data.like.length} liked={userInfo.quoteLiked.includes(element.data._id)}></HeartToggle>

@@ -26,7 +26,7 @@ export default function RootLayout({
         <body className={inter.className}>
           <main className="flex flex-col relative ">
             <TopNavBar></TopNavBar>
-            <section className="main-container">
+            <section className="main-container font-fontNew">
               <EdgeStoreProvider>
                 {children}
               </EdgeStoreProvider>

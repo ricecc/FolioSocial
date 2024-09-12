@@ -4,7 +4,13 @@
 
 /* styles/globals.css */
 @import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 
+@layer base {
+  body {
+    @apply font-fontNew; /* Applica il font Montserrat al body */
+  }
+}
 
 @layer components {
     /* main */  
