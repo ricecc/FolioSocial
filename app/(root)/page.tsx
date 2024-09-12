@@ -6,7 +6,8 @@ import { currentUser } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import Post from "@/components/post/Post";
-import NewFeedPost from "@/components/post/NewFeedPost";
+
+import MainFeedSection from "@/components/Feed/MainFeedSection";
 export default async function Home() {
 
   let feed;
@@ -34,10 +35,10 @@ export default async function Home() {
 
   return (
     <>
-      <div className="h-full gap-x-7 sm:w-full sm:gap-x-3 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3   mx-auto  container mt-3 ">
+      <div className="h-full gap-x-7  grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3   mx-auto  container mt-3 ">
         {feed && feed.length > 0 ? (
           feed.map((post, index) => (
-            <NewFeedPost
+            <MainFeedSection
               isLiked={userInfo.postLiked.includes(post._id.toString())}
               index={index}
               postId={post._id.toString()}

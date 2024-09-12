@@ -4,24 +4,19 @@ import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
 
 import { Input } from "@/components/ui/input"
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardFooter,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card"
+
 interface AddQuoteProps {
     quote: string;
     setQuote: (quote: string) => void;
+    page:string,
+    setPage:(page:string) =>void;
     index: number;
     onRemove: (index: number) => void;
 }
-const Quote = ({ index, onRemove, quote, setQuote }: AddQuoteProps) => {
+const Quote = ({ index, onRemove, quote, setQuote,page,setPage }: AddQuoteProps) => {
 
     const [isConfirmed, setIsConfirmed] = useState<boolean>(false);
-    const [page, setPage] = useState<string>("")
+    
     function confirmquote(): void {
         setIsConfirmed(true)
     }

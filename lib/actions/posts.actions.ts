@@ -314,3 +314,72 @@ export async function removePostReview(postId: string, reviewToRemove: string, p
     throw new Error(`Error to update quote:${error.message}`)
   }
 }
+
+interface PropsLikeSave {
+  fromUserId: String,
+  toElement: String,
+  path: string,
+}
+export async function putLikeToPost({ fromUserId, toElement, path }: PropsLikeSave) {
+  console.log("Start putLike")
+  try {
+    // Connessione al database
+    connectToDB();
+
+    // Trova il post e aggiorna l'array dei "likes"
+    const updatedQuote = await Post.findByIdAndUpdate(
+      toElement,
+      { $addToSet: { like: fromUserId } }, // Usa $addToSet per evitare duplicati
+      { new: true, useFindAndModify: false } // Restituisce il documento aggiornato e utilizza l'opzione senza deprecare useFindAndModify
+    );
+
+    const updatedUser = await User.findByIdAndUpdate(
+      fromUserId,
+      { $addToSet: { postLiked: toElement } }, // Usa $addToSet per evitare duplicati
+      { new: true, useFindAndModify: false } // Restituisce il documento aggiornato e utilizza l'opzione senza deprecare useFindAndModify
+    );
+
+    if (!updatedQuote) {
+      throw new Error('Post to like not found');
+    }
+    if (!updatedUser) {
+      throw new Error('User faild')
+    }
+    revalidatePath(path)
+    return { success: true };
+  } catch (error: any) {
+    throw new Error(`Failed to put like: ${error.message}`);
+  }
+}
+
+export async function removeLikeToPost({ fromUserId, toElement, path }: PropsLikeSave) {
+  console.log("Start removeLike");
+  try {
+    // Connessione al database
+    connectToDB();
+
+    // Trova il post e aggiorna l'array dei "likes"
+    const updatedQuote = await Post.findByIdAndUpdate(
+      toElement,
+      { $pull: { like: fromUserId } }, // Usa $addToSet per evitare duplicati
+      { new: true, useFindAndModify: false } // Restituisce il documento aggiornato e utilizza l'opzione senza deprecare useFindAndModify
+    );
+
+    const updatedUser = await User.findByIdAndUpdate(
+      fromUserId,
+      { $pull: { postLiked: toElement } }, // Usa $addToSet per evitare duplicati
+      { new: true, useFindAndModify: false } // Restituisce il documento aggiornato e utilizza l'opzione senza deprecare useFindAndModify
+    );
+
+    if (!updatedQuote) {
+      throw new Error('Post to like not found');
+    }
+    if (!updatedUser) {
+      throw new Error('User faild')
+    }
+    revalidatePath(path)
+    return { success: true };
+  } catch (error: any) {
+    throw new Error(`Failed to remove like: ${error.message}`);
+  }
+}

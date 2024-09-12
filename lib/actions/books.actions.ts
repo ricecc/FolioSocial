@@ -1,6 +1,8 @@
 "use server"
+import { revalidatePath } from "next/cache";
 import Book from "../models/book.model";
 import Post from "../models/post.model";
+import User from "../models/user.model";
 import { connectToDB } from "../mongoose";
 
 
@@ -67,5 +69,53 @@ export async function getPostsByBookId(bookId:string){
     return posts;
   } catch (error:any) {
     throw new Error(`Failed to get Posts by book id: ${error.message}`);
+  }
+}
+
+interface Props {
+  userId: string,
+  bookId: string,
+  path: string
+}
+export async function saveBook({ userId, bookId,path }: Props) {
+  console.log("Start saveBook")
+  try {
+    await connectToDB();
+
+
+    // Trova l'utente
+    const user = await User.findByIdAndUpdate(
+      userId,
+      { $addToSet: { savedBooks: bookId } },  // Utilizza $addToSet per evitare duplicati
+      { new: true, useFindAndModify: false }  // Restituisce il documento aggiornato e utilizza l'opzione senza deprecare useFindAndModify
+    );
+
+    revalidatePath(path)
+    
+    return {success:true};
+
+
+  } catch (error: any) {
+    throw new Error(`Faild to save post: ${error.message}`)
+  }
+}
+
+export async function removeSavedBook({ userId, bookId,path }: Props) {
+  console.log("Start removeSavedBook")
+  try {
+    await connectToDB();
+
+    // Trova l'utente e rimuove bookId da savedBooks
+    const user = await User.findByIdAndUpdate(
+      userId,
+      { $pull: { savedBooks: bookId } },  // Utilizza $pull per rimuovere bookId
+      { new: true, useFindAndModify: false }  // Restituisce il documento aggiornato e utilizza l'opzione senza deprecare useFindAndModify
+    );
+
+    revalidatePath(path)
+    return user;
+
+  } catch (error: any) {
+    throw new Error(`Failed to remove book: ${error.message}`);
   }
 }

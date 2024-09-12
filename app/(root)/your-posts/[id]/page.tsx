@@ -16,6 +16,7 @@ async function page({ params }: { params: { id: string } }) {
  
   return (
     <>
+    <p>Con calma </p>
     </>
   )
 }

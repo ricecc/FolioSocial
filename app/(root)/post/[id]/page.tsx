@@ -3,7 +3,7 @@ import WantToRead from "@/components/saveButton/PostWantToRead";
 import HeartToggle from "@/components/ui/HeartToggle";
 import SaveToggle from "@/components/ui/SaveToggle";
 import { fetchPostById, fetchSimilarPosts } from "@/lib/actions/posts.actions";
-import { fetchUser, saveBook } from "@/lib/actions/user.actions";
+import { fetchUser } from "@/lib/actions/user.actions";
 import { currentUser } from "@clerk/nextjs";
 
 
@@ -52,8 +52,8 @@ async function page({ params }: { params: { id: string } }) {
                   <div className="flex flex-row justify-between items-center">
                     <span>page:12</span>
                     <div className="flex fle-row">
+                      <SaveToggle fromUserId={userInfo._id.toString()} type={"quote"} toElement={element.data._id.toString()}  isSaved={userInfo.quoteSaved.includes(element.data._id)}></SaveToggle>
                       <HeartToggle fromUserId={userInfo._id.toString()} type={"quote"} toElement={element.data._id.toString()} numLike={element.data.like.length} liked={userInfo.quoteLiked.includes(element.data._id)}></HeartToggle>
-                      <SaveToggle fromUserId={userInfo._id.toString()} type={"quote"} toElement={element.data._id.toString()} numLike={element.data.like.length} liked={userInfo.quoteSaved.includes(element.data._id)}></SaveToggle>
                     </div>
                   </div>
 
@@ -66,7 +66,7 @@ async function page({ params }: { params: { id: string } }) {
                   <p>{element.data.review}</p>
                   <div className="flex justify-end">
                     <div className="flex flex-row">
-                    <SaveToggle fromUserId={userInfo._id.toString()} type={"review"} toElement={element.data._id.toString()} numLike={element.data.like.length} liked={userInfo.reviewSaved.includes(element.data._id)}></SaveToggle>
+                    <SaveToggle fromUserId={userInfo._id.toString()} type={"review"} toElement={element.data._id.toString()}  isSaved={userInfo.reviewSaved.includes(element.data._id)}></SaveToggle>
                     <HeartToggle fromUserId={userInfo._id.toString()} type={"review"} toElement={element.data._id.toString()} numLike={element.data.like.length} liked={userInfo.reviewLiked.includes(element.data._id)}></HeartToggle>
                     </div>
                     
@@ -77,7 +77,8 @@ async function page({ params }: { params: { id: string } }) {
               return (
                 <div key={index} className="row-span-2 flex justify-center relative">
                   <ImageDialog imageSrc={element.data} />
-                  <div className="absolute bottom-3 right-3 bg-white rounded-full p-2">
+                  <div className="absolute bottom-3 right-3 bg-white rounded-full p-2 flex flex-row space-x-2">
+                  <SaveToggle fromUserId={userInfo._id.toString()} type={"picture"} toElement={element.data}  isSaved={userInfo.imageSaved.includes(element.data._id)}></SaveToggle>
                     <HeartToggle fromUserId={userInfo._id.toString()} type={"picture"} toElement={element.data} numLike={0} liked={userInfo.imageLiked.includes(element.data)} ></HeartToggle>
                   </div>
                 </div>
@@ -86,8 +87,8 @@ async function page({ params }: { params: { id: string } }) {
           })}
         </div>
       </section>
-      <section className="flex h-16 justify-center flex-row w-2/3 bg-slate-950 text-zinc-50">
-        <div className="w-1/2 flex justify-center items-center hover:bg-slate-900  cursor-pointer">
+      <section className="flex h-16 justify-center flex-row w-2/3 bg-slate-950 text-zinc-50 mt-10">
+        <div className="w-1/2 flex justify-center items-center hover:bg-slate-900  cursor-pointer ">
           <p className="font-fontMain text-2xl">Compra</p>
         </div>
         <div className="w-1/2 flex justify-center items-center  cursor-pointer" >

@@ -1,5 +1,8 @@
 'use client';
-import { putLikeToPost, putLikeToImage, putLikeToQuote, putLikeToReview, removeLikeToPost } from '@/lib/actions/user.actions';
+import { putLikeToPost, removeLikeToPost } from '@/lib/actions/posts.actions';
+import { putLikeToQuote, removeLikeToQuote } from '@/lib/actions/quote.actions';
+import { putLikeToReview, removeLikeToReview } from '@/lib/actions/review.actions';
+import { putLikeToImage, removeLikeToImage } from '@/lib/actions/user.actions';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 
@@ -22,11 +25,11 @@ const HeartToggle = ({ fromUserId, toElement,type, numLike, liked }: Props) => {
       if(type==="post")
         await removeLikeToPost({ fromUserId, toElement,path });
       if(type==="quote")
-        await putLikeToQuote({ fromUserId, toElement,path });
+        await removeLikeToQuote({ fromUserId, toElement,path });
       if(type==="review")
-        await putLikeToReview({ fromUserId, toElement,path });
+        await removeLikeToReview({ fromUserId, toElement,path });
       if(type==="picture")
-        await putLikeToImage({ fromUserId, toElement,path });
+        await removeLikeToImage({ fromUserId, toElement,path });
       setLikeCount(likeCount - 1);
     } else {
       if(type==="post")
@@ -44,7 +47,7 @@ const HeartToggle = ({ fromUserId, toElement,type, numLike, liked }: Props) => {
 
   return (
     <div onClick={handleClick} className="cursor-pointer object-contain">
-      {isClicked || liked ? (
+      {isClicked && liked ? (
         <div className="flex justify-center items-center flex-row space-x-5">
           <img
             src="/assets/heart-filled.svg"

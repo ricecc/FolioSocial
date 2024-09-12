@@ -1,5 +1,6 @@
 import React from 'react'
 import Post from '../post/Post'
+import Link from 'next/link'
 
 interface posts {
   id: string,
@@ -15,21 +16,18 @@ interface props {
 }
 const UserLibrary = ({ posts }: props) => {
   return (
-    <div className='flex columns-3 justify-center gap-6'>
+    <div className=' columns-1  lg:columns-4'>
       {posts.map((post: any) => (
-        <div className="w-40 md:w-52 h-auto mb-4 flex-col drop-shadow-2xl ">
+        <div className="w-44 md:w-52 h-auto mb-4 flex-col drop-shadow-2xl ">
           <div className="group relative ">
-            <figure>
-              <img src={post.image} className="transition-opacity duration-300 cursor-pointer  " alt={""} />
-            </figure>
-            <div className="absolute inset-0 bg-transparent transition-opacity duration-300 group-hover:bg-slate-950 group-hover:bg-opacity-50 cursor-pointer" >
-              <div className='absolute bottom-6 right-2 invisible group-hover:visible'>
-                <div className='flex justify-center items-center flex-row space-x-1'>
-                 
-                  <p className='text-white '>{}</p>
-                </div>
-              </div>
-            </div>
+
+
+
+            <Link href={`/your-posts/${post.id}`}>
+              <figure>
+                <img src={post.image} className="transition-opacity duration-300 cursor-pointer  " alt={""} />
+              </figure>
+            </Link>
           </div>
         </div>
       ))}

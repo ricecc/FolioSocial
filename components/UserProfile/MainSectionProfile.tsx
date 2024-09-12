@@ -13,13 +13,13 @@ interface posts {
     image: string
 }
 
-interface quoteLiked {
+interface quoteSaved {
     id: string,
     page: string,
     quote: string
 }
 
-interface reviewLiked {
+interface reviewSaved {
     id: string,
     title: string,
     review: string
@@ -34,21 +34,21 @@ interface savedBooks {
 
 interface MainSectionProps {
     posts: posts[],
-    quoteLiked: quoteLiked[],
-    reviewLiked: reviewLiked[],
+    quoteSaved: quoteSaved[],
+    reviewSaved: reviewSaved[],
     savedBooks: savedBooks[],
-    imageLiked: string[],
+    imageSaved: string[],
 
 }
 
-const MainSectionProfile = ({ posts, quoteLiked, reviewLiked, savedBooks, imageLiked }: MainSectionProps) => {
+const MainSectionProfile = ({ posts, quoteSaved, reviewSaved, savedBooks, imageSaved }: MainSectionProps) => {
     const [activeTab, setActiveTab] = useState<'library' | 'saved'>('library');
 
     const handleTabChange = (tab: 'library' | 'saved') => {
         setActiveTab(tab);
     };
     return (
-        <section className="flex flex-col w-full  h-screen flex items-center ">
+        <section className="flex flex-col w-full  h-auto flex items-center ">
             <div className='w-full flex justify-center items-center bg-slate-100  mb-16 '>
                 <div className="bg-slate-100 flex flex-row justify-center items-center space-x-5    ">
                     <div
@@ -68,16 +68,17 @@ const MainSectionProfile = ({ posts, quoteLiked, reviewLiked, savedBooks, imageL
                     >
                         <p>Saved</p>
                         <p className="bg-slate-950 text-xs text-white px-3 py-1 rounded-full">
-                            {savedBooks.length + reviewLiked.length + quoteLiked.length +imageLiked.length }
+                            {savedBooks.length + reviewSaved.length + quoteSaved.length + imageSaved.length}
                         </p>
                     </div>
                 </div>
             </div>
-            <div className='w-[1000px]  '>
-                {activeTab==="library"?(
-                    <UserLibrary posts={posts}></UserLibrary>
-                ):(
-                    <UserSaved quoteLiked={quoteLiked} reviewLiked={reviewLiked} savedBooks={savedBooks} imageLiked={imageLiked}></UserSaved>
+            <div className='lg:w-[1000px] w-auto '>
+                {activeTab === "library" ? (
+                        <UserLibrary posts={posts}></UserLibrary>
+                   
+                ) : (
+                    <UserSaved quoteSaved={quoteSaved} reviewSaved={reviewSaved} savedBooks={savedBooks} imageSaved={imageSaved}></UserSaved>
                 )}
             </div>
 

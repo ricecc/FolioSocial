@@ -1,7 +1,9 @@
 "use client"; 
 
+import { removeSavedBook, saveBook } from "@/lib/actions/books.actions";
+import { usePathname } from "next/navigation";
 import React, { useState, useEffect } from "react";
-import { saveBook, removeSavedBook } from "@/lib/actions/user.actions";
+
 
 interface SaveButtonProps {
     userId: string;
@@ -11,25 +13,19 @@ interface SaveButtonProps {
 
 const WantToRead = ({ userId, bookId, saved }:SaveButtonProps) => {
     const [isSaved, setIsSaved] = useState(saved);
-
-    useEffect(() => {
-        setIsSaved(saved);
-    }, [saved]);
-
+    const path = usePathname();
+    
     const handleSavePost = async (event: React.MouseEvent) => {
         event.stopPropagation();
-        try {
             if (isSaved) {
-                await removeSavedBook({ userId, bookId });
+                await removeSavedBook({ userId, bookId,path });
                 setIsSaved(false);
             } else {
                 
-                await saveBook({ userId, bookId });
+                await saveBook({ userId, bookId,path });
                 setIsSaved(true);
             }
-        } catch (error: any) {
-            console.error(`Failed to update save status: ${error.message}`);
-        }
+       
     };
 
     return (

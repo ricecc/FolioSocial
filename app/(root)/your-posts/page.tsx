@@ -30,16 +30,16 @@ async function Page() {
     ))
   }
 
-  function filterQuoteLiked(quoteLiked: any) {
-    return quoteLiked.map((quote: any) => ({
+  function filterQuoteLiked(quoteSaved: any) {
+    return quoteSaved.map((quote: any) => ({
       id: quote._id.toString(),
       page: quote.page,
       quote: quote.quote
     }))
   }
 
-  function filterReviewLiked(reviewLiked: any) {
-    return reviewLiked.map((review: any) => ({
+  function filterReviewLiked(reviewSaved: any) {
+    return reviewSaved.map((review: any) => ({
       id: review._id.toString(),
       title: review.title,
       review: review.review
@@ -73,10 +73,10 @@ async function Page() {
       </div>
       <MainSectionProfile
             posts={filterUserPosts(userData.posts)}
-            quoteLiked={filterQuoteLiked(userData.quoteLiked)}
-            reviewLiked={filterReviewLiked(userData.reviewLiked)}
+            quoteSaved={filterQuoteLiked(userData.quoteSaved)}
+            reviewSaved={filterReviewLiked(userData.reviewSaved)}
             savedBooks={filterSavedBooks(userData.savedBooks)}
-            imageLiked={userData.imageLiked} />
+            imageSaved={userData.imageSaved} />
     </div>
   )
 }

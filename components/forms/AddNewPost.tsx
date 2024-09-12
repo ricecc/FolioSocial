@@ -150,7 +150,9 @@ export default function AddNewPost({ idUser }: UserProps) {
                             {div.type === "quote" && (
                                 <Quote
                                     quote={div.quote || ''}
-                                    setQuote={(text) => updateDiv(index, { quote: text })}
+                                    page={div.page||''}
+                                    setQuote={(newQuote) => updateDiv(index, { quote: newQuote })}
+                                    setPage={(newPage) => updateDiv(index, { page: newPage })}
                                     index={index}
                                     onRemove={() => removeDiv(index)}
                                 />
