@@ -69,11 +69,11 @@ export function UserPosts({userPosts, userSavedBooks }:Props) {
               key={post._id}
               src={post.image}
               alt="post review"
-              userImage={post.userImage} // Assuming userImage refers to the post image
+              userImage={post.userImage} 
               bookId={""}
-              userId={post.author} // Assuming userId refers to the author's id
+              userId={post.author} 
               link={`/your-posts/${post._id}`}
-              username={post.username} // Assuming username refers to the author's name
+              username={post.username} 
               postAuthorId={post.postAuthorId}
               postLike={post.likeCount}
               saved={false}

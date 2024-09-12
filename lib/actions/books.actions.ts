@@ -1,5 +1,6 @@
 "use server"
 import Book from "../models/book.model";
+import Post from "../models/post.model";
 import { connectToDB } from "../mongoose";
 
 
@@ -52,5 +53,19 @@ export async function searchBooks(query: string) {
   } catch (error) {
     console.error('Failed to fetch books by title:', error);
     return []; 
+  }
+}
+
+export async function getPostsByBookId(bookId:string){
+  try {
+    connectToDB()
+    const posts = await Post.find({ book: bookId })
+    .populate({
+      path: 'author',
+      select: 'id username image'  // Seleziona solo il campo username dell'autore
+    })
+    return posts;
+  } catch (error:any) {
+    throw new Error(`Failed to get Posts by book id: ${error.message}`);
   }
 }

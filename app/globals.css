@@ -12,12 +12,21 @@
       @apply  flex min-h-screen flex-1 flex-col w-screen z-0;
     }
 
-    .img-darken {
-        transition: filter 0.3s ease-in-out;
-      }
-      
-      .img-darken:hover {
-        filter: brightness(0.6); /* Riduci la luminosità per scurire l'immagine */
-      }
+    
 
+}
+
+@keyframes slideInLeft {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.animate-slide-in-left {
+  animation: slideInLeft 0.2s ease-out;
 }

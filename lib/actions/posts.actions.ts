@@ -8,57 +8,65 @@ import Book from '../models/book.model';
 import { ObjectId } from 'mongodb';
 import { createTag } from './tag.actions';
 import Tag from '../models/tag.model';
-  interface Params {
-    author: string,
-    book: string;
-    review?: string;
-    quote?:string;
-    image?: string;
-    path: string;
-    genre: string;
-    affiliateUrl: string;
-    tags:string[]
+import Quote from '../models/quote.model';
+import Review from '../models/review.model';
+interface Params {
+  author: string,
+  book: string;
+  review?: string;
+  quote?: string;
+  image?: string;
+  path: string;
+  genre: string;
+  affiliateUrl: string;
+  tags: string[],
+  postImages: string[]
+}
+
+
+export async function createPost({
+  author,
+  book,
+  review,
+  image,
+  path,
+  genre,
+  affiliateUrl,
+  tags,
+  quote,
+  postImages
+}: Params) {
+  console.log("Start createPost");
+  try {
+    connectToDB();
+
+    const newPostData = {
+      author,
+      book,
+      image,
+      genre,
+      affiliateUrl,
+      tags,
+      postImages,
+      reviews: review ? [review] : [],
+      quotes: quote ? [quote] : [],
+    };
+
+
+    const createPost = await Post.create(newPostData);
+
+
+    await User.findByIdAndUpdate(author, {
+      $push: { posts: createPost._id },
+    });
+  
+    revalidatePath(path);
+    return createPost._id
+  } catch (error: any) {
+    throw new Error(`Failed to create post: ${error.message}`);
   }
 
-
-  export async function createPost({
-    author,
-    book,
-    review,
-    image,
-    path,
-    genre,
-    affiliateUrl,
-    tags,
-    quote,
-  }: Params) {
-    console.log("Start createPost");
-    try {
-      connectToDB();
-
-      const newPostData = {
-        author,
-        book,
-        image,
-        genre,
-        affiliateUrl,
-        tags,
-        review: review ? [review] : [], 
-        quotes: quote ? [quote] : [],  
-      };
-  
-     
-      const createPost = await Post.create(newPostData);
-  
-      
-      await User.findByIdAndUpdate(author, {
-        $push: { posts: createPost._id },
-      });
-      revalidatePath(path);
-    } catch (error: any) {
-      throw new Error(`Failed to create post: ${error.message}`);
-    }
-  }
+}
 
 export async function fetchPostById(postId: string) {
   console.log("Start fetchPostById")
@@ -75,9 +83,20 @@ export async function fetchPostById(postId: string) {
         select: 'title author'
       })
       .populate({
-        path:'tags',
-        model:Tag,
-      }).exec();
+        path: 'tags',
+        model: Tag,
+      })
+      .populate({
+        path: 'quotes',
+        model: Quote,
+        select: "quote page like"
+      })
+      .populate({
+        path: 'reviews',
+        model: Review,
+        select: "review title like"
+      })
+      .exec();
     return post
 
   } catch (error: any) {
@@ -89,9 +108,9 @@ export async function fetchPostById(postId: string) {
 export async function fetchPostsFeed() {
   console.log("Start fetchPostsFeed")
   try {
-    console.log("Attempting to connect to DB...");
+    
     connectToDB();
-    console.log("Successfully connected to DB");
+   
 
     console.log("Fetching posts...");
     const posts = await Post.find()
@@ -102,7 +121,13 @@ export async function fetchPostsFeed() {
       })
       .populate({
         path: 'book',
-        model: Book
+        model: Book,
+        select: "title author"
+      })
+      .populate({
+        path: 'quotes',
+        model: Quote,
+        select:"quote"
       })
       .exec();
 
@@ -147,9 +172,9 @@ export async function fetchSimilarPosts(postId: string) {
         model: User
       })
       .populate({
-        path:'book',
-        model:Book,
-        select:'id'
+        path: 'book',
+        model: Book,
+        select: 'id'
       })
       .sort({ score: { $meta: "textScore" } }).limit(10).exec();
 
@@ -162,23 +187,130 @@ export async function fetchSimilarPosts(postId: string) {
 
 
 
-export async function getPostsByTag(tagId:string) {
+export async function getPostsByTag(tagId: string) {
   console.log("start getPostsByTag")
   try {
     connectToDB();
     const posts = await Post.find({ tags: tagId })
-    .populate({
-      path:'author',
-      model:User,
-      select:'id image username'
-    })
-    .populate({
-      path:'book',
-      model:Book,
-      select:'id largeImage'
-    });
+      .populate({
+        path: 'author',
+        model: User,
+        select: 'id image username'
+      })
+      .populate({
+        path: 'book',
+        model: Book,
+        select: 'id largeImage'
+      });
     return posts
-  } catch (error:any) {
+  } catch (error: any) {
     throw new Error(`Error to get  posts by tag: ${error.message}`);
+  }
+}
+
+
+
+
+interface updateQuoteProps {
+  postId: string,
+  newQuote: string,
+  quote: string,
+  pathname: string
+}
+export async function updatePostQuote({ postId, newQuote, quote, pathname }: updateQuoteProps) {
+  try {
+    connectToDB()
+
+    const updatedPost = await Post.findOneAndUpdate(
+      { _id: postId, quotes: quote },
+      { $set: { "quotes.$": newQuote } },
+      { new: true }
+    );
+
+
+    if (!updatedPost) {
+      return false
+    }
+
+
+    revalidatePath(pathname);
+    return true;
+  } catch (error: any) {
+    throw new Error(`Error to update quote:${error.message}`)
+  }
+}
+
+interface updateReviewProps {
+  postId: string,
+  newReview: string,
+  oldReview: string,
+  path: string
+}
+export async function updatePostReview({ postId, newReview, oldReview, path }: updateReviewProps) {
+  try {
+    connectToDB()
+
+
+    const updatedPost = await Post.findOneAndUpdate(
+      { _id: postId, review: oldReview },
+      { $set: { "review.$": newReview } },
+      { new: true }
+    );
+
+
+    if (!updatedPost) {
+      return false;
+    }
+
+
+    revalidatePath(path);
+    return true;
+  } catch (error: any) {
+    throw new Error(`Error to update quote:${error.message}`)
+  }
+}
+
+export async function removePostQuote(postId: string, quoteToRemove: string, path: string) {
+  try {
+    connectToDB()
+    const updatedPost = await Post.findOneAndUpdate(
+      { _id: postId },
+      { $pull: { quotes: quoteToRemove } },
+      { new: true }
+    );
+
+
+    if (!updatedPost) {
+      return false
+    }
+
+
+    revalidatePath(path);
+    return true
+  } catch (error: any) {
+    throw new Error(`Error to update quote:${error.message}`)
+  }
+}
+
+export async function removePostReview(postId: string, reviewToRemove: string, path: string) {
+  try {
+    connectToDB()
+
+    const updatedPost = await Post.findOneAndUpdate(
+      { _id: postId },
+      { $pull: { review: reviewToRemove } },
+      { new: true }
+    );
+
+
+    if (!updatedPost) {
+      return false
+    }
+
+
+    revalidatePath(path);
+    return true
+  } catch (error: any) {
+    throw new Error(`Error to update quote:${error.message}`)
   }
 }

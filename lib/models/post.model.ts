@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import Tag from "./tag.model";
+
 
 
 const postSchema = new mongoose.Schema({
@@ -11,16 +11,11 @@ const postSchema = new mongoose.Schema({
     },
     book: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Book',
-        required: true,
+        ref: 'Book'
     },
-    review: [{
-        type: String,
-        required: false,
-    }],
-    quotes:[
-        {type:String,required:false},
-    ],
+    reviews: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Review' }],
+    quotes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Quote' }],
+    postImages:[{type:String}],
     createdAt: {
         type: Date,
         default: Date.now,
@@ -29,6 +24,7 @@ const postSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
     }],
+
     image: String,
     saved:{type:Number},
     genre:{type:String},
@@ -39,7 +35,7 @@ const postSchema = new mongoose.Schema({
         ref: 'Tag',
     }],
 })
-postSchema.index({ review: 'text' });
+
 
 const Post = mongoose.models.Post || mongoose.model('Post', postSchema)
 

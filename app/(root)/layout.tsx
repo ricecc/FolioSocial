@@ -5,6 +5,7 @@ import "../globals.css";
 import TopNavBar from "@/components/navigation/TopNavBar";
 import Footer from "@/components/navigation/Footer";
 import { Navbar } from "flowbite-react";
+import { EdgeStoreProvider } from "@/lib/edgestore";
 
 
 const inter = Inter({ subsets: ["latin"] });
@@ -24,9 +25,11 @@ export default function RootLayout({
       <html lang="en" data-theme="light">
         <body className={inter.className}>
           <main className="flex flex-col relative ">
-          <TopNavBar></TopNavBar>
+            <TopNavBar></TopNavBar>
             <section className="main-container">
-              {children}
+              <EdgeStoreProvider>
+                {children}
+              </EdgeStoreProvider>
             </section>
             <Footer />
           </main>

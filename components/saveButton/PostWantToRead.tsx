@@ -20,7 +20,6 @@ const WantToRead = ({ userId, bookId, saved }:SaveButtonProps) => {
         event.stopPropagation();
         try {
             if (isSaved) {
-                
                 await removeSavedBook({ userId, bookId });
                 setIsSaved(false);
             } else {
@@ -35,9 +34,8 @@ const WantToRead = ({ userId, bookId, saved }:SaveButtonProps) => {
 
     return (
 
-        <div className="h-16 bg-white hover:bg-backgroundButton hover:text-white  text-backgroundButton flex items-center justify-between  border-t border-slate-600 cursor-pointer px-8 " onClick={handleSavePost} >
+        <div className=" hover:bg-slate-900   w-full h-full  flex items-center justify-center  cursor-pointer px-8 " onClick={handleSavePost} >
             <p className="font-fontMain text-2xl">{isSaved ? "Saved" : "Want to read"}</p>
-            <img src="/assets/arrow.svg" alt="notification" width={24} height={24} className="object-contain" />
         </div>
 
     );

@@ -9,17 +9,17 @@ import { searchBooks } from "@/lib/actions/books.actions";
 interface Book {
   _id: string;
   title: string;
-  titleUrl:string;
-  smallImage:string;
+  titleUrl: string;
+  smallImage: string;
   author: string;
-  publisher:string;
-  largeImage:string;
-  description:string;
-  ean:string;
-  genre1:string;
-  genre2:string;
-  genre3:string;
-  year:string;
+  publisher: string;
+  largeImage: string;
+  description: string;
+  ean: string;
+  genre1: string;
+  genre2: string;
+  genre3: string;
+  year: string;
 }
 function TopNavBar() {
   const router = useRouter()
@@ -45,7 +45,7 @@ function TopNavBar() {
     router.push(`/book/${book._id.toString()}`)
   }
   return (
-       <section className="flex w-full flex-row items-center justify-between  bg-zinc-50  p-3  sticky top-0 z-10 ">
+    <section className="flex w-full flex-row items-center justify-between  bg-zinc-50  p-3  sticky top-0 z-10 ">
       <div className=" m-3 cursor-pointer  ">
         <Link href="/"><p className="text-lg">F</p></Link>
       </div>
@@ -90,8 +90,8 @@ function TopNavBar() {
         <UserButton></UserButton>
       </div>
     </section>
- 
-   
+
+
   )
 }
 

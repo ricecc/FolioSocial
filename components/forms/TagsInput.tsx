@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Input } from "../ui/input";
 
 interface TagsInputProps {
   tags: string[];
@@ -24,7 +25,7 @@ const TagsInput: React.FC<TagsInputProps> = ({ tags, setTags, placeholder }) => 
   };
 
   return (
-    <div className="flex flex-wrap items-center gap-2 border rounded p-2">
+    <div className="flex flex-wrap items-center gap-2  rounded p-2">
       {tags.map((tag, index) => (
         <div
           key={index}
@@ -40,6 +41,7 @@ const TagsInput: React.FC<TagsInputProps> = ({ tags, setTags, placeholder }) => 
           </button>
         </div>
       ))}
+      
       <input
         type="text"
         value={input}

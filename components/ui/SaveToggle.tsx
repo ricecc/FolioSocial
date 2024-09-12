@@ -1,42 +1,38 @@
 'use client';
-import { putLikeToPost, putLikeToImage, putLikeToQuote, putLikeToReview, removeLikeToPost } from '@/lib/actions/user.actions';
+import { removeSaveQuote, removeSaveReview, removeSaveImage, saveImage, saveQuote, saveReview } from '@/lib/actions/user.actions';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 
 interface Props {
   fromUserId: string;
-  type:"quote" | "post" | "review" | "picture";
+  type:"quote" | "review" | "picture";
   toElement:string;
   numLike: number;
   liked: boolean;
  
 }
 
-const HeartToggle = ({ fromUserId, toElement,type, numLike, liked }: Props) => {
+const SaveToggle = ({ fromUserId, toElement,type, numLike, liked }: Props) => {
   const [isClicked, setIsClicked] = useState<boolean>(liked);
   const [likeCount, setLikeCount] = useState<number>(numLike);
   const path = usePathname();
 
   const handleClick = async () => {
     if (isClicked) {
-      if(type==="post")
-        await removeLikeToPost({ fromUserId, toElement,path });
       if(type==="quote")
-        await putLikeToQuote({ fromUserId, toElement,path });
+        await removeSaveQuote({ fromUserId, toElement,path });
       if(type==="review")
-        await putLikeToReview({ fromUserId, toElement,path });
+        await removeSaveReview({ fromUserId, toElement,path });
       if(type==="picture")
-        await putLikeToImage({ fromUserId, toElement,path });
+        await removeSaveImage({ fromUserId, toElement,path });
       setLikeCount(likeCount - 1);
     } else {
-      if(type==="post")
-        await putLikeToPost({ fromUserId, toElement,path });
       if(type==="quote")
-        await putLikeToQuote({ fromUserId, toElement,path });
+        await saveQuote({ fromUserId, toElement,path });
       if(type==="review")
-        await putLikeToReview({ fromUserId, toElement,path });
+        await saveReview({ fromUserId, toElement,path });
       if(type==="picture")
-        await putLikeToImage({ fromUserId, toElement,path });
+        await saveImage({ fromUserId, toElement,path });
       setLikeCount(likeCount + 1);
     }
     setIsClicked(!isClicked);
@@ -47,20 +43,20 @@ const HeartToggle = ({ fromUserId, toElement,type, numLike, liked }: Props) => {
       {isClicked || liked ? (
         <div className="flex justify-center items-center flex-row space-x-5">
           <img
-            src="/assets/heart-filled.svg"
+            src="/assets/bookMarkFill.svg"
             alt="heart filled"
             width={24}
-            height={24}
+            height={10}
           />
           {likeCount}
         </div>
       ) : (
         <div className="flex justify-center items-center flex-row space-x-5">
           <img
-            src="/assets/heart-gray.svg"
+            src="/assets/bookMarkEmpty.svg"
             alt="heart"
             width={24}
-            height={24}
+            height={10}
           />
           {likeCount}
         </div>
@@ -69,4 +65,4 @@ const HeartToggle = ({ fromUserId, toElement,type, numLike, liked }: Props) => {
   );
 };
 
-export default HeartToggle;
+export default SaveToggle;
