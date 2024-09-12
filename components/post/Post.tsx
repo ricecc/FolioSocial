@@ -1,11 +1,10 @@
 "use client";
 import React, { useState } from 'react'
 import Image from 'next/image'
-import { saveBook } from '@/lib/actions/user.actions'
+
 import Link from 'next/link';
 import { Router } from 'next/router';
 import { useRouter, usePathname } from 'next/navigation';
-import SaveButton from '../saveButton/SaveButton';
 
 
 interface Props {
@@ -39,9 +38,7 @@ const Post = ({ src, alt, userImage, bookId, userId, link, username, postAuthorI
                 </figure>
                 <div className="absolute inset-0 bg-transparent transition-opacity duration-300 group-hover:bg-slate-950 group-hover:bg-opacity-50 cursor-pointer" onClick={redirectToLink}>
                     <div className='absolute top-3 space-x-2 right-2 flex  items-center justify-center rounded-full invisible group-hover:visible'>
-                        {!isOnYourPosts && (
-                            <SaveButton userId={userId} bookId={bookId} saved={saved}  />
-                        )}
+                        
                     </div>
                     <div className='absolute bottom-6 left-4 flex space-x-4 justify-center items-center invisible group-hover:visible'>
                         <div className='p-2 bg-white rounded-full flex justify-center items-center'>
