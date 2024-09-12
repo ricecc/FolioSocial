@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import ImageDialog from '../ImageDialog/ImageDialog';
 import BookPreview from '../BookPreview/BookPreview';
-import { Link } from 'lucide-react';
+
 
 interface quoteSaved {
     id: string;
