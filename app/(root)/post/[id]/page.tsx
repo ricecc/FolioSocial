@@ -39,8 +39,8 @@ async function page({ params }: { params: { id: string } }) {
               <p>{formattedDateTime} </p>
             </div>
           </div>
-          <div className="bg-zinc-100 md:row-span-2 min-h-48 flex justify-center items-center">
-            <img src={post.image} alt="" className="max-h-96" />
+          <div className="bg-zinc-100 md:row-span-2 min-h-48 flex justify-center items-center p-5 lg:p-0">
+            <img src={post.image} alt="" className="w-auto h-64" />
           </div>
           {elements.map((element: any, index: number) => {
             if (element.type === "quote") {
@@ -89,7 +89,7 @@ async function page({ params }: { params: { id: string } }) {
       </section>
       <section className="flex h-16 justify-center flex-row w-2/3 bg-slate-950 text-zinc-50 mt-10">
         <div className="w-1/2 flex justify-center items-center hover:bg-slate-900  cursor-pointer ">
-          <p className="font-fontMain text-2xl">Compra</p>
+          <p className="font-fontMain lg:text-2xl text-md">Compra</p>
         </div>
         <div className="w-1/2 flex justify-center items-center  cursor-pointer" >
           <WantToRead userId={userInfo._id.toString()} bookId={post.book._id.toString()} saved={userInfo.savedBooks.includes(post.book._id)}></WantToRead>

@@ -52,7 +52,7 @@ const MainFeedSection = ({ isLiked, postId, quote, bookTitle, bookAuthor, bookCo
         <div className='flex flex-col cursor-pointer mb-28  w-[320px] sm:w-[250px] md:w-[450px] shadow-xl p-2' >
             <div className="w-[320px] sm:w-[250px] md:w-[450px] h-[350px] flex justify-between flex-col items-center  relative">
                 <div className='flex flex-row items-center space-x-2 p-3 h-1/6 w-full '>
-                    <img src={userImage} className="w-7 rounded-full" />
+                    <img src={userImage} className="w-7 h-7 object-cover rounded-full" />
                     <p>{username}</p>
                 </div>
                 <Link href={`/post/${postId}`} className=' h-5/6 flex items-center w-full justify-center'>

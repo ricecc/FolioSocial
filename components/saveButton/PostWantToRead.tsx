@@ -31,7 +31,7 @@ const WantToRead = ({ userId, bookId, saved }:SaveButtonProps) => {
     return (
 
         <div className=" hover:bg-slate-900   w-full h-full  flex items-center justify-center  cursor-pointer px-8 " onClick={handleSavePost} >
-            <p className="font-fontMain text-2xl">{isSaved ? "Saved" : "Want to read"}</p>
+            <p className="font-fontMain lg:text-2xl text-md">{isSaved ? "Saved" : "Want to read"}</p>
         </div>
 
     );
