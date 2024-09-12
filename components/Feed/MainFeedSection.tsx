@@ -49,7 +49,7 @@ const MainFeedSection = ({ isLiked, postId, quote, bookTitle, bookAuthor, bookCo
     }
 
     return (
-        <div className='flex flex-col cursor-pointer mb-28  w-[320px] sm:w-[250px] md:w-[450px] shadow-xl ' >
+        <div className='flex flex-col cursor-pointer mb-10  w-[320px] sm:w-[250px] md:w-[450px] shadow-xl ' >
             <div className="w-[320px] sm:w-[250px] md:w-[450px] h-[350px] flex justify-between flex-col items-center  relative">
                 <div className='flex flex-row items-center space-x-2 p-3 h-1/6 w-full '>
                     <img src={userImage} className="w-7 h-7 object-cover rounded-full" />

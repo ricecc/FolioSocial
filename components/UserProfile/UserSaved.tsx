@@ -105,14 +105,14 @@ const UserSaved = ({ quoteSaved, reviewSaved, savedBooks, imageSaved }: UserSave
         <div className='flex flex-col lg:flex-row w-full min-w-72 h-auto justify-center'>
             <div className='flex justify-center lg:w-1/4 h-auto'>
                 <div className="lg:space-y-5 space-x-2 flex flex-row lg:flex-col items-center bg-zinc-50 shadow-xl h-min p-10 rounded-sm">
-                    <div className={`cursor-pointer flex justify-center items-center ${type === 'books' ? 'border-b-2 border-slate-700' : 'border-b-2 border-white'}`} onClick={() => setType('books')}><p>Books</p></div>
-                    <div className={`cursor-pointer flex justify-center items-center ${type === 'quotes' ? 'border-b-2 border-slate-700' : 'border-b-2 border-white'}`} onClick={() => setType('quotes')}><p>Quotes</p></div>
-                    <div className={`cursor-pointer flex justify-center items-center ${type === 'notes' ? 'border-b-2 border-slate-700' : 'border-b-2 border-white'}`} onClick={() => setType('notes')}><p>Notes</p></div>
-                    <div className={`cursor-pointer flex justify-center items-center ${type === 'pictures' ? 'border-b-2 border-slate-700' : 'border-b-2 border-white'}`} onClick={() => setType('pictures')}><p>Pictures</p></div>
+                    <div className={`cursor-pointer flex justify-center items-center ${type === 'books' ? 'border-b-2 border-slate-700' : 'border-b-2 bg-zinc-50'}`} onClick={() => setType('books')}><p>Books</p></div>
+                    <div className={`cursor-pointer flex justify-center items-center ${type === 'quotes' ? 'border-b-2 border-slate-700' : 'border-b-2 bg-zinc-50'}`} onClick={() => setType('quotes')}><p>Quotes</p></div>
+                    <div className={`cursor-pointer flex justify-center items-center ${type === 'notes' ? 'border-b-2 border-slate-700' : 'border-b-2 bg-zinc-50'}`} onClick={() => setType('notes')}><p>Notes</p></div>
+                    <div className={`cursor-pointer flex justify-center items-center ${type === 'pictures' ? 'border-b-2 border-slate-700' : 'border-b-2 bg-zinc-50'}`} onClick={() => setType('pictures')}><p>Pictures</p></div>
                 </div>
             </div>
 
-            <div className="lg:w-3/4 w-auto" id="content">
+            <div className="lg:w-3/4 w-auto flex justify-center" id="content">
                 {renderContent()}
             </div>
         </div>

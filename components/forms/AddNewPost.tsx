@@ -130,7 +130,7 @@ export default function AddNewPost({ idUser }: UserProps) {
         <>
        
             <Header onPublish={handlePublish} />
-            <section className="flex h-auto justify-center flex-col w-2/3">
+            <section className="flex h-auto justify-center flex-col lg:w-2/3 w-full">
                 <div className="grid w-full md:grid-cols-2 grid-cols-1 ">
                     <div className="bg-zinc-50 min-h-48 pt-6 p-5 border">
                         {selectedBook ? (

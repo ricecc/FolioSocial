@@ -15,7 +15,7 @@
 @layer components {
     /* main */  
     .main-container {
-      @apply  flex min-h-screen flex-1 flex-col w-screen z-0;
+      @apply  flex min-h-screen flex-1 flex-col w-screen z-0 ;
     }
 
     

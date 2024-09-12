@@ -48,24 +48,25 @@ const HeartToggle = ({ fromUserId, toElement,type, numLike, liked }: Props) => {
   return (
     <div onClick={handleClick} className="cursor-pointer object-contain">
       {isClicked && liked ? (
-        <div className="flex justify-center items-center flex-row space-x-5">
+        <div className="flex justify-center items-center flex-row space-x-3">
           <img
             src="/assets/heart-filled.svg"
             alt="heart filled"
             width={24}
             height={24}
           />
-          {likeCount}
+          <span>{likeCount}</span>
+          
         </div>
       ) : (
-        <div className="flex justify-center items-center flex-row space-x-5">
+        <div className="flex justify-center items-center flex-row space-x-3">
           <img
             src="/assets/heart-gray.svg"
             alt="heart"
             width={24}
             height={24}
           />
-          {likeCount}
+          <span>{likeCount}</span>
         </div>
       )}
     </div>
