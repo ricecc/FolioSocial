@@ -6,6 +6,16 @@ import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { searchBooks } from "@/lib/actions/books.actions";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+  CommandSeparator,
+  CommandShortcut,
+} from "@/components/ui/command"
 interface Book {
   _id: string;
   title: string;
@@ -54,36 +64,38 @@ function TopNavBar() {
         <Link href="/create-post"><Image src="/assets/newPost.svg" alt="notification" width={24} height={24} className="cursor-pointer object-contain" /></Link>
       </div>
       <div className="w-4/5 flex-1 ">
-        <input
-          type="text"
-          className="w-full rounded-full p-2 bg-slate-100 "
-          placeholder="search"
-          onChange={(e) => getBooks(e.target.value)}
-        />
-        <div
-          className={`w-max absolute top-14  border bg-white rounded-lg p-2 mt-4  ${termResult.length > 0 ? '' : 'hidden'
-            }`}
-        >
+        <Command className="border-b  md:min-w-[450px] h-auto bg-zinc-50 ">
+          <div className="flex flex-row items-center  px-3 py-3 space-x-3">
+            <img src="/assets/search.svg" alt="notification" width={15} height={15} className="cursor-pointer object-contain" />
+            <input
+              type="text"
+              placeholder="What did you read?"
+              onChange={(e) => getBooks(e.target.value)}
+              className="   focus:outline-none bg-transparent w-full "
+            />
+          </div>
           {termResult.length > 0 ? (
-            <ul className="w-full">
-              {termResult.map((book) => (
-                <li
-                  key={book._id}
-                  className="cursor-pointer hover:bg-slate-100 p-2 w-full"
-                  onClick={() => handleBookClick(book)}
-                >
+            <CommandList className="absolute top-14 bg-zinc-50 w-4/5 ">
 
-                  <div className="flex flex-row justify-start items-center space-x-2">
-                    <img src={book.smallImage} alt="" className="w-5 h-8" />
-                    <p>{book.title}</p>
-                  </div>
-                </li>
-              ))}
-            </ul>
+              <CommandGroup heading="Suggestions">
+                {termResult.map((book) => (
+                  <CommandItem
+                    key={book._id}
+                    onSelect={() => handleBookClick(book)}
+                  >
+                    <div className="flex flex-row justify-start items-center space-x-2">
+                      <img src={book.smallImage} alt="" className="w-5 h-8" />
+                      <p>{book.title}</p>
+                    </div>
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+            </CommandList>
           ) : (
-            <p>No results found.</p>
+            <></>
           )}
-        </div>
+
+        </Command>
       </div>
       <div className="m-2 flex flex-row items-center justify-center space-x-6">
         <Image src="/assets/notifcation.svg" alt="notification" width={24} height={24} className="cursor-pointer object-contain" />
