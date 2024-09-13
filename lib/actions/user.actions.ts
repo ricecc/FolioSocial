@@ -117,8 +117,6 @@ export async function fetchUserInfoForProfile(userId: string) {
   }
 }
 
-
-
 export async function fetchUserPosts(userId: string) {
   console.log("Start FetchUserPost")
   try {
@@ -154,14 +152,7 @@ export async function fetchUserSavedBooks(userId: string) {
     throw new Error(`Faild to fetch user saved posts: ${error.message}`)
   }
 }
-
-
 //ZONA SAVE
-
-
-
-
-
 
 export async function saveImage({ fromUserId, toElement, path }: PropsLikeSave) {
   console.log("Start saveImage")
@@ -289,5 +280,25 @@ export async function getUserPostByBookId(userId: string, bookId: string) {
     return user.posts[0]._id;
   } catch (error: any) {
     throw new Error(`Faild to get user post by book id:${error.message}`)
+  }
+}
+
+export async function searchUsers(query: string) {
+  try {
+    connectToDB();
+
+   //implementare anche la ricerca per nome e congome, modificare on boarding
+    const users = await User.find(
+      {
+        username: { $regex: query, $options: 'i' } 
+      }
+    )
+    .select('id image username')
+    .limit(7); 
+
+    return users;
+  } catch (error) {
+    console.error('Failed to search users:', error);
+    return []; 
   }
 }

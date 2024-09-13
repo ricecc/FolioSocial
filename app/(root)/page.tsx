@@ -19,20 +19,6 @@ export default async function Home() {
   if (userInfo)
     feed = await fetchPostsFeed();
 
-  {/* <Post 
-              key={post._id.toString()} 
-              bookId={post.book._id.toString()}
-              userId={userInfo._id.toString()}
-              src={post.image} 
-              alt={`Image of ${post.book.title}`}
-              userImage={post.author.image}
-              link={`/post/${post._id.toString()}`}
-              username={post.author.username}
-              postAuthorId={post.author.id}
-              postLike={post.like.length}
-              saved={userInfo.savedBooks.includes(post.book._id)}
-            /> */}
-
   return (
     
     <div className="h-full gap-8  grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3  mx-auto mt-3 flex justify-center  ">

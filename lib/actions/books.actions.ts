@@ -35,7 +35,7 @@ export async function fetchBookById(bookId: string) {
     return book
 
   } catch (error:any) {
-    console.error("Error while fetching thread:", error.message);
+    console.error("Error while fetching book:", error.message);
     throw new Error("Unable to fetch thread");
   }
 }
@@ -44,12 +44,12 @@ export async function searchBooks(query: string) {
   try {
     await connectToDB();
 
-    // Cerca libri basati sul titolo con un'espressione regolare
+    
     const books = await Book.find(
       {
-        title: { $regex: query, $options: 'i' } // Cerca il query nel titolo, ignorando maiuscole/minuscole
+        title: { $regex: query, $options: 'i' } 
       }
-    ).limit(7); // Limita i risultati a 7 libri
+    ).limit(7);
 
     return books;
   } catch (error) {

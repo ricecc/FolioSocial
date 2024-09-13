@@ -2,6 +2,7 @@
 import React, { useState } from 'react'
 import UserLibrary from './UserLibrary'
 import UserSaved from './UserSaved'
+import { usePathname } from 'next/navigation'
 
 interface posts {
     id: string,
@@ -43,7 +44,8 @@ interface MainSectionProps {
 
 const MainSectionProfile = ({ posts, quoteSaved, reviewSaved, savedBooks, imageSaved }: MainSectionProps) => {
     const [activeTab, setActiveTab] = useState<'library' | 'saved'>('library');
-
+    const pathname = usePathname(); // Ottieni il pathname corrente
+    const isOnYourPosts = pathname === '/your-posts';
     const handleTabChange = (tab: 'library' | 'saved') => {
         setActiveTab(tab);
     };
@@ -75,8 +77,7 @@ const MainSectionProfile = ({ posts, quoteSaved, reviewSaved, savedBooks, imageS
             </div>
             <div className='lg:w-[1000px] w-auto '>
                 {activeTab === "library" ? (
-                        <UserLibrary posts={posts}></UserLibrary>
-                   
+                    <UserLibrary posts={posts} isYourPost={isOnYourPosts}></UserLibrary>
                 ) : (
                     <UserSaved quoteSaved={quoteSaved} reviewSaved={reviewSaved} savedBooks={savedBooks} imageSaved={imageSaved}></UserSaved>
                 )}

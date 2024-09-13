@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 
 import Link from 'next/link';
 
-import {  usePathname } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 
 import HeartToggle from '../ui/HeartToggle';
 import QuotePreview from './QuotePreview';
@@ -53,10 +53,12 @@ const MainFeedSection = ({ isLiked, postId, quote, bookTitle, bookAuthor, bookCo
             <div className="w-[320px] sm:w-[250px] md:w-[450px] h-[350px] flex justify-between flex-col items-center  relative">
                 <div className='flex flex-row items-center space-x-2 p-3 h-1/6 w-full '>
                     <img src={userImage} className="w-7 h-7 object-cover rounded-full" />
-                    <p>{username}</p>
+                    <Link href={`/profile/${postAuthorId}`}>
+                        <p>{username}</p>
+                    </Link>
                 </div>
                 <Link href={`/post/${postId}`} className='h-5/6 w-full '>
-                {/**componente per quote/bookCover/imagePost */}
+                    {/**componente per quote/bookCover/imagePost */}
                     {content}
                 </Link>
             </div>

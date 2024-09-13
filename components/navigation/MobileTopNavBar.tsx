@@ -3,7 +3,7 @@ import { UserButton } from "@clerk/nextjs";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { searchBooks } from "@/lib/actions/books.actions";
+import { searchUsers } from "@/lib/actions/user.actions";
 import {
     Command,
     CommandGroup,
@@ -19,43 +19,41 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { User, Plus, LibraryBig } from "lucide-react";
 
-interface Book {
-    _id: string;
-    title: string;
-    titleUrl: string;
-    smallImage: string;
-    author: string;
-    publisher: string;
-    largeImage: string;
-    description: string;
-    ean: string;
-    genre1: string;
-    genre2: string;
-    genre3: string;
-    year: string;
+interface User {
+    id: string;
+    image: string;
+    username: string;
 }
 
 function MobileTopNavBar() {
     const router = useRouter();
-    const [termResult, setTermResult] = useState<Book[]>([]);
+    const [termResult, setTermResult] = useState<User[]>([]);
     const [isOpen, setIsOpen] = useState(false);
+    const [searchTerm, setSearchTerm] = useState("");
 
-    async function getBooks(searchTerm: string) {
+    async function getUsers(searchTerm: string) {
+        setSearchTerm(searchTerm);
         if (searchTerm.trim() === "") {
             setTermResult([]);
             return;
         }
         try {
-            const response = await searchBooks(searchTerm);
+            const response = await searchUsers(searchTerm);
             setTermResult(response);
         } catch (error) {
-            console.error("Error fetching books:", error);
+            console.error("Error fetching users:", error);
         }
     }
 
-    function handleBookClick(book: Book) {
+    function userClick(user: User) {
         setTermResult([]);
-        router.push(`/book/${book._id.toString()}`);
+        setSearchTerm("");
+        router.push(`/profile/${user.id}`);
+    }
+
+    function clear() {
+        setTermResult([]);
+        setSearchTerm("");
     }
 
     function handleMenuClick() {
@@ -110,39 +108,54 @@ function MobileTopNavBar() {
                     </DropdownMenuContent>
                 </DropdownMenu>
             </div>
-            <div className="w-4/5 flex-1">
-                <Command className="border-b md:min-w-[450px] h-auto bg-zinc-50">
-                    <div className="flex flex-row items-center px-3 py-3 space-x-3">
-                        <img
-                            src="/assets/search.svg"
-                            alt="search"
-                            width={15}
-                            height={15}
-                            className="cursor-pointer object-contain"
-                        />
-                        <input
-                            type="text"
-                            placeholder="What did you read?"
-                            onChange={(e) => getBooks(e.target.value)}
-                            className="focus:outline-none bg-transparent w-full"
-                        />
+            <div className="lg:w-3/4 w-72">
+                <Command className="border-b h-auto">
+                    <div className="flex flex-row justify-between items-center px-3 py-3 space-x-3">
+                        <div className="flex flex-row items-center space-x-3 w-full">
+                            <img
+                                src="/assets/search.svg"
+                                alt="search"
+                                width={15}
+                                height={15}
+                                className="cursor-pointer object-contain"
+                            />
+                            <input
+                                type="text"
+                                placeholder="@username"
+                                value={searchTerm}
+                                onChange={(e) => getUsers(e.target.value)}
+                                className="focus:outline-none w-full"
+                            />
+                        </div>
+                       
                     </div>
-                    {termResult.length > 0 && (
-                        <CommandList className="absolute top-14 bg-zinc-50 w-4/5">
-                            <CommandGroup heading="Suggestions">
-                                {termResult.map((book) => (
-                                    <CommandItem
-                                        key={book._id}
-                                        onSelect={() => handleBookClick(book)}
-                                    >
-                                        <div className="flex flex-row justify-start items-center space-x-2">
-                                            <img src={book.smallImage} alt="" className="w-5 h-8" />
-                                            <p>{book.title}</p>
-                                        </div>
-                                    </CommandItem>
-                                ))}
-                            </CommandGroup>
-                        </CommandList>
+                    {searchTerm.trim() !== "" && (
+                        termResult.length > 0 ? (
+                            <CommandList className="absolute top-14 bg-zinc-50 lg:w-3/4 w-72 shadow-2xl rounded-md">
+                                <CommandGroup heading="Suggestions">
+                                    {termResult.map((user) => (
+                                        <CommandItem
+                                            key={user.id}
+                                            onSelect={() => userClick(user)}
+                                            className="cursor-pointer"
+                                        >
+                                            <div className="flex flex-row justify-start items-center space-x-2">
+                                                <img
+                                                    src={user.image}
+                                                    alt=""
+                                                    className="w-7 h-7 rounded-full object-cover"
+                                                />
+                                                <p>{user.username}</p>
+                                            </div>
+                                        </CommandItem>
+                                    ))}
+                                </CommandGroup>
+                            </CommandList>
+                        ) : (
+                            <CommandList className="absolute top-14 bg-zinc-50 lg:w-3/4 w-72 shadow-2xl rounded-md">
+                                <CommandGroup heading="Utente non trovato" />
+                            </CommandList>
+                        )
                     )}
                 </Command>
             </div>
