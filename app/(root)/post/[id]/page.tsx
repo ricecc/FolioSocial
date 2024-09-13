@@ -31,7 +31,7 @@ async function page({ params }: { params: { id: string } }) {
         <div className="w-full flex flex-col lg:flex-row lg:h-[374px] ">
           <div className="bg-zinc-50 min-h-48 pt-6 p-5 border flex flex-col justify-between lg:w-1/2 ">
             <div className="pt-5 space-y-2">
-              <p className="font-protest font-medium  lg:text-7xl text-3xl">{post.book.title}</p>
+              <p className="font-montserrat font-medium  lg:text-5xl text-3xl">{post.book.title}</p>
               <p className=" font-montserrat font-light text-2xl">{post.book.author}</p>
             </div>
             <div className="flex flex-col items-end">

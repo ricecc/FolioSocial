@@ -60,7 +60,6 @@ async function page({ params }: { params: { id: string } }) {
               ):(
                 <p className="text-xl font-bold pt-2 flex justify-center items-center"><span>{userToWatch.name}</span></p>
               )}
-           
               <p className="text-sm font-sans pb-2">@{userToWatch.username} - {0} likes </p>
             </div>
           </div>
