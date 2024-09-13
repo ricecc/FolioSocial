@@ -6,6 +6,7 @@ import { UserPosts } from "@/components/UserProfile/UserPosts";
 import { fetchUser, fetchUserInfoForProfile } from "@/lib/actions/user.actions";
 import { currentUser } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
+import { Suspense } from "react";
 
 async function Page() {
   const user = await currentUser();
@@ -49,10 +50,10 @@ async function Page() {
   function filterSavedBooks(savedBooks: any) {
     return savedBooks.map((savedBook: any) => ({
       id: savedBook._id.toString(),
-      title:savedBook.title,
-      author:savedBook.author,
-      largeImage:savedBook.largeImage
-      
+      title: savedBook.title,
+      author: savedBook.author,
+      largeImage: savedBook.largeImage
+
     }))
   }
 
@@ -71,12 +72,12 @@ async function Page() {
           </div>
         </div>
       </div>
-      <MainSectionProfile
-            posts={filterUserPosts(userData.posts)}
-            quoteSaved={filterQuoteLiked(userData.quoteSaved)}
-            reviewSaved={filterReviewLiked(userData.reviewSaved)}
-            savedBooks={filterSavedBooks(userData.savedBooks)}
-            imageSaved={userData.imageSaved} />
+        <MainSectionProfile
+          posts={filterUserPosts(userData.posts)}
+          quoteSaved={filterQuoteLiked(userData.quoteSaved)}
+          reviewSaved={filterReviewLiked(userData.reviewSaved)}
+          savedBooks={filterSavedBooks(userData.savedBooks)}
+          imageSaved={userData.imageSaved} />
     </div>
   )
 }

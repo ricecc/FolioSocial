@@ -18,7 +18,7 @@ const ImageDialog: React.FC<DialogProps> = ({ imageSrc }) => {
       <img
         src={imageSrc}
         alt="Post Image"
-        className="w-full h-full object-cover max-h-[400px]"
+        className="w-full h-full object-cover  max-h-[400px]"
         onClick={handleImageClick}
       />
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
@@ -30,7 +30,7 @@ const ImageDialog: React.FC<DialogProps> = ({ imageSrc }) => {
             <img
               src={imageSrc}
               alt="Full Preview"
-              className="rounded-md w-full max-h-[550px] object-contain"
+              className="rounded-md w-full max-h-[550px]  object-center"
             />
           </div>
         </DialogContent>

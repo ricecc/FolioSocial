@@ -48,8 +48,6 @@ async function page({ params }: { params: { id: string } }) {
       
     }))
   }
-  console.log(userToWatch)
-  {/**  <UserPosts userPosts={filterUserPostsData(userPosts.posts)} userSavedBooks={filterUserSavedBooks(userSavedBooks.savedBooks)} /> */ }
   return (
     <div className="flex justify-center items-center w-screen flex-col ">
       <div className="w-full  h-full ">

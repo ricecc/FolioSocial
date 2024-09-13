@@ -1,26 +1,21 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* styles/globals.css */
-@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@100..900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 
-@layer base {
-  body {
-    @apply font-fontNew; /* Applica il font Montserrat al body */
-  }
-}
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@100..900&display=swap');
+
+
+
 
 @layer components {
-    /* main */  
     .main-container {
-      @apply  flex min-h-screen flex-1 flex-col w-screen z-0 ;
+      @apply flex min-h-screen flex-1 flex-col w-screen z-0;
     }
 
-    
-
 }
+
 
 @keyframes slideInLeft {
   0% {

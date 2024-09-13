@@ -32,16 +32,8 @@ const config: Config = {
       },
       fontFamily: {
         fontMain: ['Work Sans', 'sans-serif'],
-        fontNew: ['Montserrat', 'sans-serif'] // Aggiungi Montserrat come font
-      },
-      fontWeight: {
-        'hairline': '100',    // Peso 100 come stringa
-        'light': '300',       // Peso 300 come stringa (opzionale)
-        'normal': '400',      // Peso 400 come stringa
-        'semibold': '600',    // Peso 600 come stringa (opzionale)
-        'bold': '700',        // Peso 700 come stringa
-        'extrabold': '800',   // Peso 800 come stringa (opzionale)
-        'black': '900'        // Peso 900 come stringa
+        montserrat: ['Montserrat', 'sans-serif'],
+        protest: ['Protest Guerrilla', 'sans-serif'],
       },
       colors: {
         backgroundPrimary: '#F9F2E5',

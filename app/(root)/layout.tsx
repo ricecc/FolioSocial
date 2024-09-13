@@ -24,10 +24,14 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en" data-theme="light">
+        <head>
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet"/>
+        <link href="https://fonts.googleapis.com/css2?family=Protest+Guerrilla&display=swap" rel="stylesheet"/>
+        </head>
         <body className={inter.className}>
           <main className="flex flex-col relative ">
           <MobileTopNavBar/>
-            <section className="main-container fontNew font-light">
+            <section className="main-container font-fontStrano">
               <EdgeStoreProvider>
                 {children}
               </EdgeStoreProvider>

@@ -28,20 +28,21 @@ async function page({ params }: { params: { id: string } }) {
   return (
     <div className="h-full flex-col flex justify-start items-center ">
       <section className="flex h-auto justify-center flex-col  w-full ">
-        <div className="grid w-full  md:grid-cols-2 grid-cols-1 ">
-          <div className="bg-zinc-50 min-h-48 pt-6 p-5 border flex flex-col justify-between">
-            <div>
-              <p className="text-2xl">{post.book.title}</p>
-              <p>{post.book.author}</p>
+        <div className="w-full flex flex-col lg:flex-row lg:h-[374px] ">
+          <div className="bg-zinc-50 min-h-48 pt-6 p-5 border flex flex-col justify-between lg:w-1/2 ">
+            <div className="pt-5 space-y-2">
+              <p className="font-protest font-medium  lg:text-7xl text-3xl">{post.book.title}</p>
+              <p className=" font-montserrat font-light text-2xl">{post.book.author}</p>
             </div>
             <div className="flex flex-col items-end">
               <p>{post.author.username}</p>
-              <p>{formattedDateTime} </p>
             </div>
           </div>
-          <div className="bg-gradient-to-b from-white to-zinc-200 md:row-span-2 min-h-48 flex justify-center items-center p-5 lg:p-0">
-            <img src={post.image} alt="" className="w-auto h-64" />
+          <div className="bg-gradient-to-b from-white to-zinc-200  min-h-48 flex justify-center items-center p-5 lg:p-0 lg:w-1/2">
+            <img src={post.image} alt="" className="w-auto h-64 object-contain" />
           </div>
+        </div>
+        <div className="grid w-full  md:grid-cols-2 grid-cols-1">
           {elements.map((element: any, index: number) => {
             if (element.type === "quote") {
               return (
@@ -52,7 +53,7 @@ async function page({ params }: { params: { id: string } }) {
                   <div className="flex flex-row justify-between items-center">
                     <span >page:12</span>
                     <div className="flex fle-row">
-                      <SaveToggle fromUserId={userInfo._id.toString()} type={"quote"} toElement={element.data._id.toString()}  isSaved={userInfo.quoteSaved.includes(element.data._id)}></SaveToggle>
+                      <SaveToggle fromUserId={userInfo._id.toString()} type={"quote"} toElement={element.data._id.toString()} isSaved={userInfo.quoteSaved.includes(element.data._id)}></SaveToggle>
                       <HeartToggle fromUserId={userInfo._id.toString()} type={"quote"} toElement={element.data._id.toString()} numLike={element.data.like.length} liked={userInfo.quoteLiked.includes(element.data._id)}></HeartToggle>
                     </div>
                   </div>
@@ -66,10 +67,10 @@ async function page({ params }: { params: { id: string } }) {
                   <p>{element.data.review}</p>
                   <div className="flex justify-end">
                     <div className="flex flex-row">
-                    <SaveToggle fromUserId={userInfo._id.toString()} type={"review"} toElement={element.data._id.toString()}  isSaved={userInfo.reviewSaved.includes(element.data._id)}></SaveToggle>
-                    <HeartToggle fromUserId={userInfo._id.toString()} type={"review"} toElement={element.data._id.toString()} numLike={element.data.like.length} liked={userInfo.reviewLiked.includes(element.data._id)}></HeartToggle>
+                      <SaveToggle fromUserId={userInfo._id.toString()} type={"review"} toElement={element.data._id.toString()} isSaved={userInfo.reviewSaved.includes(element.data._id)}></SaveToggle>
+                      <HeartToggle fromUserId={userInfo._id.toString()} type={"review"} toElement={element.data._id.toString()} numLike={element.data.like.length} liked={userInfo.reviewLiked.includes(element.data._id)}></HeartToggle>
                     </div>
-                    
+
                   </div>
                 </div>
               );
@@ -78,7 +79,7 @@ async function page({ params }: { params: { id: string } }) {
                 <div key={index} className="row-span-2 flex justify-center relative">
                   <ImageDialog imageSrc={element.data} />
                   <div className="absolute bottom-3 right-3 bg-white rounded-full p-2 flex flex-row space-x-2">
-                  <SaveToggle fromUserId={userInfo._id.toString()} type={"picture"} toElement={element.data}  isSaved={userInfo.imageSaved.includes(element.data._id)}></SaveToggle>
+                    <SaveToggle fromUserId={userInfo._id.toString()} type={"picture"} toElement={element.data} isSaved={userInfo.imageSaved.includes(element.data._id)}></SaveToggle>
                     <HeartToggle fromUserId={userInfo._id.toString()} type={"picture"} toElement={element.data} numLike={0} liked={userInfo.imageLiked.includes(element.data)} ></HeartToggle>
                   </div>
                 </div>
