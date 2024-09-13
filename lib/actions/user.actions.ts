@@ -77,7 +77,7 @@ export async function fetchUserInfoForProfile(userId: string) {
   console.log("Start FetchUserInfoForProfile");
 
   try {
-    await connectToDB(); // Assicurati che la connessione al DB sia corretta
+    await connectToDB(); 
 
     const user = await User.findOne({ id: userId })
       .populate({
@@ -102,13 +102,21 @@ export async function fetchUserInfoForProfile(userId: string) {
         path: 'savedBooks',
         select: 'largeImage title author'
       })
+      .populate({
+        path: 'follow',
+        select: 'id username'
+      })
+      .populate({
+        path: 'follower',
+        select: 'id username'
+      })
       .select('imageSaved onboarded image username name');
 
     if (!user) {
       console.warn(`No user found with ID ${userId}`);
       return null;
     }
-    
+
 
     return user
   } catch (error: any) {
@@ -157,14 +165,14 @@ export async function fetchUserSavedBooks(userId: string) {
 export async function saveImage({ fromUserId, toElement, path }: PropsLikeSave) {
   console.log("Start saveImage")
   try {
-    
+
     connectToDB();
 
 
     const updatedUser = await User.findByIdAndUpdate(
       fromUserId,
       { $addToSet: { imageSaved: toElement } },
-      { new: true, useFindAndModify: false } 
+      { new: true, useFindAndModify: false }
     );
 
 
@@ -180,14 +188,14 @@ export async function saveImage({ fromUserId, toElement, path }: PropsLikeSave) 
 export async function removeSaveImage({ fromUserId, toElement, path }: PropsLikeSave) {
   console.log("Start removeSaveImage")
   try {
-    
+
     connectToDB();
 
 
     const updatedUser = await User.findByIdAndUpdate(
       fromUserId,
       { $pull: { imageSaved: toElement } },
-      { new: true, useFindAndModify: false } 
+      { new: true, useFindAndModify: false }
     );
 
 
@@ -203,8 +211,58 @@ export async function removeSaveImage({ fromUserId, toElement, path }: PropsLike
 
 //FINE ZONA SAVE
 
+interface FollowProps {
+  fromUserId: string,
+  toUserId: string,
+  path: string
+}
+export async function startFollow({ fromUserId, toUserId, path }: FollowProps) {
+  try {
+    connectToDB()
+    const fromUserUpdate = await User.findByIdAndUpdate(
+      fromUserId,
+      { $addToSet: { follow: toUserId } },
+      { new: true, useFindAndModify: false }
+    );
 
+    const toUserUpdate = await User.findByIdAndUpdate(
+      toUserId,
+      { $addToSet: { follower: fromUserId } },
+      { new: true, useFindAndModify: false }
+    );
+    if (!fromUserUpdate || !toUserUpdate) {
+      return { success: false }
+    }
+    revalidatePath(path)
+    return { success: true };
+  } catch (error: any) {
+    throw new Error(`Failed to start follow User: ${error.message}`);
+  }
+}
 
+export async function removeFollow({ fromUserId, toUserId, path }: FollowProps) {
+  try {
+    connectToDB()
+    const fromUserUpdate = await User.findByIdAndUpdate(
+      fromUserId,
+      { $pull: { follow: toUserId } },
+      { new: true, useFindAndModify: false }
+    );
+
+    const toUserUpdate = await User.findByIdAndUpdate(
+      toUserId,
+      { $pull: { follower: fromUserId } },
+      { new: true, useFindAndModify: false }
+    );
+    if (!fromUserUpdate || !toUserUpdate) {
+      return { success: false }
+    }
+    revalidatePath(path)
+    return { success: true };
+  } catch (error: any) {
+    throw new Error(`Failed to start remove follow User: ${error.message}`);
+  }
+}
 
 
 
@@ -287,18 +345,18 @@ export async function searchUsers(query: string) {
   try {
     connectToDB();
 
-   //implementare anche la ricerca per nome e congome, modificare on boarding
+    //implementare anche la ricerca per nome e congome, modificare on boarding
     const users = await User.find(
       {
-        username: { $regex: query, $options: 'i' } 
+        username: { $regex: query, $options: 'i' }
       }
     )
-    .select('id image username')
-    .limit(7); 
+      .select('id image username')
+      .limit(7);
 
     return users;
   } catch (error) {
     console.error('Failed to search users:', error);
-    return []; 
+    return [];
   }
 }
