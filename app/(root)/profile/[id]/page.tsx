@@ -2,7 +2,7 @@ import { currentUser } from "@clerk/nextjs";
 import { fetchUser, fetchUserInfoForProfile, startFollow } from "@/lib/actions/user.actions";
 import MainSectionProfile from "@/components/UserProfile/MainSectionProfile";
 import FollowButton from "@/components/UserProfile/FollowButton";
-
+import DialogFollower from "@/components/UserProfile/DialogFollower"
 
 async function page({ params }: { params: { id: string } }) {
   if (!params.id) return null;
@@ -10,12 +10,26 @@ async function page({ params }: { params: { id: string } }) {
   const user = await currentUser();
   let fromUser
 
-  if (!user) 
+  if (!user)
     return null
   else
-     fromUser = await fetchUser(user?.id)
-  
+    fromUser = await fetchUser(user?.id)
+
   const userToWatch = await fetchUserInfoForProfile(params.id)
+
+
+  function filterUserFollower(users: any) {
+    return users.map((user: any) => (
+      {
+        id: user.id,
+        _id: user._id.toString(),
+        image: user.image,
+        username: user.username
+      }
+    ))
+  }
+
+
   function filterUserPosts(posts: any) {
     return posts.map((post: any) => (
       {
@@ -56,7 +70,7 @@ async function page({ params }: { params: { id: string } }) {
     }))
   }
   const isFollowing = userToWatch.follower.some(
-    (follower:any) => follower._id.toString() === fromUser._id.toString()
+    (follower: any) => follower._id.toString() === fromUser._id.toString()
   );
 
   return (
@@ -74,7 +88,11 @@ async function page({ params }: { params: { id: string } }) {
                 )}
                 <FollowButton fromUserId={fromUser._id.toString()} toUserId={userToWatch._id.toString()} alreadyFollow={isFollowing}></FollowButton>
               </div>
-              <p className="text-sm font-sans pb-2">@{userToWatch.username} - {userToWatch.follower.length} follower </p>
+              <div className="flex flex-row space-x-1">
+                <p className="text-sm font-sans pb-2">@{userToWatch.username} -</p>
+                <DialogFollower numFollower={userToWatch.follower.length} followerUsers={filterUserFollower(userToWatch.follower)} />
+              </div>
+
             </div>
           </div>
         </div>

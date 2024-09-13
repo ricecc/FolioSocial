@@ -108,7 +108,7 @@ export async function fetchUserInfoForProfile(userId: string) {
       })
       .populate({
         path: 'follower',
-        select: 'id username'
+        select: 'id username image'
       })
       .select('imageSaved onboarded image username name');
 
