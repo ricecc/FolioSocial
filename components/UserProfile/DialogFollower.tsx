@@ -28,7 +28,7 @@ export function DialogFollower({ numFollower, followerUsers }: followerProp) {
             <DialogTrigger asChild>
                 <p className="text-sm font-sans pb-2 cursor-pointer">{numFollower} follower</p>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
+            <DialogContent className="lg:max-w-[425px] w-80 rounded-md">
                 <DialogHeader>
                     <DialogTitle>Tutti i follower</DialogTitle>
                 </DialogHeader>
