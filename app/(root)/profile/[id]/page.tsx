@@ -48,6 +48,7 @@ async function page({ params }: { params: { id: string } }) {
       
     }))
   }
+  console.log(userToWatch)
   {/**  <UserPosts userPosts={filterUserPostsData(userPosts.posts)} userSavedBooks={filterUserSavedBooks(userSavedBooks.savedBooks)} /> */ }
   return (
     <div className="flex justify-center items-center w-screen flex-col ">
@@ -56,7 +57,12 @@ async function page({ params }: { params: { id: string } }) {
           <div className="h-auto  flex flex-col justify-center items-center md:w-1/4 md:ml-8  mb-3 md:mb-0 bg-slate-100 ">
             <img src={userToWatch.image} className="w-24 h-24 rounded-full object-cover  border-spacing-52" alt="" />
             <div>
-              <p className="text-xl font-bold pt-2">{user.firstName} {user.lastName}</p>
+              {userToWatch.lastName?(
+                <p className="text-xl font-bold pt-2">{userToWatch.name} {userToWatch.lastName}</p>
+              ):(
+                <p className="text-xl font-bold pt-2 flex justify-center items-center"><span>{userToWatch.name}</span></p>
+              )}
+           
               <p className="text-sm font-sans pb-2">@{userToWatch.username} - {0} likes </p>
             </div>
           </div>

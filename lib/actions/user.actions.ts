@@ -102,7 +102,7 @@ export async function fetchUserInfoForProfile(userId: string) {
         path: 'savedBooks',
         select: 'largeImage title author'
       })
-      .select('imageSaved onboarded image username');
+      .select('imageSaved onboarded image username name');
 
     if (!user) {
       console.warn(`No user found with ID ${userId}`);

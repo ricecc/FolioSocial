@@ -108,8 +108,8 @@ function MobileTopNavBar() {
                     </DropdownMenuContent>
                 </DropdownMenu>
             </div>
-            <div className="lg:w-3/4 w-72">
-                <Command className="border-b h-auto">
+            <div className="lg:w-3/4 w-72 ">
+                <Command className="border-b h-auto bg-transparent ">
                     <div className="flex flex-row justify-between items-center px-3 py-3 space-x-3">
                         <div className="flex flex-row items-center space-x-3 w-full">
                             <img
@@ -124,7 +124,7 @@ function MobileTopNavBar() {
                                 placeholder="@username"
                                 value={searchTerm}
                                 onChange={(e) => getUsers(e.target.value)}
-                                className="focus:outline-none w-full"
+                                className="focus:outline-none w-full bg-transparent"
                             />
                         </div>
                        

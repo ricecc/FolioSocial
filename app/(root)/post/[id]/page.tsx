@@ -27,7 +27,7 @@ async function page({ params }: { params: { id: string } }) {
 
   return (
     <div className="h-full flex-col flex justify-start items-center ">
-      <section className="flex h-auto justify-center flex-col lg:w-2/3 w-full ">
+      <section className="flex h-auto justify-center flex-col  w-full ">
         <div className="grid w-full  md:grid-cols-2 grid-cols-1 ">
           <div className="bg-zinc-50 min-h-48 pt-6 p-5 border flex flex-col justify-between">
             <div>
