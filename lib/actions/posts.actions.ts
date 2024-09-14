@@ -89,12 +89,23 @@ export async function fetchPostById(postId: string) {
       .populate({
         path: 'quotes',
         model: Quote,
-        select: "quote page like"
+        select: "quote page",
+        populate:{
+          path:'like',
+          model:User,
+          select:'id image username name lastName'
+        }
       })
       .populate({
         path: 'reviews',
         model: Review,
-        select: "review title like"
+        select: "review title",
+        populate:{
+          path:'like',
+          model:User,
+          select:'id image username name lastName'
+        }
+
       })
       .exec();
     return post
@@ -125,12 +136,17 @@ export async function fetchPostsFeed() {
         select: "title author"
       })
       .populate({
+        path:'like',
+        model:User,
+        select:'id image username name lastName'
+      })
+      .populate({
         path: 'quotes',
         model: Quote,
         select:"quote"
       })
+      .limit(12)
       .exec();
-
     console.log("Posts fetched successfully");
     return posts;
   } catch (error: any) {

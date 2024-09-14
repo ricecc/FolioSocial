@@ -16,17 +16,12 @@ import { FaSearch } from 'react-icons/fa';
 interface Book {
     _id: string;
     title: string;
-    titleUrl: string;
-    smallImage: string;
     author: string;
-    publisher: string;
+    smallImage: string;
     largeImage: string;
-    description: string;
-    ean: string;
-    genre1: string;
-    genre2: string;
-    genre3: string;
-    year: string;
+    genre1:string;
+    genre2:string;
+    genre3:string;
 }
 
 interface BookSelectionProps {
@@ -47,7 +42,7 @@ const BookSelection = ({ onBookClick }: BookSelectionProps) => {
 
 
     return (
-        
+
         <Command className="border-b  md:min-w-[450px] h-auto bg-transparent ">
             <div className="flex flex-row items-center  px-3 py-3 space-x-3">
                 <img src="/assets/search.svg" alt="notification" width={15} height={15} className="cursor-pointer object-contain" />
@@ -69,7 +64,10 @@ const BookSelection = ({ onBookClick }: BookSelectionProps) => {
                             >
                                 <div className="flex flex-row justify-start items-center space-x-2">
                                     <img src={book.smallImage} alt="" className="w-5 h-8" />
-                                    <p>{book.title}</p>
+                                    <div className="flex flex-col">
+                                        <span className="font-regular">{book.title}</span>
+                                        <p className="font-extralight text-xs">{book.author}</p>
+                                    </div>
                                 </div>
                             </CommandItem>
                         ))}

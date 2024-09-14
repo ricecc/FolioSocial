@@ -25,23 +25,18 @@ interface DivData {
     imageUrl?: string;
     quote?: string;
     titleReview?: string;
-    page?:string;
+    page?: string;
 }
 
 interface Book {
     _id: string;
     title: string;
-    titleUrl: string;
-    smallImage: string;
     author: string;
-    publisher: string;
+    smallImage: string;
     largeImage: string;
-    description: string;
-    ean: string;
     genre1: string;
     genre2: string;
     genre3: string;
-    year: string;
 }
 
 interface UserProps {
@@ -109,7 +104,7 @@ export default function AddNewPost({ idUser }: UserProps) {
             divs.map(async (div) => {
                 if (div.type === 'quote' && div.quote) {
                     await createQuote({
-                        page:div.page || "",
+                        page: div.page || "",
                         quote: div.quote,
                         postId: post.toString()
                     });
@@ -128,19 +123,27 @@ export default function AddNewPost({ idUser }: UserProps) {
 
     return (
         <>
-       
+
             <Header onPublish={handlePublish} />
             <section className="flex h-auto justify-center flex-col lg:w-2/3 w-full">
                 <div className="grid w-full md:grid-cols-2 grid-cols-1 ">
-                    <div className="bg-zinc-50 min-h-48 pt-6 p-5 border">
+                    <div className="bg-zinc-50 min-h-48 pt-6 p-5 border flex flex-col justify-between">
+                        <div>
+                            {selectedBook ? (
+                                <>
+                                    <p className="text-2xl">{selectedBook.title}</p>
+                                    <p>{selectedBook.author}</p>
+                                </>
+                            ) : (
+                                <BookSelection onBookClick={handleBookClick} />
+                            )}
+                        </div>
                         {selectedBook ? (
-                            <>
-                                <p className="text-2xl">{selectedBook.title}</p>
-                                <p>{selectedBook.author}</p>
-                            </>
-                        ) : (
-                            <BookSelection onBookClick={handleBookClick} />
-                        )}
+                            <div className="flex justify-end">
+                                <p className='px-2 border rounded-lg w-min text-sm cursor-pointer' onClick={() => setSelectedBook(undefined)}>annulla</p>
+                            </div>
+                        ) : (<></>)}
+
                     </div>
                     <div className="bg-zinc-100 md:row-span-2 min-h-48 flex justify-center items-center">
                         <img src={selectedBook?.largeImage} alt="" className="max-h-96" />
@@ -150,7 +153,7 @@ export default function AddNewPost({ idUser }: UserProps) {
                             {div.type === "quote" && (
                                 <Quote
                                     quote={div.quote || ''}
-                                    page={div.page||''}
+                                    page={div.page || ''}
                                     setQuote={(newQuote) => updateDiv(index, { quote: newQuote })}
                                     setPage={(newPage) => updateDiv(index, { page: newPage })}
                                     index={index}
@@ -177,41 +180,41 @@ export default function AddNewPost({ idUser }: UserProps) {
                             )}
                         </div>
                     ))}
-                 
+
                 </div>
                 <div className={`mt-6  flex justify-center`}>
-                        <Accordion type="single" className={`${divs.length === 0 ? "w-full" : "md:w-2/3 w-full"}`} collapsible>
-                            <AccordionItem
-                                value="item-1"
-                                className="group flex justify-between items-center p-5 cursor-pointer hover:bg-slate-800 transition-colors duration-100"
-                                onClick={() => addDiv("quote")}
-                            >
-                                <p className="group-hover:text-white">Quote</p>
-                                <img src="/assets/plus.svg" alt="plus" width={24} height={24} className="cursor-pointer object-contain group-hover:bg-white group-hover:rounded-full" />
-                            </AccordionItem>
-                            <AccordionItem
-                                value="item-2"
-                                className="group flex justify-between items-center p-5 cursor-pointer hover:bg-slate-800 transition-colors duration-100"
-                                onClick={() => addDiv("review")}
-                            >
-                                <p className="group-hover:text-white">Review</p>
-                                <img src="/assets/plus.svg" alt="plus" width={24} height={24} className="cursor-pointer object-contain group-hover:bg-white group-hover:rounded-full" />
-                            </AccordionItem>
-                            <AccordionItem
-                                value="item-3"
-                                className="group flex justify-between items-center p-5 cursor-pointer hover:bg-slate-800 transition-colors duration-100"
-                                onClick={() => addDiv("image", true)}
-                            >
-                                <p className="group-hover:text-white">Image</p>
-                                <img src="/assets/plus.svg" alt="plus" width={24} height={24} className="cursor-pointer object-contain group-hover:bg-white group-hover:rounded-full" />
-                            </AccordionItem>
-                            <AccordionItem
-                                value="item-4"
-                            >
-                                <TagsInput tags={tags} setTags={setTags} placeholder="Tag" />
-                            </AccordionItem>
-                        </Accordion>
-                    </div>
+                    <Accordion type="single" className={`${divs.length === 0 ? "w-full" : "md:w-2/3 w-full"}`} collapsible>
+                        <AccordionItem
+                            value="item-1"
+                            className="group flex justify-between items-center p-5 cursor-pointer hover:bg-slate-800 transition-colors duration-100"
+                            onClick={() => addDiv("quote")}
+                        >
+                            <p className="group-hover:text-white">Quote</p>
+                            <img src="/assets/plus.svg" alt="plus" width={24} height={24} className="cursor-pointer object-contain group-hover:bg-white group-hover:rounded-full" />
+                        </AccordionItem>
+                        <AccordionItem
+                            value="item-2"
+                            className="group flex justify-between items-center p-5 cursor-pointer hover:bg-slate-800 transition-colors duration-100"
+                            onClick={() => addDiv("review")}
+                        >
+                            <p className="group-hover:text-white">Review</p>
+                            <img src="/assets/plus.svg" alt="plus" width={24} height={24} className="cursor-pointer object-contain group-hover:bg-white group-hover:rounded-full" />
+                        </AccordionItem>
+                        <AccordionItem
+                            value="item-3"
+                            className="group flex justify-between items-center p-5 cursor-pointer hover:bg-slate-800 transition-colors duration-100"
+                            onClick={() => addDiv("image", true)}
+                        >
+                            <p className="group-hover:text-white">Image</p>
+                            <img src="/assets/plus.svg" alt="plus" width={24} height={24} className="cursor-pointer object-contain group-hover:bg-white group-hover:rounded-full" />
+                        </AccordionItem>
+                        <AccordionItem
+                            value="item-4"
+                        >
+                            <TagsInput tags={tags} setTags={setTags} placeholder="Tag" />
+                        </AccordionItem>
+                    </Accordion>
+                </div>
             </section>
         </>
     );

@@ -8,7 +8,7 @@ async function page({ params }: { params: { name: string, tag: string } }) {
     if (!user) return null;
     const userInfo = await fetchUser(user.id)
     const feed = await getPostsByTag(params.tag)
-    console.log(feed)
+
     return (
         <>
             <div className="h-16 flex items-center bg-slate-800 pl-10">

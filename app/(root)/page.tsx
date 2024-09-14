@@ -19,13 +19,26 @@ export default async function Home() {
   if (!userInfo?.onboarded) redirect('/onboarding')
   if (userInfo)
     feed = await fetchPostsFeed();
-
+ 
+  function filterUserLiked(users: any) {
+    return users.map((user: any) => (
+      {
+        id: user.id,
+        image: user.image,
+        username: user.username,
+        name:user.name,
+        lastName:user.lastName
+      }
+    ))
+  }
   return (
 
     <div className="h-full gap-8  grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3  mx-auto mt-3 flex justify-center  ">
       {feed && feed.length > 0 ? (
         feed.map((post, index) => (
+         
             <MainFeedSection
+              usersLiked={filterUserLiked(post.like)}
               isLiked={userInfo.postLiked.includes(post._id.toString())}
               index={index}
               postId={post._id.toString()}
@@ -42,7 +55,7 @@ export default async function Home() {
               postLike={post.like.length}
               isSaved={userInfo.savedBooks.includes(post.book._id)}
             />
-      
+         
         ))
       ) : (
         <h1>Il feed è vuoto</h1>

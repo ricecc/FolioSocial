@@ -24,7 +24,17 @@ async function page({ params }: { params: { id: string } }) {
   const dateObject = new Date(post.createdAt);
   const formattedDateTime = dateObject.toLocaleDateString();
 
-
+  function filterUserLiked(users: any) {
+    return users.map((user: any) => (
+      {
+        id: user.id,
+        image: user.image,
+        username: user.username,
+        name:user.name,
+        lastName:user.lastName
+      }
+    ))
+  }
   return (
     <div className="h-full flex-col flex justify-start items-center ">
       <section className="flex h-auto justify-center flex-col  w-full ">
@@ -45,6 +55,7 @@ async function page({ params }: { params: { id: string } }) {
         <div className="grid w-full  md:grid-cols-2 grid-cols-1">
           {elements.map((element: any, index: number) => {
             if (element.type === "quote") {
+            
               return (
                 <div key={index} className="col-span-1  p-4 min-h-48 border flex justify-between flex-col ">
                   <div className="flex justify-center items-center min-h-24">
@@ -54,7 +65,13 @@ async function page({ params }: { params: { id: string } }) {
                     <span >page:12</span>
                     <div className="flex fle-row">
                       <SaveToggle fromUserId={userInfo._id.toString()} type={"quote"} toElement={element.data._id.toString()} isSaved={userInfo.quoteSaved.includes(element.data._id)}></SaveToggle>
-                      <HeartToggle fromUserId={userInfo._id.toString()} type={"quote"} toElement={element.data._id.toString()} numLike={element.data.like.length} liked={userInfo.quoteLiked.includes(element.data._id)}></HeartToggle>
+                      <HeartToggle 
+                        fromUserId={userInfo._id.toString()} 
+                        type={"quote"} 
+                        toElement={element.data._id.toString()} 
+                        numLike={element.data.like.length} 
+                        liked={userInfo.quoteLiked.includes(element.data._id)}
+                        userLiked={filterUserLiked(element.data.like)}/>
                     </div>
                   </div>
 
@@ -68,7 +85,7 @@ async function page({ params }: { params: { id: string } }) {
                   <div className="flex justify-end">
                     <div className="flex flex-row">
                       <SaveToggle fromUserId={userInfo._id.toString()} type={"review"} toElement={element.data._id.toString()} isSaved={userInfo.reviewSaved.includes(element.data._id)}></SaveToggle>
-                      <HeartToggle fromUserId={userInfo._id.toString()} type={"review"} toElement={element.data._id.toString()} numLike={element.data.like.length} liked={userInfo.reviewLiked.includes(element.data._id)}></HeartToggle>
+                      <HeartToggle fromUserId={userInfo._id.toString()} type={"review"} toElement={element.data._id.toString()} numLike={element.data.like.length} liked={userInfo.reviewLiked.includes(element.data._id)} userLiked={filterUserLiked(element.data.like)}></HeartToggle>
                     </div>
 
                   </div>
@@ -80,7 +97,7 @@ async function page({ params }: { params: { id: string } }) {
                   <ImageDialog imageSrc={element.data} />
                   <div className="absolute bottom-3 right-3 bg-white rounded-full p-2 flex flex-row space-x-2">
                     <SaveToggle fromUserId={userInfo._id.toString()} type={"picture"} toElement={element.data} isSaved={userInfo.imageSaved.includes(element.data._id)}></SaveToggle>
-                    <HeartToggle fromUserId={userInfo._id.toString()} type={"picture"} toElement={element.data} numLike={0} liked={userInfo.imageLiked.includes(element.data)} ></HeartToggle>
+                    <HeartToggle fromUserId={userInfo._id.toString()} type={"picture"} toElement={element.data} numLike={0} liked={userInfo.imageLiked.includes(element.data)} userLiked={[]}></HeartToggle>
                   </div>
                 </div>
               );

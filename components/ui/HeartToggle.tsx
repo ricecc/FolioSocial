@@ -5,6 +5,15 @@ import { putLikeToReview, removeLikeToReview } from '@/lib/actions/review.action
 import { putLikeToImage, removeLikeToImage } from '@/lib/actions/user.actions';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
+import DialogLike from '../UserProfile/DialogLike';
+
+interface UserProps{
+  id:string,
+  image:string,
+  name:string,
+  lastName:string,
+  username:string
+}
 
 interface Props {
   fromUserId: string;
@@ -12,10 +21,11 @@ interface Props {
   toElement:string;
   numLike: number;
   liked: boolean;
+  userLiked:UserProps[]
  
 }
 
-const HeartToggle = ({ fromUserId, toElement,type, numLike, liked }: Props) => {
+const HeartToggle = ({ fromUserId, toElement,type, numLike, liked,userLiked }: Props) => {
   const [isClicked, setIsClicked] = useState<boolean>(liked);
   const [likeCount, setLikeCount] = useState<number>(numLike);
   const path = usePathname();
@@ -46,7 +56,7 @@ const HeartToggle = ({ fromUserId, toElement,type, numLike, liked }: Props) => {
   };
 
   return (
-    <div onClick={handleClick} className="cursor-pointer object-contain">
+    <div className="cursor-pointer object-contain">
       {isClicked && liked ? (
         <div className="flex justify-center items-center flex-row space-x-3">
           <img
@@ -54,9 +64,10 @@ const HeartToggle = ({ fromUserId, toElement,type, numLike, liked }: Props) => {
             alt="heart filled"
             width={24}
             height={24}
+            onClick={handleClick}
           />
-          <span>{likeCount}</span>
-          
+         
+          <DialogLike userLiked={userLiked} numLike={likeCount}></DialogLike>
         </div>
       ) : (
         <div className="flex justify-center items-center flex-row space-x-3">
@@ -65,8 +76,9 @@ const HeartToggle = ({ fromUserId, toElement,type, numLike, liked }: Props) => {
             alt="heart"
             width={24}
             height={24}
+            onClick={handleClick}
           />
-          <span>{likeCount}</span>
+          <DialogLike userLiked={userLiked} numLike={likeCount}></DialogLike>
         </div>
       )}
     </div>
