@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import "../globals.css";
-import TopNavBar from "@/components/navigation/TopNavBar";
+
 import Footer from "@/components/navigation/Footer";
 import { Navbar } from "flowbite-react";
 import { EdgeStoreProvider } from "@/lib/edgestore";
