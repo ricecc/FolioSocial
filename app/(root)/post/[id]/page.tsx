@@ -64,19 +64,16 @@ async function page({ params }: { params: { id: string } }) {
                     <p className=" ">"{element.data.quote}"</p>
                   </div>
                   <span >page:{element.data.page}</span>
-                  <div className="flex flex-row justify-between items-center">
-                    <LikeSection userLiked={filterUserLiked(element.data.like)} numLike={element.data.like.length} />
-                    <div className="flex flex-row">
-                      <SaveToggle fromUserId={userInfo._id.toString()} type={"quote"} toElement={element.data._id.toString()} isSaved={userInfo.quoteSaved.includes(element.data._id)}></SaveToggle>
-                      <HeartToggle
-                        fromUserId={userInfo._id.toString()}
-                        type={"quote"}
-                        toElement={element.data._id.toString()}
-                        numLike={element.data.like.length}
-                        liked={userInfo.quoteLiked.includes(element.data._id)}
-                      />
-                    </div>
-                  </div>
+                  <LikeSection
+                    fromUserUsername={userInfo.username}
+                    userLiked={filterUserLiked(element.data.like)}
+                    numLike={element.data.like.length}
+                    fromUserId={userInfo._id.toString()}
+                    toElement={element.data._id.toString()}
+                    liked={userInfo.quoteLiked.includes(element.data._id)}
+                    isSaved={userInfo.quoteSaved.includes(element.data._id)}
+                    type="quote"
+                  />
 
 
                 </div>
@@ -86,20 +83,16 @@ async function page({ params }: { params: { id: string } }) {
                 <div key={index} className="col-span-1 p-4 min-h-48 border border-gray-300 rounded  space-y-4">
                   <h3 className="text-lg font-bold">{element.data.title}</h3>
                   <p>{element.data.review}</p>
-                  <div className="flex flex-row justify-between items-center">
-                    <LikeSection userLiked={filterUserLiked(element.data.like)} numLike={element.data.like.length} />
-                    <div className="flex flex-row">
-                      <SaveToggle fromUserId={userInfo._id.toString()} type={"review"} toElement={element.data._id.toString()} isSaved={userInfo.quoteSaved.includes(element.data._id)}></SaveToggle>
-                      <HeartToggle
-                        fromUserId={userInfo._id.toString()}
-                        type={"review"}
-                        toElement={element.data._id.toString()}
-                        numLike={element.data.like.length}
-                        liked={userInfo.quoteLiked.includes(element.data._id)}
-                      />
-                    </div>
-                  </div>
-
+                  <LikeSection
+                    fromUserUsername={userInfo.username}
+                    userLiked={filterUserLiked(element.data.like)}
+                    numLike={element.data.like.length}
+                    fromUserId={userInfo._id.toString()}
+                    toElement={element.data._id.toString()}
+                    liked={userInfo.quoteLiked.includes(element.data._id)}
+                    isSaved={userInfo.quoteSaved.includes(element.data._id)}
+                    type="review"
+                  />
                 </div>
               );
             } else if (element.type === "image") {
@@ -108,7 +101,7 @@ async function page({ params }: { params: { id: string } }) {
                   <ImageDialog imageSrc={element.data} />
                   <div className="absolute bottom-3 right-3 bg-white rounded-full p-2 flex flex-row space-x-2">
                     <SaveToggle fromUserId={userInfo._id.toString()} type={"picture"} toElement={element.data} isSaved={userInfo.imageSaved.includes(element.data._id)}></SaveToggle>
-                    <HeartToggle fromUserId={userInfo._id.toString()} type={"picture"} toElement={element.data} numLike={0} liked={userInfo.imageLiked.includes(element.data)} ></HeartToggle>
+
                   </div>
                 </div>
               );

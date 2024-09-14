@@ -31,14 +31,13 @@ interface Props {
     userId: string,
     username: string,
     postAuthorId: string,
-    postLike: number,
-    isSaved: boolean,
     index: number,
     quote: string,
     isLiked: boolean,
-    usersLiked: UserProps[]
+    usersLiked: UserProps[],
+    usernameViewer:string,
 }
-const MainFeedSection = ({ usersLiked, isLiked, postId, quote, bookTitle, bookAuthor, bookCover, userImage, bookId, userId, username, postAuthorId, postLike, isSaved, imagePost, index }: Props) => {
+const MainFeedSection = ({ usersLiked, isLiked, postId, quote, bookTitle, bookAuthor, bookCover, userImage, bookId, userId, username, postAuthorId, usernameViewer, imagePost, index }: Props) => {
 
 
     const pathname = usePathname();
@@ -72,8 +71,17 @@ const MainFeedSection = ({ usersLiked, isLiked, postId, quote, bookTitle, bookAu
             </div>
             <div className=' flex flex-col p-3 '>
                 <div className='flex flex-row space-x-2  justify-between pt-2 pb-2  '>
-                    <LikeSection userLiked={usersLiked} numLike={usersLiked.length}/>
-                    <HeartToggle fromUserId={userId} toElement={postId} numLike={postLike} liked={isLiked} type={'post'}></HeartToggle>
+                    <LikeSection
+                        fromUserUsername={usernameViewer}
+                        userLiked={usersLiked}
+                        numLike={usersLiked.length}
+                        fromUserId={userId}
+                        toElement={postId}
+                        liked={isLiked}
+                        isSaved={false}
+                        type="post"
+                    />
+
                 </div>
                 <div className=''>
                     <p className='font-md font-medium hover:text-hoverTag '><Link href={`/book/${bookId}`}>{bookTitle}</Link></p>

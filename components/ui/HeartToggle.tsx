@@ -5,52 +5,77 @@ import { putLikeToReview, removeLikeToReview } from '@/lib/actions/review.action
 import { putLikeToImage, removeLikeToImage } from '@/lib/actions/user.actions';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
-import DialogLike from '../UserProfile/DialogLike';
-
-
 
 interface Props {
   fromUserId: string;
-  type:"quote" | "post" | "review" | "picture";
-  toElement:string;
-  numLike: number;
+  type: "quote" | "post" | "review" | "picture";
+  toElement: string;
   liked: boolean;
-  
+  setViewUsername: (value: boolean) => void; 
 }
 
-const HeartToggle = ({ fromUserId, toElement,type, numLike, liked }: Props) => {
+const HeartToggle = ({ fromUserId, toElement, type, liked,setViewUsername  }: Props) => {
   const [isClicked, setIsClicked] = useState<boolean>(liked);
-  const [likeCount, setLikeCount] = useState<number>(numLike);
+
   const path = usePathname();
 
   const handleClick = async () => {
-    if (isClicked) {
-      if(type==="post")
-        await removeLikeToPost({ fromUserId, toElement,path });
-      if(type==="quote")
-        await removeLikeToQuote({ fromUserId, toElement,path });
-      if(type==="review")
-        await removeLikeToReview({ fromUserId, toElement,path });
-      if(type==="picture")
-        await removeLikeToImage({ fromUserId, toElement,path });
-      setLikeCount(likeCount - 1);
-    } else {
-      if(type==="post")
-        await putLikeToPost({ fromUserId, toElement,path });
-      if(type==="quote")
-        await putLikeToQuote({ fromUserId, toElement,path });
-      if(type==="review")
-        await putLikeToReview({ fromUserId, toElement,path });
-      if(type==="picture")
-        await putLikeToImage({ fromUserId, toElement,path });
-      setLikeCount(likeCount + 1);
-    }
+    
+    const previousIsClicked = isClicked;
+
+    
     setIsClicked(!isClicked);
+    setViewUsername(true);
+
+    try {
+
+      if (isClicked) {
+        
+        switch (type) {
+          case "post":
+            await removeLikeToPost({ fromUserId, toElement, path });
+            break;
+          case "quote":
+            await removeLikeToQuote({ fromUserId, toElement, path });
+            break;
+          case "review":
+            await removeLikeToReview({ fromUserId, toElement, path });
+            break;
+          case "picture":
+            await removeLikeToImage({ fromUserId, toElement, path });
+            break;
+          default:
+            throw new Error("Tipo non supportato");
+        }
+      } else {
+        
+        switch (type) {
+          case "post":
+            await putLikeToPost({ fromUserId, toElement, path });
+            break;
+          case "quote":
+            await putLikeToQuote({ fromUserId, toElement, path });
+            break;
+          case "review":
+            await putLikeToReview({ fromUserId, toElement, path });
+            break;
+          case "picture":
+            await putLikeToImage({ fromUserId, toElement, path });
+            break;
+          default:
+            throw new Error("Tipo non supportato");
+        }
+      }
+    } catch (error) {
+
+      alert("Errore nell'aggiornare il like, riprova più tardi")
+      setIsClicked(previousIsClicked);
+    }
   };
 
   return (
     <div className="cursor-pointer object-contain">
-      {isClicked && liked ? (
+      {isClicked ? (
         <div className="flex justify-center items-center flex-row space-x-3">
           <img
             src="/assets/heart-filled.svg"
