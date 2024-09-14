@@ -348,14 +348,16 @@ export async function searchUsers(query: string) {
   try {
     connectToDB();
 
-    //implementare anche la ricerca per nome e congome, modificare on boarding
-    const users = await User.find(
-      {
-        username: { $regex: query, $options: 'i' }
-      }
-    )
-      .select('id image username')
-      .limit(7);
+   
+    const users = await User.find({
+      $or: [
+        { username: { $regex: query, $options: 'i' } },
+        { name: { $regex: query, $options: 'i' } },
+        { lastName: { $regex: query, $options: 'i' } }
+      ]
+    })
+    .select('id image username name lastName') 
+    .limit(7);
 
     return users;
   } catch (error) {

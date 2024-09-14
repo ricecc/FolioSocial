@@ -22,6 +22,8 @@ import { User, Plus, LibraryBig } from "lucide-react";
 interface User {
     id: string;
     image: string;
+    name: string;
+    lastName: string;
     username: string;
 }
 
@@ -127,12 +129,12 @@ function MobileTopNavBar() {
                                 className="focus:outline-none w-full bg-transparent"
                             />
                         </div>
-                       
+
                     </div>
                     {searchTerm.trim() !== "" && (
                         termResult.length > 0 ? (
                             <CommandList className="absolute top-14 bg-zinc-50 lg:w-3/4 w-72 shadow-2xl rounded-md">
-                                <CommandGroup heading="Suggestions">
+                                <CommandGroup heading="Suggeriti">
                                     {termResult.map((user) => (
                                         <CommandItem
                                             key={user.id}
@@ -145,7 +147,11 @@ function MobileTopNavBar() {
                                                     alt=""
                                                     className="w-7 h-7 rounded-full object-cover"
                                                 />
-                                                <p>{user.username}</p>
+                                                <div className="flex flex-col">
+                                                    <span className="font-regular">{user.username}</span>
+                                                    <p className="font-extralight text-xs">{user.name} {user.lastName}</p>
+                                                </div>
+
                                             </div>
                                         </CommandItem>
                                     ))}
