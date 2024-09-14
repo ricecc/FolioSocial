@@ -27,7 +27,7 @@ export function DialogLike({ numLike, userLiked }: likedProps) {
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <p className="text-sm font-sans pb-2 cursor-pointer">{numLike}</p>
+                <p className="text-sm font-sans  cursor-pointer"> e altri {numLike}</p>
             </DialogTrigger>
             <DialogContent className="lg:max-w-[425px] w-80 rounded-md">
                 {numLike > 0 ? (

@@ -7,13 +7,7 @@ import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 import DialogLike from '../UserProfile/DialogLike';
 
-interface UserProps{
-  id:string,
-  image:string,
-  name:string,
-  lastName:string,
-  username:string
-}
+
 
 interface Props {
   fromUserId: string;
@@ -21,11 +15,10 @@ interface Props {
   toElement:string;
   numLike: number;
   liked: boolean;
-  userLiked:UserProps[]
- 
+  
 }
 
-const HeartToggle = ({ fromUserId, toElement,type, numLike, liked,userLiked }: Props) => {
+const HeartToggle = ({ fromUserId, toElement,type, numLike, liked }: Props) => {
   const [isClicked, setIsClicked] = useState<boolean>(liked);
   const [likeCount, setLikeCount] = useState<number>(numLike);
   const path = usePathname();
@@ -66,8 +59,6 @@ const HeartToggle = ({ fromUserId, toElement,type, numLike, liked,userLiked }: P
             height={24}
             onClick={handleClick}
           />
-         
-          <DialogLike userLiked={userLiked} numLike={likeCount}></DialogLike>
         </div>
       ) : (
         <div className="flex justify-center items-center flex-row space-x-3">
@@ -78,7 +69,6 @@ const HeartToggle = ({ fromUserId, toElement,type, numLike, liked,userLiked }: P
             height={24}
             onClick={handleClick}
           />
-          <DialogLike userLiked={userLiked} numLike={likeCount}></DialogLike>
         </div>
       )}
     </div>

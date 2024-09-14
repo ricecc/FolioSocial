@@ -10,6 +10,8 @@ import HeartToggle from '../ui/HeartToggle';
 import QuotePreview from './QuotePreview';
 import ImagePostPreview from './ImagePostPreview';
 import BookCoverPreview from './BookCoverPreview';
+import DialogLike from '../UserProfile/DialogLike';
+import LikeSection from '../ui/LikeSection';
 
 interface UserProps {
     id: string,
@@ -34,9 +36,9 @@ interface Props {
     index: number,
     quote: string,
     isLiked: boolean,
-    usersLiked:UserProps[]
+    usersLiked: UserProps[]
 }
-const MainFeedSection = ({ usersLiked,isLiked, postId, quote, bookTitle, bookAuthor, bookCover, userImage, bookId, userId, username, postAuthorId, postLike, isSaved, imagePost, index }: Props) => {
+const MainFeedSection = ({ usersLiked, isLiked, postId, quote, bookTitle, bookAuthor, bookCover, userImage, bookId, userId, username, postAuthorId, postLike, isSaved, imagePost, index }: Props) => {
 
 
     const pathname = usePathname();
@@ -54,7 +56,7 @@ const MainFeedSection = ({ usersLiked,isLiked, postId, quote, bookTitle, bookAut
     } else {
         content = <BookCoverPreview bookCover={bookCover}></BookCoverPreview>
     }
-    
+
     return (
         <div className='flex flex-col cursor-pointer mb-10  w-[320px] sm:w-[250px] md:w-[450px] shadow-xl ' >
             <div className="w-[320px] sm:w-[250px] md:w-[450px] h-[350px] flex justify-between flex-col items-center  relative">
@@ -69,8 +71,9 @@ const MainFeedSection = ({ usersLiked,isLiked, postId, quote, bookTitle, bookAut
                 </Link>
             </div>
             <div className=' flex flex-col p-3 '>
-                <div className='flex flex-row space-x-2  justify-end pt-2 pb-2  '>
-                    <HeartToggle fromUserId={userId} toElement={postId} numLike={postLike} liked={isLiked} type={'post'} userLiked={usersLiked}></HeartToggle>
+                <div className='flex flex-row space-x-2  justify-between pt-2 pb-2  '>
+                    <LikeSection userLiked={usersLiked} numLike={usersLiked.length}/>
+                    <HeartToggle fromUserId={userId} toElement={postId} numLike={postLike} liked={isLiked} type={'post'}></HeartToggle>
                 </div>
                 <div className=''>
                     <p className='font-md font-medium hover:text-hoverTag '><Link href={`/book/${bookId}`}>{bookTitle}</Link></p>

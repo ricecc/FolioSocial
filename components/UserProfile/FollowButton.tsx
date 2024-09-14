@@ -26,7 +26,7 @@ const FollowButton = ({ fromUserId, toUserId, alreadyFollow }: FollowProps) => {
 
     return (
         <button
-            className={`px-2  rounded-lg font-bold transition-colors duration-300 ${isFollowing
+            className={`px-2  rounded-lg font-bold  ${isFollowing
                     ? "bg-white text-black border border-black font-light"
                     : "bg-black text-white font-light"
                 }`}
