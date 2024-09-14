@@ -80,19 +80,24 @@ async function page({ params }: { params: { id: string } }) {
               );
             } else if (element.type === "review") {
               return (
-                <div key={index} className="col-span-1 p-4 min-h-48 border border-gray-300 rounded  space-y-4">
-                  <h3 className="text-lg font-bold">{element.data.title}</h3>
-                  <p>{element.data.review}</p>
-                  <LikeSection
-                    fromUserUsername={userInfo.username}
-                    userLiked={filterUserLiked(element.data.like)}
-                    numLike={element.data.like.length}
-                    fromUserId={userInfo._id.toString()}
-                    toElement={element.data._id.toString()}
-                    liked={userInfo.quoteLiked.includes(element.data._id)}
-                    isSaved={userInfo.quoteSaved.includes(element.data._id)}
-                    type="review"
-                  />
+                <div key={index} className="col-span-1 p-4 flex-col justify-between min-h-48 border border-gray-300 rounded  space-y-4">
+                  <div className="flex justify-start  min-h-28  flex-col space-y-5 pt-2">
+                    <h3 className="text-lg font-bold">{element.data.title}</h3>
+                    <p>{element.data.review}</p>
+                  </div>
+                  <div>
+                    <LikeSection
+                      fromUserUsername={userInfo.username}
+                      userLiked={filterUserLiked(element.data.like)}
+                      numLike={element.data.like.length}
+                      fromUserId={userInfo._id.toString()}
+                      toElement={element.data._id.toString()}
+                      liked={userInfo.quoteLiked.includes(element.data._id)}
+                      isSaved={userInfo.quoteSaved.includes(element.data._id)}
+                      type="review"
+                    />
+
+                  </div>
                 </div>
               );
             } else if (element.type === "image") {

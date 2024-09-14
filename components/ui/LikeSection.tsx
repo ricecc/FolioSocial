@@ -1,10 +1,9 @@
 "use client"
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import HeartToggle from './HeartToggle'
 import SaveToggle from './SaveToggle'
 import DialogLike from '../UserProfile/DialogLike'
-import { boolean } from 'zod'
 
 interface UserProps {
     id: string,
@@ -18,59 +17,66 @@ interface likedProps {
     userLiked: UserProps[]
     numLike: number
     fromUserId: string
-    fromUserUsername: string,
+    fromUserUsername: string
     toElement: string
     liked: boolean
     type: "quote" | "post" | "review" | "picture"
-    isSaved: boolean // Aggiunto per SaveToggle
+    isSaved: boolean 
 }
 
 const LikeSection = ({ fromUserUsername, userLiked, numLike, fromUserId, toElement, liked, type, isSaved }: likedProps) => {
-    const [viewUsername, setViewUsername] = useState<boolean>(false)
+    const [count, setCount] = useState<number>(numLike) 
+    const [likedList, setLikedList] = useState<UserProps[]>(userLiked)
+
+
+    const updateLikedList = (isLiked: boolean) => {
+        if (isLiked) {
+         
+            setLikedList(likedList.filter(user => user.id !== fromUserId))
+        } else {
+          
+            setLikedList([{ id: fromUserId, username: fromUserUsername, image: "", name: "", lastName: "" }, ...likedList])
+        }
+    }
     return (
-        <div className="flex flex-row justify-between items-center w-full">
+        <div className="flex flex-row justify-between items-center w-full ">
             <div>
-                {numLike > 0 && numLike < 2 ? (
+                {count === 1 ? (
                     <p className='text-sm'>
                         Piace a
                         <span className='font-semibold hover:text-hoverTag pl-1'>
-                            <Link href={`/profile/${userLiked[0].id}`}>
-                                {userLiked[0].username}
+                            <Link href={`/profile/${likedList[0].id}`}>
+                                {likedList[0].username}
                             </Link>
                         </span>
                     </p>
-                ) : numLike > 1 ? (
+                ) : count > 1 ? (
                     <div className='flex flex-row space-x-1'>
                         <p className='text-sm'>
                             Piace a
                             <span className='font-semibold hover:text-hoverTag pl-1'>
-                                <Link href={`/profile/${userLiked[0].id}`}>
-                                    {userLiked[0].username}
+                                <Link href={`/profile/${likedList[0].id}`}>
+                                    {likedList[0].username}
                                 </Link>
                             </span>
                         </p>
-                        <DialogLike userLiked={userLiked} numLike={numLike - 1}></DialogLike>
+                        <DialogLike userLiked={userLiked} numLike={count - 1}></DialogLike>
                     </div>
-                ) : (numLike === 0 && viewUsername) ? (
-                    <p className='text-sm'>
-                        Piace a
-                        <span className='font-semibold hover:text-hoverTag pl-1'>
-                            {fromUserUsername}
-                        </span>
-                    </p>
+                ) : count === 0 ? (
+                    <></>
                 ) : (<></>)}
             </div>
 
             <div className="flex flex-row items-center space-x-3">
-
                 <HeartToggle
                     fromUserId={fromUserId}
                     toElement={toElement}
                     type={type}
                     liked={liked}
-                    setViewUsername={setViewUsername}
+                    setCount={setCount} 
+                    count={count}
+                    updateLikedList={updateLikedList} 
                 />
-
 
                 {type !== "post" && (
                     <SaveToggle

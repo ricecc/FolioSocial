@@ -11,26 +11,27 @@ interface Props {
   type: "quote" | "post" | "review" | "picture";
   toElement: string;
   liked: boolean;
-  setViewUsername: (value: boolean) => void; 
+  setCount: (value: number) => void; 
+  count: number;
+  updateLikedList: (isLiked: boolean) => void; 
 }
 
-const HeartToggle = ({ fromUserId, toElement, type, liked,setViewUsername  }: Props) => {
+const HeartToggle = ({ fromUserId, toElement, type, liked, setCount, count, updateLikedList }: Props) => {
   const [isClicked, setIsClicked] = useState<boolean>(liked);
 
   const path = usePathname();
 
   const handleClick = async () => {
-    
     const previousIsClicked = isClicked;
+    const newCount = isClicked ? count - 1 : count + 1;
 
     
     setIsClicked(!isClicked);
-    setViewUsername(!isClicked);
+    setCount(newCount);
+    updateLikedList(isClicked); 
 
     try {
-
       if (isClicked) {
-        
         switch (type) {
           case "post":
             await removeLikeToPost({ fromUserId, toElement, path });
@@ -48,7 +49,6 @@ const HeartToggle = ({ fromUserId, toElement, type, liked,setViewUsername  }: Pr
             throw new Error("Tipo non supportato");
         }
       } else {
-        
         switch (type) {
           case "post":
             await putLikeToPost({ fromUserId, toElement, path });
@@ -67,9 +67,11 @@ const HeartToggle = ({ fromUserId, toElement, type, liked,setViewUsername  }: Pr
         }
       }
     } catch (error) {
-
-      alert("Errore nell'aggiornare il like, riprova più tardi")
+     
+      alert("Errore nell'aggiornare il like, riprova più tardi");
       setIsClicked(previousIsClicked);
+      setCount(previousIsClicked ? newCount + 1 : newCount - 1);
+      updateLikedList(!isClicked); 
     }
   };
 
