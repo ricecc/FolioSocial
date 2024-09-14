@@ -25,7 +25,7 @@ const HeartToggle = ({ fromUserId, toElement, type, liked,setViewUsername  }: Pr
 
     
     setIsClicked(!isClicked);
-    setViewUsername(true);
+    setViewUsername(!isClicked);
 
     try {
 
