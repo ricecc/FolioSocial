@@ -16,6 +16,7 @@ interface Params {
   userId: string,
   username: string,
   name: string,
+  lastName:string,
   bio: string,
   image: string,
   path: string,
@@ -31,6 +32,7 @@ export async function updateUser({
   userId,
   bio,
   name,
+  lastName,
   path,
   username,
   image,
@@ -45,6 +47,7 @@ export async function updateUser({
         name,
         bio,
         image,
+        lastName,
         onboarded: true,
       },
       { upsert: true }
