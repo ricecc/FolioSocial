@@ -59,7 +59,7 @@ const CommentSection = ({ numComment, _idCurrentUser, postId, imageCurrentUser }
             {isClicked && (
                 <DialogComment
                     comments={comments}
-                    totalComment={comments.length}
+                    totalComment={numComment}
                     postId={postId}
                     currentUser={_idCurrentUser}
                     pathname={pathname}
