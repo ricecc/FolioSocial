@@ -15,6 +15,7 @@ import LikeSection from '../post/LikeSection';
 import CommentSection from '../post/CommentSection';
 
 interface UserProps {
+    _id:string,
     id: string,
     image: string,
     name: string,

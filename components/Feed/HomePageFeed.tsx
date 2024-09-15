@@ -35,6 +35,7 @@ const FeedClient: React.FC<FeedClientProps> = ({ initialPosts, currentUserInfo }
 
   function filterUserLiked(users: any[]) {
     return users.map((user) => ({
+      _id:user._id,
       id: user.id,
       image: user.image,
       username: user.username,
