@@ -13,7 +13,8 @@ export default async function Home() {
   const userInfo = await fetchUser(user.id);
   if (!userInfo?.onboarded) redirect('/onboarding');
 
-  const initialFeed = await fetchPostsFeed(1, 6);
+  const initialFeed = await fetchPostsFeed(1, 3);
+  
   const currentUserInfo={
     imageCurrentUser:userInfo.image,
     usernameViewer:userInfo.username,

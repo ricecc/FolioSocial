@@ -1,10 +1,15 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import {
-    Dialog,
-    DialogContent,
-    DialogFooter,
-} from "@/components/ui/dialog";
+    Drawer,
+    DrawerClose,
+    DrawerContent,
+    DrawerDescription,
+    DrawerFooter,
+    DrawerHeader,
+    DrawerTitle,
+    DrawerTrigger,
+} from "@/components/ui/drawer"
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CommentValidation } from "@/lib/validations/post";
 import { z } from "zod";
@@ -30,11 +35,11 @@ interface DialogCommentParams {
     onClose: () => void; // Funzione per chiudere il dialogo
 }
 
-export function DialogComment({ 
-    comments, 
-    totalComment, 
-    postId, 
-    currentUser, 
+export function DialogComment({
+    comments,
+    totalComment,
+    postId,
+    currentUser,
     pathname,
     hasMore,
     isLoading,
@@ -88,10 +93,10 @@ export function DialogComment({
     };
 
     return (
-        <Dialog open={true} onOpenChange={onClose} >
-            <DialogContent className="lg:max-w-[425px] max-w-[425px] rounded-lg">
+        <Drawer open={true} onOpenChange={onClose} >
+            <DrawerContent className="h-[80%] px-8">
                 {totalComment > 0 ? (
-                    <ScrollArea className="h-72 w-full">
+                    <ScrollArea className="h-full w-full">
                         <div className="p-4">
                             {comments.map((comment) => (
                                 <div key={comment._id} className="mb-4">
@@ -117,17 +122,22 @@ export function DialogComment({
                 )}
 
                 {hasMore && (
-                    <div className="text-center mt-4">
-                        <p
-                            onClick={loadMoreComments}
-                            className="text-sm text-blue-500 cursor-pointer"
-                        >
-                            {isLoading ? 'Caricamento...' : 'Carica altri'}
-                        </p>
+                    <div className="text-center  mt-4">
+                        {isLoading ? (
+                            <div className="flex space-x-2 justify-center items-center">
+                                <div className="bounce bounce1 h-2 w-2 rounded-full bg-slate-900"></div>
+                                <div className="bounce bounce2 h-2 w-2 rounded-full bg-slate-900"></div>
+                                <div className="bounce h-2 w-2 rounded-full bg-slate-900"></div>
+                            </div>
+                        ) : (
+                            <div onClick={loadMoreComments} className=" text-black cursor-pointer flex flex-col justify-center items-center space-y-2" >
+                                <img src="/assets/loadMore.svg" className="" alt="loadComments" width={24} height={24}></img>
+                            </div>
+                        )}
                     </div>
                 )}
 
-                <DialogFooter>
+                <DrawerFooter>
                     <Form {...form}>
                         <form className='w-full flex items-center gap-3' onSubmit={form.handleSubmit(onSubmit)}>
                             <FormField
@@ -141,6 +151,7 @@ export function DialogComment({
                                                 {...field}
                                                 placeholder='Comment...'
                                                 className='no-focus text-light-1 outline-none'
+                                                autoFocus={false}
                                             />
                                         </FormControl>
                                     </FormItem>
@@ -151,8 +162,8 @@ export function DialogComment({
                             </Button>
                         </form>
                     </Form>
-                </DialogFooter>
-            </DialogContent>
-        </Dialog>
+                </DrawerFooter>
+            </DrawerContent>
+        </Drawer>
     );
 }

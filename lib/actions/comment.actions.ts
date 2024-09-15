@@ -61,7 +61,7 @@ export async function fetchComments(postId: string, pageNumber = 1, pageSize = 2
     }
 }
 
-export async function createComment({ author, postId, text, pathname }: CommentParams) {
+export async function   createComment({ author, postId, text, pathname }: CommentParams) {
     try {
         connectToDB()
         const newComment = await Comment.create({

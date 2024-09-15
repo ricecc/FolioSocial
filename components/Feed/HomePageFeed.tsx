@@ -30,12 +30,12 @@ const FeedClient: React.FC<FeedClientProps> = ({ initialPosts, currentUserInfo }
     setFeed((prevFeed) => [...prevFeed, ...newFeed.posts]);
     setPage(newPage);
     setLoading(false);
-  
+
   };
 
   function filterUserLiked(users: any[]) {
     return users.map((user) => ({
-      _id:user._id,
+      _id: user._id,
       id: user.id,
       image: user.image,
       username: user.username,
@@ -53,7 +53,7 @@ const FeedClient: React.FC<FeedClientProps> = ({ initialPosts, currentUserInfo }
               <MainFeedSection
                 key={post._id}
                 imageCurrentUser={currentUserInfo.imageCurrentUser}
-                numComment={post.comments.length}
+                numComment={post.comments}
                 usernameViewer={currentUserInfo.usernameViewer}
                 usersLiked={filterUserLiked(post.like)}
                 isLiked={currentUserInfo.postLiked.includes(post._id.toString())}
@@ -81,13 +81,16 @@ const FeedClient: React.FC<FeedClientProps> = ({ initialPosts, currentUserInfo }
           hasMore ? (
             loading ? (
               <div className="flex flex-row space-x-1 items-center justify-center">
-                <div className="h-6 w-6 animate-spin rounded-full border-4 border-solid border-slate-700 border-t-transparent"></div>
-                <p className="text-sm text-slate-700">Caricamento</p>
+                <div className="flex space-x-2 justify-center items-center">
+                  <div className="bounce bounce1 h-2 w-2 rounded-full bg-slate-900"></div>
+                  <div className="bounce bounce2 h-2 w-2 rounded-full bg-slate-900"></div>
+                  <div className="bounce h-2 w-2 rounded-full bg-slate-900"></div>
+                </div>
               </div>
             ) : (
               <div onClick={loadMorePosts} className=" text-black cursor-pointer flex flex-col justify-center items-center space-y-2" >
                 <p>Load more</p>
-                <img src="/assets/loadMore.svg" className="animate-bounce" alt="plus" width={24} height={24}></img>
+                <img src="/assets/loadMore.svg" className="animate-pulse" alt="plus" width={24} height={24}></img>
               </div>
             )
 

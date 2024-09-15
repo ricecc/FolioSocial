@@ -116,7 +116,7 @@ export async function fetchPostById(postId: string) {
   }
 }
 
-export async function fetchPostsFeed(pageNumber = 1, pageSize = 6) {
+export async function fetchPostsFeed(pageNumber = 1, pageSize = 3) {
   console.log("Start fetchPostsFeed");
 
   try {
@@ -126,7 +126,7 @@ export async function fetchPostsFeed(pageNumber = 1, pageSize = 6) {
     const skipAmount = (pageNumber - 1) * pageSize;
 
 
-
+    
     // Crea una query per ottenere i post con la paginazione
     const postsQuery = Post.find()
       .sort({ createdAt: -1 })
@@ -151,7 +151,7 @@ export async function fetchPostsFeed(pageNumber = 1, pageSize = 6) {
         model: Quote,
         select: "quote",
       });
-
+  
     // Conta il numero totale di post
     const totalPostsCount = await Post.countDocuments();
 
@@ -180,11 +180,11 @@ export async function fetchPostsFeed(pageNumber = 1, pageSize = 6) {
         id: quote._id.toString(),
         quote: quote.quote,
       })),
-      comments: post.comments, // Include solo il conteggio dei commenti
+      comments: post.comments.length, // Include solo il conteggio dei commenti
       postImages: post.postImages,
       image: post.image,
     }));
-
+    
     console.log("Posts fetched successfully");
     return { posts: jsonPosts, isNext };
   } catch (error: any) {
