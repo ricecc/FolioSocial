@@ -295,7 +295,7 @@ export async function putLikeToImage({ fromUserId, toElement, path }: PropsLikeS
   }
 }
 export async function removeLikeToImage({ fromUserId, toElement, path }: PropsLikeSave) {
-  console.log("Start putLikeToImage")
+  console.log("Start removeLikeToImage")
   try {
     // Connessione al database
     connectToDB();

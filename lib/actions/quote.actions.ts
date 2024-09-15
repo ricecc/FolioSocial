@@ -79,7 +79,7 @@ export async function removeLikeToQuote({ fromUserId, toElement, path }: PropsLi
 
     try {
         // Assicurati che la connessione al DB sia completata prima di proseguire
-        await connectToDB();
+        connectToDB();
 
         const updatedQuote = await Quote.findByIdAndUpdate(
             toElement,

@@ -33,7 +33,9 @@ export default function RootLayout({
           <MobileTopNavBar/>
             <section className="main-container font-fontStrano">
               <EdgeStoreProvider>
+             
                 {children}
+             
               </EdgeStoreProvider>
             </section>
             <Footer />

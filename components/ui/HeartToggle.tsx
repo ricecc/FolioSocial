@@ -18,13 +18,13 @@ interface Props {
 
 const HeartToggle = ({ fromUserId, toElement, type, liked, setCount, count, updateLikedList }: Props) => {
   const [isClicked, setIsClicked] = useState<boolean>(liked);
-
+  const [tempLiked, setTempLiked] = useState<boolean>(false)
   const path = usePathname();
 
   const handleClick = async () => {
     const previousIsClicked = isClicked;
     const newCount = isClicked ? count - 1 : count + 1;
-
+    
     
     setIsClicked(!isClicked);
     setCount(newCount);

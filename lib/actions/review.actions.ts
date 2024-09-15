@@ -81,13 +81,13 @@ export async function putLikeToReview({ fromUserId, toElement, path }: PropsLike
       const updatedReview = await Review.findByIdAndUpdate(
         toElement,
         { $pull: { like: fromUserId } }, // Usa $addToSet per evitare duplicati
-        { new: true, useFindAndModify: false } // Restituisce il documento aggiornato e utilizza l'opzione senza deprecare useFindAndModify
+        { new: true } 
       );
   
       const updatedUser = await User.findByIdAndUpdate(
         fromUserId,
         { $pull: { reviewLiked: toElement } }, // Usa $addToSet per evitare duplicati
-        { new: true, useFindAndModify: false } // Restituisce il documento aggiornato e utilizza l'opzione senza deprecare useFindAndModify
+        { new: true } 
       );
   
       if (!updatedReview) {

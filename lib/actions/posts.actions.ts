@@ -116,16 +116,22 @@ export async function fetchPostById(postId: string) {
   }
 }
 
-export async function fetchPostsFeed() {
-  console.log("Start fetchPostsFeed")
-  try {
-    
-    connectToDB();
-   
+export async function fetchPostsFeed(pageNumber = 1, pageSize = 6) {
+  console.log("Start fetchPostsFeed");
 
-    console.log("Fetching posts...");
-    const posts = await Post.find()
+  try {
+    await connectToDB();
+
+    // Calcola l'importo da saltare
+    const skipAmount = (pageNumber - 1) * pageSize;
+
+
+
+    // Crea una query per ottenere i post con la paginazione
+    const postsQuery = Post.find()
       .sort({ createdAt: -1 })
+      .skip(skipAmount) // Applica lo skip
+      .limit(pageSize) // Limita i risultati
       .populate({
         path: 'author',
         model: User,
@@ -133,25 +139,57 @@ export async function fetchPostsFeed() {
       .populate({
         path: 'book',
         model: Book,
-        select: "title author"
+        select: "title author",
       })
       .populate({
-        path:'like',
-        model:User,
-        select:'id image username name lastName'
+        path: 'like',
+        model: User,
+        select: 'id image username name lastName',
       })
       .populate({
         path: 'quotes',
         model: Quote,
-        select:"quote"
-      })
-      .limit(12)
-      .exec();
+        select: "quote",
+      });
+
+    // Conta il numero totale di post
+    const totalPostsCount = await Post.countDocuments();
+
+    // Esegui la query
+    const posts = await postsQuery.exec();
+
+    // Verifica se ci sono altri post disponibili per la pagina successiva
+    const isNext = totalPostsCount > skipAmount + posts.length;
+    const jsonPosts = posts.map(post => ({
+      _id: post._id.toString(),
+      author: {
+        id: post.author._id.toString(),
+        username: post.author.username,
+        image: post.author.image,
+      },
+      book: post.book ? {
+        title: post.book.title,
+        author: post.book.author,
+      } : null,
+      like: post.like.map((user: any) => ({
+        id: user._id.toString(),
+        username: user.username,
+        image: user.image,
+      })),
+      quotes: post.quotes.map((quote: any) => ({
+        id: quote._id.toString(),
+        quote: quote.quote,
+      })),
+      comments: post.comments, // Include solo il conteggio dei commenti
+      postImages: post.postImages,
+      image: post.image,
+    }));
+
     console.log("Posts fetched successfully");
-    return posts;
+    return { posts: jsonPosts, isNext };
   } catch (error: any) {
-    console.error("Error while fetching feed post:", error.message);
-    throw new Error("Unable to fetch Post");
+    console.error("Error while fetching posts feed:", error.message);
+    throw new Error("Unable to fetch posts");
   }
 }
 

@@ -11,7 +11,8 @@ import QuotePreview from './QuotePreview';
 import ImagePostPreview from './ImagePostPreview';
 import BookCoverPreview from './BookCoverPreview';
 import DialogLike from '../UserProfile/DialogLike';
-import LikeSection from '../ui/LikeSection';
+import LikeSection from '../post/LikeSection';
+import CommentSection from '../post/CommentSection';
 
 interface UserProps {
     id: string,
@@ -24,7 +25,6 @@ interface Props {
     bookCover: string,
     postId: string,
     imagePost: string,
-    bookId: string,
     bookTitle: string,
     bookAuthor: string,
     userImage: string,
@@ -35,9 +35,11 @@ interface Props {
     quote: string,
     isLiked: boolean,
     usersLiked: UserProps[],
-    usernameViewer:string,
+    usernameViewer: string,
+    numComment: number,
+    imageCurrentUser: string,
 }
-const MainFeedSection = ({ usersLiked, isLiked, postId, quote, bookTitle, bookAuthor, bookCover, userImage, bookId, userId, username, postAuthorId, usernameViewer, imagePost, index }: Props) => {
+const MainFeedSection = ({ imageCurrentUser, numComment, usersLiked, isLiked, postId, quote, bookTitle, bookAuthor, bookCover, userImage, userId, username, postAuthorId, usernameViewer, imagePost, index }: Props) => {
 
 
     const pathname = usePathname();
@@ -70,8 +72,9 @@ const MainFeedSection = ({ usersLiked, isLiked, postId, quote, bookTitle, bookAu
                 </Link>
             </div>
             <div className=' flex flex-col p-3 '>
-                <div className='flex flex-row space-x-2  justify-between pt-2 pb-2  '>
+                <div className='flex flex-col space-y-1  justify-between pt-2 pb-2  '>
                     <LikeSection
+                        fromUserImage={imageCurrentUser}
                         fromUserUsername={usernameViewer}
                         userLiked={usersLiked}
                         numLike={usersLiked.length}
@@ -81,10 +84,11 @@ const MainFeedSection = ({ usersLiked, isLiked, postId, quote, bookTitle, bookAu
                         isSaved={false}
                         type="post"
                     />
-
+                    {/**comment section */}
+                    <CommentSection numComment={numComment} _idCurrentUser={userId} postId={postId} imageCurrentUser={imageCurrentUser} />
                 </div>
                 <div className=''>
-                    <p className='font-md font-medium hover:text-hoverTag '><Link href={`/book/${bookId}`}>{bookTitle}</Link></p>
+                    <p className='font-md font-medium hover:text-hoverTag '>{bookTitle}</p>
                     <p className='text-sm'>{bookAuthor}</p>
                 </div>
             </div>

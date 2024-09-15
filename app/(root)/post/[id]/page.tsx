@@ -1,7 +1,7 @@
 import ImageDialog from "@/components/ImageDialog/ImageDialog";
 import WantToRead from "@/components/saveButton/PostWantToRead";
 import HeartToggle from "@/components/ui/HeartToggle";
-import LikeSection from "@/components/ui/LikeSection";
+import LikeSection from "@/components/post/LikeSection";
 import SaveToggle from "@/components/ui/SaveToggle";
 
 import { fetchPostById, fetchSimilarPosts } from "@/lib/actions/posts.actions";
@@ -29,6 +29,7 @@ async function page({ params }: { params: { id: string } }) {
   function filterUserLiked(users: any) {
     return users.map((user: any) => (
       {
+        _id:user._id.toString(),
         id: user.id,
         image: user.image,
         username: user.username,
@@ -37,6 +38,7 @@ async function page({ params }: { params: { id: string } }) {
       }
     ))
   }
+
   return (
     <div className="h-full flex-col flex justify-start items-center ">
       <section className="flex h-auto justify-center flex-col  w-full ">
@@ -57,7 +59,6 @@ async function page({ params }: { params: { id: string } }) {
         <div className="grid w-full  md:grid-cols-2 grid-cols-1">
           {elements.map((element: any, index: number) => {
             if (element.type === "quote") {
-
               return (
                 <div key={index} className="col-span-1  p-4 min-h-48 border flex justify-between flex-col ">
                   <div className="flex justify-center items-center min-h-24">
@@ -65,12 +66,13 @@ async function page({ params }: { params: { id: string } }) {
                   </div>
                   <span >page:{element.data.page}</span>
                   <LikeSection
+                    fromUserImage={userInfo.image}
                     fromUserUsername={userInfo.username}
                     userLiked={filterUserLiked(element.data.like)}
                     numLike={element.data.like.length}
                     fromUserId={userInfo._id.toString()}
                     toElement={element.data._id.toString()}
-                    liked={userInfo.quoteLiked.includes(element.data._id)}
+                    liked={userInfo.quoteLiked.includes(element.data._id.toString())}
                     isSaved={userInfo.quoteSaved.includes(element.data._id)}
                     type="quote"
                   />
@@ -86,16 +88,22 @@ async function page({ params }: { params: { id: string } }) {
                     <p>{element.data.review}</p>
                   </div>
                   <div>
-                    <LikeSection
-                      fromUserUsername={userInfo.username}
-                      userLiked={filterUserLiked(element.data.like)}
-                      numLike={element.data.like.length}
-                      fromUserId={userInfo._id.toString()}
-                      toElement={element.data._id.toString()}
-                      liked={userInfo.quoteLiked.includes(element.data._id)}
-                      isSaved={userInfo.quoteSaved.includes(element.data._id)}
-                      type="review"
-                    />
+                    <div>
+                      <LikeSection
+                       fromUserImage={userInfo.image}
+                        fromUserUsername={userInfo.username}
+                        userLiked={filterUserLiked(element.data.like)}
+                        numLike={element.data.like.length}
+                        fromUserId={userInfo._id.toString()}
+                        toElement={element.data._id.toString()}
+                        liked={userInfo.reviewLiked.includes(element.data._id)}
+                        isSaved={userInfo.reviewSaved.includes(element.data._id)}
+                        type="review"
+                      />
+
+                    </div>
+
+
 
                   </div>
                 </div>

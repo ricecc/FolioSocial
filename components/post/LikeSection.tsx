@@ -1,11 +1,12 @@
 "use client"
 import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
-import HeartToggle from './HeartToggle'
-import SaveToggle from './SaveToggle'
+import HeartToggle from '../ui/HeartToggle'
+import SaveToggle from '../ui/SaveToggle'
 import DialogLike from '../UserProfile/DialogLike'
 
 interface UserProps {
+    _id:string,
     id: string,
     image: string,
     name: string,
@@ -21,21 +22,20 @@ interface likedProps {
     toElement: string
     liked: boolean
     type: "quote" | "post" | "review" | "picture"
-    isSaved: boolean 
+    isSaved: boolean,
+    fromUserImage:string,
 }
 
-const LikeSection = ({ fromUserUsername, userLiked, numLike, fromUserId, toElement, liked, type, isSaved }: likedProps) => {
+const LikeSection = ({ fromUserUsername, userLiked, numLike, fromUserId, toElement, liked, type, isSaved,fromUserImage }: likedProps) => {
     const [count, setCount] = useState<number>(numLike) 
     const [likedList, setLikedList] = useState<UserProps[]>(userLiked)
 
 
     const updateLikedList = (isLiked: boolean) => {
         if (isLiked) {
-         
-            setLikedList(likedList.filter(user => user.id !== fromUserId))
+            setLikedList(likedList.filter(user => user._id !== fromUserId))
         } else {
-          
-            setLikedList([{ id: fromUserId, username: fromUserUsername, image: "", name: "", lastName: "" }, ...likedList])
+            setLikedList([{ _id: fromUserId, username: fromUserUsername, image: fromUserImage, name: "", lastName: "",id:"" }, ...likedList])
         }
     }
     return (
@@ -60,7 +60,7 @@ const LikeSection = ({ fromUserUsername, userLiked, numLike, fromUserId, toEleme
                                 </Link>
                             </span>
                         </p>
-                        <DialogLike userLiked={userLiked} numLike={count - 1}></DialogLike>
+                        <DialogLike userLiked={likedList} numLike={count - 1}></DialogLike>
                     </div>
                 ) : count === 0 ? (
                     <></>
