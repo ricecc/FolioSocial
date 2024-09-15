@@ -83,9 +83,9 @@ const FeedClient: React.FC<FeedClientProps> = ({ initialPosts, currentUserInfo }
             loading ? (
               <div className="flex flex-row space-x-1 items-center justify-center">
                 <div className="flex space-x-2">
-                  <div className="w-2 h-2 bg-gray-200 rounded-full pulse"></div>
-                  <div className="w-2 h-2 bg-gray-200 rounded-full pulse"></div>
-                  <div className="w-2 h-2 bg-gray-200 rounded-full pulse"></div>
+                  <div className="w-2 h-2 bg-gray-200 rounded-full scaleAnimation "></div>
+                  <div className="w-2 h-2 bg-gray-200 rounded-full scaleAnimation "></div>
+                  <div className="w-2 h-2 bg-gray-200 rounded-full scaleAnimation "></div>
                 </div>
               </div>
             ) : (

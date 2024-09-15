@@ -125,17 +125,23 @@ export function DialogComment({
                 {hasMore && (
                     <div className="text-center  mt-4">
                         {isLoading ? (
-                            <div key="skeleton" className="mb-4">
-                            <div className="flex flex-row items-center space-x-2">
-                              <Skeleton className="w-7 h-7 rounded-full" />
-                              <Skeleton className="w-24 h-4 rounded" />
+
+                            <div className="flex flex-col space-y-4">
+                                {[...Array(5)].map((_, index) => (
+                                    <div key={index} className="mb-4">
+                                        <div className="flex flex-row items-center space-x-2">
+                                            <Skeleton className="w-7 h-7 rounded-full" />
+                                            <Skeleton className="w-24 h-4 rounded" />
+                                        </div>
+                                        <div className="ml-10 mt-1 space-y-2">
+                                            <Skeleton className="w-48 h-4 rounded mb-2" />
+                                            <Skeleton className="w-36 h-4 rounded" />
+                                        </div>
+                                       
+                                    </div>
+                                ))}
                             </div>
-                            <div className="ml-10 mt-1">
-                              <Skeleton className="w-48 h-4 rounded mb-2" />
-                              <Skeleton className="w-36 h-4 rounded" />
-                            </div>
-                            <Skeleton className="my-2 h-px" />
-                          </div>
+
                         ) : (
                             <div onClick={loadMoreComments} className=" text-black cursor-pointer flex flex-col justify-center items-center space-y-2" >
                                 <img src="/assets/loadMore.svg" className="" alt="loadComments" width={24} height={24}></img>
