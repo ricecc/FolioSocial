@@ -21,6 +21,7 @@ import { Form, FormField, FormItem, FormControl } from "../ui/form";
 import { createComment } from "@/lib/actions/comment.actions";
 import { useState } from 'react';
 import Link from "next/link";
+import { Skeleton } from "../ui/skeleton";
 
 interface DialogCommentParams {
     comments: any[];
@@ -124,11 +125,17 @@ export function DialogComment({
                 {hasMore && (
                     <div className="text-center  mt-4">
                         {isLoading ? (
-                            <div className="flex space-x-2 justify-center items-center">
-                                <div className="bounce bounce1 h-2 w-2 rounded-full bg-slate-900"></div>
-                                <div className="bounce bounce2 h-2 w-2 rounded-full bg-slate-900"></div>
-                                <div className="bounce h-2 w-2 rounded-full bg-slate-900"></div>
+                            <div key="skeleton" className="mb-4">
+                            <div className="flex flex-row items-center space-x-2">
+                              <Skeleton className="w-7 h-7 rounded-full" />
+                              <Skeleton className="w-24 h-4 rounded" />
                             </div>
+                            <div className="ml-10 mt-1">
+                              <Skeleton className="w-48 h-4 rounded mb-2" />
+                              <Skeleton className="w-36 h-4 rounded" />
+                            </div>
+                            <Skeleton className="my-2 h-px" />
+                          </div>
                         ) : (
                             <div onClick={loadMoreComments} className=" text-black cursor-pointer flex flex-col justify-center items-center space-y-2" >
                                 <img src="/assets/loadMore.svg" className="" alt="loadComments" width={24} height={24}></img>

@@ -4,6 +4,7 @@ import { fetchPostsFeed } from "@/lib/actions/posts.actions";
 import MainFeedSection from "@/components/Feed/MainFeedSection";
 import { revalidatePath } from "next/cache";
 import { usePathname } from "next/navigation";
+import { Skeleton } from "../ui/skeleton";
 
 interface FeedClientProps {
   initialPosts: any[];
@@ -81,10 +82,10 @@ const FeedClient: React.FC<FeedClientProps> = ({ initialPosts, currentUserInfo }
           hasMore ? (
             loading ? (
               <div className="flex flex-row space-x-1 items-center justify-center">
-                <div className="flex space-x-2 justify-center items-center">
-                  <div className="bounce bounce1 h-2 w-2 rounded-full bg-slate-900"></div>
-                  <div className="bounce bounce2 h-2 w-2 rounded-full bg-slate-900"></div>
-                  <div className="bounce h-2 w-2 rounded-full bg-slate-900"></div>
+                <div className="flex space-x-2">
+                  <div className="w-2 h-2 bg-gray-200 rounded-full pulse"></div>
+                  <div className="w-2 h-2 bg-gray-200 rounded-full pulse"></div>
+                  <div className="w-2 h-2 bg-gray-200 rounded-full pulse"></div>
                 </div>
               </div>
             ) : (
