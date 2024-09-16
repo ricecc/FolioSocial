@@ -17,6 +17,7 @@ const FeedClient: React.FC<FeedClientProps> = ({ initialPosts, currentUserInfo }
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true); // Assumiamo inizialmente che ci siano più post
   const pathname = usePathname()
+
   const loadMorePosts = async () => {
     if (loading || !hasMore) return;
 
@@ -25,7 +26,7 @@ const FeedClient: React.FC<FeedClientProps> = ({ initialPosts, currentUserInfo }
     const newFeed = await fetchPostsFeed(newPage, 6);
 
     if (newFeed.posts.length < 6) {
-      setHasMore(false); // Se la risposta contiene meno post del previsto, non ci sono più post
+      setHasMore(false); 
     }
 
     setFeed((prevFeed) => [...prevFeed, ...newFeed.posts]);
