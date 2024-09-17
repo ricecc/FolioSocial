@@ -32,7 +32,7 @@ const SaveToggle = ({ fromUserId, toElement, type, isSaved }: Props) => {
 
   const handleClick = async () => {
     if (isClicked) {
-      // Se è già salvato, rimuovi e mostra un toast con la data e il messaggio corrispondente
+     
       if (type === "quote")
         await removeSaveQuote({ fromUserId, toElement, path });
       if (type === "review")
@@ -44,7 +44,7 @@ const SaveToggle = ({ fromUserId, toElement, type, isSaved }: Props) => {
         description: getCurrentDate(),
       });
     } else {
-      // Se non è ancora salvato, salva e mostra un toast con la data e il messaggio corrispondente
+     
       if (type === "quote")
         await saveQuote({ fromUserId, toElement, path });
       if (type === "review")

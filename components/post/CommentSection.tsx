@@ -25,7 +25,7 @@ const CommentSection = ({refType, numComment, _idCurrentUser, refId, imageCurren
         setIsLoading(true);
         try {
             const { comments: newComments, isNext } = await fetchComments(refId,refType, pageNum, 5); // Carica 5 commenti per volta
-            console.log("I commenti",newComments)
+           
             setComments(prevComments => [...prevComments, ...newComments]);
             setHasMore(isNext);
             setPage(pageNum + 1); // Incrementa la pagina
