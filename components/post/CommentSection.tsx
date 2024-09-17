@@ -1,31 +1,35 @@
 "use client";
 import { fetchComments } from '@/lib/actions/comment.actions';
-import React, { useState } from 'react';
-import { DialogComment } from './DialogComment';
+import React, { useState,lazy,Suspense } from 'react';
+
 import { usePathname } from 'next/navigation';
 
+const DialogComment = lazy(() => import('./DialogComment'));
 interface CommentSectionProps {
     numComment: number;
     _idCurrentUser: string;
-    postId: string;
+    refId: string;
     imageCurrentUser: string;
+    refType:'Quote'|'Review'
 }
 
-const CommentSection = ({ numComment, _idCurrentUser, postId, imageCurrentUser }: CommentSectionProps) => {
+const CommentSection = ({refType, numComment, _idCurrentUser, refId, imageCurrentUser }: CommentSectionProps) => {
     const [comments, setComments] = useState<any[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [hasMore, setHasMore] = useState(true);
     const [page, setPage] = useState(1); // Stato per la paginazione
     const [isClicked, setIsClicked] = useState(false); // Stato per il dialogo
-
+    
     const loadComments = async (pageNum: number) => {
         if (isLoading) return;
         setIsLoading(true);
         try {
-            const { comments: newComments, isNext } = await fetchComments(postId, pageNum, 5); // Carica 5 commenti per volta
+            const { comments: newComments, isNext } = await fetchComments(refId,refType, pageNum, 5); // Carica 5 commenti per volta
+            console.log("I commenti",newComments)
             setComments(prevComments => [...prevComments, ...newComments]);
             setHasMore(isNext);
             setPage(pageNum + 1); // Incrementa la pagina
+            
         } catch (error) {
             console.error("Failed to fetch comments:", error);
         } finally {
@@ -46,7 +50,7 @@ const CommentSection = ({ numComment, _idCurrentUser, postId, imageCurrentUser }
             <div className='text-sm' onClick={() => {
                 setIsClicked(true);
 
-                loadComments(page); // Carica i primi 5 commenti quando il dialogo viene aperto
+                loadComments(page); 
 
             }} style={{ cursor: 'pointer', color: 'blue' }}>
                 {numComment > 0 ? (
@@ -57,10 +61,12 @@ const CommentSection = ({ numComment, _idCurrentUser, postId, imageCurrentUser }
 
             </div>
             {isClicked && (
+                <Suspense fallback={<div className='text-xs text-gray-300'>loading...</div>}>
                 <DialogComment
                     comments={comments}
                     totalComment={numComment}
-                    postId={postId}
+                    refType={refType}
+                    refId={refId}
                     currentUser={_idCurrentUser}
                     pathname={pathname}
                     hasMore={hasMore}
@@ -69,6 +75,7 @@ const CommentSection = ({ numComment, _idCurrentUser, postId, imageCurrentUser }
                     imageCurrentUser={imageCurrentUser}
                     onClose={() => setIsClicked(false)} // Passa la funzione per chiudere il dialogo
                 />
+                </Suspense>
             )}
         </div>
     );

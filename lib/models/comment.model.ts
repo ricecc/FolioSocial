@@ -2,10 +2,9 @@ import mongoose from "mongoose";
 
 const commentSchema = new mongoose.Schema({
     author: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-    post: { type: mongoose.Schema.Types.ObjectId, ref: 'Post', required: true },
     text: { type: String, required: true },
     createdAt: { type: Date, default: Date.now },
-    like:{type:Number},
+    like: { type: Number },
     parentId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Comment',  
@@ -16,7 +15,17 @@ const commentSchema = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Comment'  
         }
-    ]
+    ],
+   
+    refType: {
+        type: String,
+        enum: ['Quote', 'Review'],  
+        required: true
+    },
+    refId: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+    }
 });
 
 const Comment = mongoose.models.Comment || mongoose.model('Comment', commentSchema);

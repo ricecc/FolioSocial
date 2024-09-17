@@ -4,16 +4,14 @@ import {
     Drawer,
     DrawerClose,
     DrawerContent,
-    DrawerDescription,
     DrawerFooter,
     DrawerHeader,
     DrawerTitle,
     DrawerTrigger,
-} from "@/components/ui/drawer"
+} from "@/components/ui/drawer";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CommentValidation } from "@/lib/validations/post";
 import { z } from "zod";
-import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
@@ -22,24 +20,46 @@ import { createComment } from "@/lib/actions/comment.actions";
 import { useState } from 'react';
 import Link from "next/link";
 import { Skeleton } from "../ui/skeleton";
+import ReplyComment from "./ReplyComment";
+import CommentItem from "./CommentItem";
+
+interface Author {
+    _id: string;
+    id: string;
+    username: string; 
+    image: string;
+}
+
+interface Comment {
+    _id: string;
+    text: string;
+    refType: 'Quote' | 'Review';
+    author: Author;
+    children: Comment[]; 
+    createdAt: string;
+    parentId: string | null; 
+    refId: string;
+}
 
 interface DialogCommentParams {
-    comments: any[];
+    comments: Comment[];
     totalComment: number;
-    postId: string;
+    refType: 'Quote' | 'Review';
+    refId: string;
     currentUser: string;
     pathname: string;
     hasMore: boolean;
     isLoading: boolean;
     loadMoreComments: () => void;
     imageCurrentUser: string;
-    onClose: () => void; // Funzione per chiudere il dialogo
+    onClose: () => void; 
 }
 
 export function DialogComment({
     comments,
+    refType,
     totalComment,
-    postId,
+    refId,
     currentUser,
     pathname,
     hasMore,
@@ -49,7 +69,8 @@ export function DialogComment({
     onClose
 }: DialogCommentParams) {
     const [isSubmitting, setIsSubmitting] = useState(false); // Stato di invio del commento
-
+    const [replyingCommentId, setReplyingCommentId] = useState<string | null>(null);
+    const [viewChildrenCommentFromId, setViewChildrenCommentFromId] = useState<string | null>(null);
     const form = useForm<z.infer<typeof CommentValidation>>({
         resolver: zodResolver(CommentValidation),
         defaultValues: {
@@ -58,62 +79,68 @@ export function DialogComment({
     });
 
     const onSubmit = async (values: z.infer<typeof CommentValidation>) => {
-        const optimisticComment = {
-            _id: "temp-id", // ID temporaneo
+        const optimisticComment: Comment = {
+            _id: "temp-id", 
             text: values.comment,
+            refType: refType, 
             author: {
+                _id: "temp-author-id", 
                 id: currentUser,
-                username: "Tu", // Nome visualizzato dell'utente corrente
-                image: imageCurrentUser // Immagine dell'utente corrente
+                username: "Tu", 
+                image: imageCurrentUser
             },
+            children: [], 
+            createdAt: new Date().toISOString(),
+            parentId: null, 
+            refId, 
         };
 
-        // Aggiungi il commento ottimistico allo stato
-        comments.unshift(optimisticComment); // Aggiungi all'inizio della lista
+        
+        comments.unshift(optimisticComment); 
         form.reset();
         setIsSubmitting(true);
 
         try {
-            // Invia il commento al server
+         
             await createComment({
                 author: currentUser,
+                refType,
                 text: values.comment,
-                postId,
+                refId,
                 pathname,
             });
 
-            // In caso di successo, aggiorna lo stato (se necessario, rimuovi l'ID temporaneo)
-            // Aggiorna l'ID del commento se necessario
+            
         } catch (error) {
-            // Rimuovi il commento ottimistico in caso di errore
+          
             console.error("Failed to submit comment:", error);
-            comments.shift(); // Rimuovi il commento ottimistico
+            comments.shift(); 
         } finally {
             setIsSubmitting(false);
         }
     };
 
     return (
-        <Drawer open={true} onOpenChange={onClose} >
+        <Drawer open={true} onOpenChange={onClose}>
             <DrawerContent className="h-[80%] px-8">
                 {totalComment > 0 ? (
                     <ScrollArea className="h-full w-full">
                         <div className="p-4">
                             {comments.map((comment) => (
-                                <div key={comment._id} className="mb-4">
-                                    <div className="flex flex-row items-center space-x-2">
-                                        <img
-                                            src={comment.author.image}
-                                            alt={comment.author.username}
-                                            className="w-7 h-7 rounded-full object-cover"
-                                        />
-                                        <Link href={`/profile/${comment.author.id}`} className="font-semibold">
-                                            {comment.author.username}
-                                        </Link>
-                                    </div>
-                                    <p className="ml-10 mt-1 text-sm">{comment.text}</p>
-                                    <Separator className="my-2" />
-                                </div>
+                                <CommentItem
+                                    numChildren={comment.children.length} 
+                                    pathname={pathname}
+                                    refId={refId}
+                                    refType={refType}
+                                    currentUser={currentUser}
+                                    imageCurrentUser={imageCurrentUser}
+                                    key={comment._id}
+                                    comment={comment}
+                                    isReplying={replyingCommentId === comment._id}
+                                    onReplyClick={() => setReplyingCommentId(replyingCommentId === comment._id ? null : comment._id)}
+                                    viewSubComments={viewChildrenCommentFromId === comment._id}
+                                    onViewSubComments={() => setViewChildrenCommentFromId(viewChildrenCommentFromId === comment._id ? null : comment._id)}
+                                />
                             ))}
                             {!hasMore && <p className="text-sm">Non ci sono altri commenti.</p>}
                         </div>
@@ -123,9 +150,8 @@ export function DialogComment({
                 )}
 
                 {hasMore && (
-                    <div className="text-center  mt-4">
+                    <div className="text-center mt-4">
                         {isLoading ? (
-
                             <div className="flex flex-col space-y-4">
                                 {[...Array(5)].map((_, index) => (
                                     <div key={index} className="mb-4">
@@ -137,14 +163,12 @@ export function DialogComment({
                                             <Skeleton className="w-48 h-4 rounded mb-2" />
                                             <Skeleton className="w-36 h-4 rounded" />
                                         </div>
-                                       
                                     </div>
                                 ))}
                             </div>
-
                         ) : (
-                            <div onClick={loadMoreComments} className=" text-black cursor-pointer flex flex-col justify-center items-center space-y-2" >
-                                <img src="/assets/loadMore.svg" className="" alt="loadComments" width={24} height={24}></img>
+                            <div onClick={loadMoreComments} className="text-black cursor-pointer flex flex-col justify-center items-center space-y-2">
+                                <img src="/assets/loadMore.svg" className="" alt="loadComments" width={24} height={24} />
                             </div>
                         )}
                     </div>
@@ -180,3 +204,5 @@ export function DialogComment({
         </Drawer>
     );
 }
+
+export default DialogComment;

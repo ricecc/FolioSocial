@@ -4,39 +4,59 @@ import { removeSaveReview, saveReview } from '@/lib/actions/review.actions';
 import { removeSaveImage, saveImage } from '@/lib/actions/user.actions';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
+import { toast } from 'sonner'; // Importa toast per le notifiche
 
 interface Props {
   fromUserId: string;
-  type:"quote" | "review" | "picture";
-  toElement:string;
-
+  type: "quote" | "review" | "picture";
+  toElement: string;
   isSaved: boolean;
- 
 }
 
-const SaveToggle = ({ fromUserId, toElement,type, isSaved }: Props) => {
+const SaveToggle = ({ fromUserId, toElement, type, isSaved }: Props) => {
   const [isClicked, setIsClicked] = useState<boolean>(isSaved);
-
   const path = usePathname();
+
+  // Funzione per ottenere la data corrente
+  const getCurrentDate = () => {
+    const now = new Date();
+    return now.toLocaleString('it-IT', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
+    });
+  };
 
   const handleClick = async () => {
     if (isClicked) {
-      if(type==="quote")
-        await removeSaveQuote({ fromUserId, toElement,path });
-      if(type==="review")
-        await removeSaveReview({ fromUserId, toElement,path });
-      if(type==="picture")
-        await removeSaveImage({ fromUserId, toElement,path });
+      // Se è già salvato, rimuovi e mostra un toast con la data e il messaggio corrispondente
+      if (type === "quote")
+        await removeSaveQuote({ fromUserId, toElement, path });
+      if (type === "review")
+        await removeSaveReview({ fromUserId, toElement, path });
+      if (type === "picture")
+        await removeSaveImage({ fromUserId, toElement, path });
 
+      toast(`${type === 'quote' ? 'Citazione' : type === 'review' ? 'Recensione' : 'Immagine'} rimossa dagli elementi salvati`, {
+        description: getCurrentDate(),
+      });
     } else {
-      if(type==="quote")
-        await saveQuote({ fromUserId, toElement,path });
-      if(type==="review")
-        await saveReview({ fromUserId, toElement,path });
-      if(type==="picture")
-        await saveImage({ fromUserId, toElement,path });
+      // Se non è ancora salvato, salva e mostra un toast con la data e il messaggio corrispondente
+      if (type === "quote")
+        await saveQuote({ fromUserId, toElement, path });
+      if (type === "review")
+        await saveReview({ fromUserId, toElement, path });
+      if (type === "picture")
+        await saveImage({ fromUserId, toElement, path });
 
+      toast(`${type === 'quote' ? 'Citazione' : type === 'review' ? 'Recensione' : 'Immagine'} aggiunta tra gli elementi salvati`, {
+        description: getCurrentDate(),
+      });
     }
+
     setIsClicked(!isClicked);
   };
 

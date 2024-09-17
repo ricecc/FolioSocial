@@ -75,7 +75,7 @@ export async function fetchPostById(postId: string) {
     const post = await Post.findById(postId)
       .populate({
         path: 'author',
-        select: 'username image'  // Seleziona solo il campo username dell'autore
+        select: 'username image id'  // Seleziona solo il campo username dell'autore
       })
       .populate({
         path: 'book',
@@ -89,7 +89,7 @@ export async function fetchPostById(postId: string) {
       .populate({
         path: 'quotes',
         model: Quote,
-        select: "quote page",
+        select: "quote page comments",
         populate:{
           path:'like',
           model:User,
@@ -99,7 +99,7 @@ export async function fetchPostById(postId: string) {
       .populate({
         path: 'reviews',
         model: Review,
-        select: "review title",
+        select: "review title comments",
         populate:{
           path:'like',
           model:User,

@@ -4,7 +4,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import "../globals.css";
 
 import Footer from "@/components/navigation/Footer";
-import { Navbar } from "flowbite-react";
+import { Toaster } from "@/components/ui/sonner"
 import { EdgeStoreProvider } from "@/lib/edgestore";
 import MobileTopNavBar from "@/components/navigation/MobileTopNavBar";
 
@@ -40,6 +40,7 @@ export default function RootLayout({
             </section>
             <Footer />
           </main>
+          <Toaster />
         </body>
       </html>
     </ClerkProvider>

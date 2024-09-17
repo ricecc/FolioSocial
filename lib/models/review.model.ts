@@ -10,6 +10,10 @@ const reviewSchema = new mongoose.Schema({
     },
     title:{type:String},
     review:{type:String},
+    comments:[{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Comment',
+    }],
     createdAt: {
         type: Date,
         default: Date.now,

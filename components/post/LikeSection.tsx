@@ -78,14 +78,7 @@ const LikeSection = ({ fromUserUsername, userLiked, numLike, fromUserId, toEleme
                     updateLikedList={updateLikedList} 
                 />
 
-                {type !== "post" && (
-                    <SaveToggle
-                        fromUserId={fromUserId}
-                        toElement={toElement}
-                        type={type}
-                        isSaved={isSaved}
-                    />
-                )}
+                
             </div>
         </div>
     )

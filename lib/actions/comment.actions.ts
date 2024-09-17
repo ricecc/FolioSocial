@@ -5,53 +5,52 @@ import { revalidatePath } from "next/cache";
 import { connectToDB } from "../mongoose";
 import Post from "../models/post.model";
 import Comment from "../models/comment.model";
+import Quote from "../models/quote.model";
+import Review from "../models/review.model";
 
-interface CommentParams {
-    author: string,
-    postId: string,
-    text: string,
-    pathname: string
-}
-export async function fetchComments(postId: string, pageNumber = 1, pageSize = 20) {
+
+export async function fetchComments(refId: string, refType: 'Quote' | 'Review', pageNumber = 1, pageSize = 5) {
     try {
-        // Connessione al database
-        await connectToDB();
 
-        // Calcola l'importo da saltare per la paginazione
+        connectToDB();
+
+
         const skipAmount = (pageNumber - 1) * pageSize;
 
-        // Crea la query per recuperare i commenti top-level (quelli senza parentId) del post specificato
+
         const commentsQuery = Comment.find({
-            post: postId, // Filtra per postId
-            parentId: { $in: [null, undefined] } // Solo commenti top-level
+            refId: refId,
+            refType: refType,
+            parentId: { $in: [null, undefined] }
         })
             .sort({ createdAt: 'desc' })
             .skip(skipAmount)
             .limit(pageSize)
             .populate({
                 path: 'author',
-                select: '_id id username image'  // Seleziona solo i campi necessari dell'autore
+                select: '_id id username image'
             })
             .populate({
-                path: 'children', // Popola il campo `children` (se i commenti hanno delle risposte)
+                path: 'children',
                 populate: {
                     path: 'author',
-                    select: '_id id username image'  // Seleziona solo i campi necessari dell'autore dei commenti figli
+                    select: '_id id username image'
                 }
             });
 
-        // Conta il numero totale di commenti top-level per il post specificato
+
         const totalCommentsCount = await Comment.countDocuments({
-            post: postId, // Filtra per postId
+            refId: refId,
+            refType: refType,
             parentId: { $in: [null, undefined] }
         });
 
-        // Esegui la query per ottenere i commenti
+
         const comments = await commentsQuery.exec();
 
-        // Determina se ci sono ulteriori commenti disponibili per la paginazione
+
         const isNext = totalCommentsCount > skipAmount + comments.length;
-        // Converte i commenti in JSON
+
         const jsonComments = JSON.parse(JSON.stringify(comments));
 
         return { comments: jsonComments, isNext };
@@ -61,20 +60,40 @@ export async function fetchComments(postId: string, pageNumber = 1, pageSize = 2
     }
 }
 
-export async function   createComment({ author, postId, text, pathname }: CommentParams) {
+interface CommentParams {
+    author: string,
+    refId: string,
+    refType: 'Quote' | 'Review', // Aggiungi il tipo di riferimento
+    text: string,
+    pathname: string
+}
+
+export async function createComment({ author, refId, refType, text, pathname }: CommentParams) {
     try {
-        connectToDB()
+        await connectToDB();
+
+        // Crea il nuovo commento con refType e refId
         const newComment = await Comment.create({
             author,
-            post: postId,
+            refId,  // Riferimento all'entità (Post, Quote, Review)
+            refType, // Specifica il tipo di riferimento
             text
-        })
-
-        const postUpdated = await Post.findByIdAndUpdate(postId, {
-            $addToSet: { comments: newComment._id },
         });
-        if (!postUpdated) {
-            throw new Error('Il post specificato non esiste o è stato cancellato');
+
+        // Aggiorna l'entità associata (Post, Quote o Review) con il nuovo commento
+        let updatedEntity;
+        if (refType === 'Quote') {
+            updatedEntity = await Quote.findByIdAndUpdate(refId, {
+                $addToSet: { comments: newComment._id },
+            });
+        } else if (refType === 'Review') {
+            updatedEntity = await Review.findByIdAndUpdate(refId, {
+                $addToSet: { comments: newComment._id },
+            });
+        }
+
+        if (!updatedEntity) {
+            throw new Error(`${refType} specificato non esiste o è stato cancellato`);
         }
 
         revalidatePath(pathname);
@@ -102,7 +121,6 @@ async function fetchAllChildComments(commentId: string): Promise<any[]> {
 
 export async function deleteComment(id: string, path: string): Promise<void> {
     try {
-        // Connessione al database
         await connectToDB();
 
         // Trova il commento principale da eliminare
@@ -121,62 +139,132 @@ export async function deleteComment(id: string, path: string): Promise<void> {
             ...descendantComments.map((comment) => comment._id),
         ];
 
-        // Aggiorna il modello Post rimuovendo i riferimenti ai commenti eliminati
-        await Post.updateMany(
-            { comments: { $in: descendantCommentsIds } },
-            { $pull: { comments: { $in: descendantCommentsIds } } }
-        );
+        // Rimuovi i commenti dall'entità associata (Post, Quote, Review)
+        if (mainComment.refType === 'Post') {
+            await Post.updateMany(
+                { comments: { $in: descendantCommentsIds } },
+                { $pull: { comments: { $in: descendantCommentsIds } } }
+            );
+        } else if (mainComment.refType === 'Quote') {
+            await Quote.updateMany(
+                { comments: { $in: descendantCommentsIds } },
+                { $pull: { comments: { $in: descendantCommentsIds } } }
+            );
+        } else if (mainComment.refType === 'Review') {
+            await Review.updateMany(
+                { comments: { $in: descendantCommentsIds } },
+                { $pull: { comments: { $in: descendantCommentsIds } } }
+            );
+        }
 
         // Cancella ricorsivamente tutti i commenti figli e discendenti
         await Comment.deleteMany({ _id: { $in: descendantCommentsIds } });
 
-
-
         revalidatePath(path);
-
     } catch (error: any) {
         throw new Error(`Failed to delete comment: ${error.message}`);
     }
 }
-
-export async function addCommentToPost(
-    postId: string,
-    commentText: string,
-    userId: string,
-    path: string
+interface AddChildrenProps{
+    parentCommentId: string,
+    authorId: string,
+    text: string,
+    refId: string,
+    refType:  'Quote' | 'Review',
+    pathname: string
+}
+export async function addChildrenToComment(
+    {parentCommentId,
+    authorId,
+    text,
+    refId,
+    refType,
+    pathname}:AddChildrenProps
 ) {
     try {
         // Connessione al database
         await connectToDB();
 
-        // Trova il post originale per il quale aggiungere il commento
-        const originalPost = await Post.findById(postId);
+        // Trova il commento genitore
+        const parentComment = await Comment.findById(parentCommentId);
 
-        if (!originalPost) {
-            throw new Error("Post not found");
+        if (!parentComment) {
+            throw new Error("Parent comment not found");
         }
 
-        // Crea il nuovo commento
-        const newComment = new Comment({
-            text: commentText,
-            author: userId,
-            post: postId, // Imposta il postId come riferimento al post
+        // Crea il nuovo commento figlio
+        const childComment = new Comment({
+            author: authorId,
+            text: text,
+            refId: refId,  // Riferimento all'entità (Post, Quote o Review)
+            refType: refType, // Specifica il tipo di riferimento
+            parentId: parentCommentId, // Imposta il commento genitore
         });
 
-        // Salva il nuovo commento nel database
-        const savedComment = await newComment.save();
+        // Salva il commento figlio nel database
+        const savedChildComment = await childComment.save();
 
-        // Aggiungi l'ID del nuovo commento all'array `comments` del post originale
-        originalPost.comments.push(savedComment._id);
+        // Aggiungi l'ID del commento figlio alla lista `children` del commento genitore
+        parentComment.children.push(savedChildComment._id);
+        await parentComment.save();
 
-        // Salva il post aggiornato nel database
-        await originalPost.save();
+       
+        if (refType === 'Quote') {
+            await Quote.findByIdAndUpdate(refId, {
+                $addToSet: { comments: savedChildComment._id },
+            });
+        } else if (refType === 'Review') {
+            await Review.findByIdAndUpdate(refId, {
+                $addToSet: { comments: savedChildComment._id },
+            });
+        }
+
+      
+        revalidatePath(pathname);
+
+        return savedChildComment;
+    } catch (error: any) {
+        console.error("Error while adding child comment:", error);
+        throw new Error(`Failed to add child comment: ${error.message}`);
+    }
+}
 
 
-        revalidatePath(path);
+export async function fetchSubComments(parentId: string, pageNumber = 1, pageSize = 3) {
+    try {
+        // Connect to the database
+        connectToDB();
 
+        // Find the parent comment
+        const parentComment = await Comment.findById(parentId)
+            .populate({
+                path: 'children',
+                populate: {
+                    path: 'author',
+                    select: '_id id username image'
+                }
+            })
+            .exec();
+
+        if (!parentComment) {
+            throw new Error('Parent comment not found');
+        }
+
+        // Calculate the amount of documents to skip for pagination
+        const skipAmount = (pageNumber - 1) * pageSize;
+
+        // Get the children comments
+        const children = parentComment.children
+            .slice(skipAmount, skipAmount + pageSize);
+
+        // Determine if there are more comments to load
+        const isNext = parentComment.children.length > skipAmount + children.length;
+
+        const jsonComments = JSON.parse(JSON.stringify(children));
+
+        return { comments: jsonComments, isNext };
     } catch (err) {
-        console.error("Error while adding comment:", err);
-        throw new Error("Unable to add comment");
+        console.error("Error while fetching sub-comments:", err);
+        throw new Error("Unable to fetch sub-comments");
     }
 }
