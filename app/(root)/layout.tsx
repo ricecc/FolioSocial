@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import "../globals.css";
 import { SpeedInsights } from "@vercel/speed-insights/next"
+import { Analytics } from "@vercel/analytics/react"
 import Footer from "@/components/navigation/Footer";
 import { Toaster } from "@/components/ui/sonner"
 import { EdgeStoreProvider } from "@/lib/edgestore";
@@ -36,6 +37,7 @@ export default function RootLayout({
              
                 {children}
                 <SpeedInsights />
+                <Analytics />
               </EdgeStoreProvider>
             </section>
             <Footer />
