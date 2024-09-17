@@ -33,7 +33,7 @@ async function Page() {
       <section className='lg:mt-3 bg-dark-2 lg:p-2 flex justify-center'>
         <Card className="lg:w-[750px] w-[350px]">
           <CardHeader>
-            <CardTitle>Benvenuto su Folio!</CardTitle>
+            <CardTitle>Benvenuto su Book Board!</CardTitle>
             <CardDescription>Onboarding</CardDescription>
           </CardHeader>
           <CardContent>

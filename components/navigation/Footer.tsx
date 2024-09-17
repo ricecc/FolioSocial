@@ -93,10 +93,10 @@ const Footer: React.FC = () => {
                                         d="M12.378 1.602a.75.75 0 00-.756 0L3 6.632l9 5.25 9-5.25-8.622-5.03zM21.75 7.93l-9 5.25v9l8.628-5.032a.75.75 0 00.372-.648V7.93zM11.25 22.18v-9l-9-5.25v8.57a.75.75 0 00.372.648l8.628 5.033z" />
                                 </svg>
                             </span>
-                            Folio
+                            Book Board
                         </h6>
                         <p>
-                        Folio è il tuo angolo di magia letteraria: condividi le emozioni dei tuoi libri preferiti, scopri nuove letture e unisciti a una comunità che vive la passione per la lettura.
+                        Book Board è il tuo angolo di magia letteraria: condividi le emozioni dei tuoi libri preferiti, scopri nuove letture e unisciti a una comunità che vive la passione per la lettura.
                         </p>
                     </div>
                    
@@ -169,7 +169,7 @@ const Footer: React.FC = () => {
                                         d="M22.5 6.908V6.75a3 3 0 00-3-3h-15a3 3 0 00-3 3v.158l9.714 5.978a1.5 1.5 0 001.572 0L22.5 6.908z" />
                                 </svg>
                             </span>
-                            info@Folio.com
+                            info@Book Board.com
                         </p>
                         <p className="mb-4 flex items-center justify-center md:justify-start">
                             <span className="me-3 [&>svg]:h-5 [&>svg]:w-5">
@@ -194,7 +194,7 @@ const Footer: React.FC = () => {
             <div className="bg-black/5 p-6 text-center">
                 <span>© 2024 Copyright:</span>
                 <a className="font-semibold" href="https://tw-elements.com/"
-                >Folio</a>
+                >Book Board</a>
             </div>
         </footer>
     );
