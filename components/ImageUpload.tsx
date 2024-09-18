@@ -108,13 +108,9 @@ export default function App() {
   }
 
   return (
-    <div className="w-full flex justify-center flex-col items-center mt-4">
-      <div className="w-56 h-20  flex justify-center items-center  border-dashed border rounded-lg border-spacing-3 border-slate-950">
-
-        <input type="file" accept="image/*" className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" onChange={onSelectFile} />
-        <label  className="block px-4 py-2  text-slate-950 rounded cursor-pointer ">
-          Seleziona un'immagine
-        </label>
+    <div className="flex justify-center items-center flex-col">
+      <div className="">
+        <input type="file" accept="image/*" onChange={onSelectFile} />
       </div>
       {!!imgSrc && (
         <ReactCrop
@@ -124,24 +120,19 @@ export default function App() {
           aspect={aspect}
           minHeight={10}
         >
-          <div className='relative  bg-red-200'>
-            <img
-              ref={imgRef}
-              alt="Crop me"
-              src={imgSrc}
-              className=''
-              onLoad={onImageLoad}
-            />
-            {!!completedCrop && (
-              <div className='absolute bottom-5 right-3 bg-white text-slate-950 rounded-lg px-3 py-2 border border-slate-950'>
-                <button onClick={onSaveCropClick}>Salva frase</button>
-              </div>
-            )}
-          </div>
-
+          <img
+            ref={imgRef}
+            alt="Crop me"
+            src={imgSrc}
+            onLoad={onImageLoad}
+          />
         </ReactCrop>
       )}
-
+      {!!completedCrop && (
+        <div>
+          <button onClick={onSaveCropClick}>Save Crop</button>
+        </div>
+      )}
       {savedImgSrc && (
         <div>
           <h3>Testo Riconosciuto</h3>
