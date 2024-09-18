@@ -1,17 +1,18 @@
-import { useEffect, DependencyList } from 'react'
+"use client";
+import { useEffect, DependencyList } from 'react';
 
 export function useDebounceEffect(
   fn: () => void,
   waitTime: number,
-  deps?: DependencyList,
+  deps: DependencyList = [], // Imposta un array vuoto come valore predefinito
 ) {
   useEffect(() => {
     const t = setTimeout(() => {
-      fn.apply(undefined, deps)
-    }, waitTime)
+      fn(); // Chiama la funzione senza passare deps
+    }, waitTime);
 
     return () => {
-      clearTimeout(t)
-    }
-  }, deps)
+      clearTimeout(t);
+    };
+  }, deps); // Usa deps come dipendenze per useEffect
 }
