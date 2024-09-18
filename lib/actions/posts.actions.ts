@@ -223,17 +223,25 @@ export async function fetchSimilarPosts(postId: string) {
     )
       .populate({
         path: 'author',
-        model: User
+        model: User,
+        select: 'id image username'
       })
       .populate({
         path: 'book',
         model: Book,
-        select: 'id'
+        select: 'id title author'
       })
-      .sort({ score: { $meta: "textScore" } }).limit(10).exec();
+      .populate({
+        path:'quotes',
+        model:Quote,
+        select:'quote'
+      })
+      .select('image postImages')
+      .sort({ score: { $meta: "textScore" } }).limit(6).exec();
 
-
-    return similarPosts;
+      const jsonPosts = JSON.parse(JSON.stringify(similarPosts));
+     
+      return jsonPosts
   } catch (error: any) {
     throw new Error(`Error to fetch similar posts: ${error.message}`);
   }
