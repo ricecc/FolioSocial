@@ -17,8 +17,8 @@ const TextRecognition: React.FC<TextRecognitionProps> = ({ selectedImage }) => {
         setError(null);
 
         try {
-          const result = await Tesseract.recognize(selectedImage, 'eng', {
-            logger: info => console.log(info), // opzionale: per il logging dello stato del processo
+          const result = await Tesseract.recognize(selectedImage, 'ita', {
+            logger: info => console.log(info), 
           });
           setRecognizedText(result.data.text);
         } catch (err) {
