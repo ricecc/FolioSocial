@@ -158,7 +158,7 @@ async function page({ params }: { params: { id: string } }) {
               <WantToRead userId={userInfo._id.toString()} bookId={post.book._id.toString()} saved={userInfo.savedBooks.includes(post.book._id)} />
             </div>
           </section>
-          <section className="flex  w-full mb-7 mx-7 sticky bottom-0 z-10 bg-white">
+          <section className="flex  w-full mb-7 mx-7 sticky bottom-0 z-10 h-14 bg-zinc-50">
             <NavigationPosts currentPost={params.id} />
           </section>
           <section className="flex justify-center items-center mb-3">
