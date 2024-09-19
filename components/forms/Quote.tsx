@@ -4,19 +4,24 @@ import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
 
 import { Input } from "@/components/ui/input"
+import ImageUpload from './ImageUpload';
 
 interface AddQuoteProps {
     quote: string;
     setQuote: (quote: string) => void;
-    page:string,
-    setPage:(page:string) =>void;
+    page: string,
+    setPage: (page: string) => void;
     index: number;
     onRemove: (index: number) => void;
 }
-const Quote = ({ index, onRemove, quote, setQuote,page,setPage }: AddQuoteProps) => {
+const Quote = ({ index, onRemove, quote, setQuote, page, setPage }: AddQuoteProps) => {
 
     const [isConfirmed, setIsConfirmed] = useState<boolean>(false);
     
+
+    const handleTextRecognized = (text: string) => {
+      setQuote(text);
+    };
     function confirmquote(): void {
         setIsConfirmed(true)
     }
@@ -40,10 +45,15 @@ const Quote = ({ index, onRemove, quote, setQuote,page,setPage }: AddQuoteProps)
                     <div className='space-y-4 flex flex-col pt-5 '>
 
                         <Textarea className="" placeholder="scrivi.." value={quote} onChange={(e) => setQuote(e.target.value)} />
+                        {/**componente fotocamera */}
                         <div className='flex justify-between flex-row items-center'>
-                            <Input type="text" className="w-16" placeholder="page" value={page} onChange={(e) => setPage(e.target.value)} />
+                            <div className='flex flex-row space-x-2'>
+                                <Input type="text" className="w-16" placeholder="page" value={page} onChange={(e) => setPage(e.target.value)} />
+                                <ImageUpload onTextRecognized={handleTextRecognized}/>
+                            </div>
+
                             {quote ? (
-                                <p className='px-2 border rounded-lg w-min text-sm bg-slate-900 text-white border cursor-pointer' onClick={confirmquote}>save</p>
+                                <p className='px-2 border rounded-lg w-min text-sm bg-slate-900 text-white  cursor-pointer' onClick={confirmquote}>save</p>
                             ) : (
                                 <p className='px-2 border rounded-lg w-min text-sm cursor-pointer' onClick={() => onRemove(index)}>delete</p>
                             )}
