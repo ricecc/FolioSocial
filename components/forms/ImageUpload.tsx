@@ -165,7 +165,7 @@ export default function App({ onTextRecognized }: AppProps) {
           </div>
 
         </DialogTrigger>
-        <DialogContent className="max-w-[425px] max-w-[800px]">
+        <DialogContent className="max-w-[425px] max-h-screen lg:max-w-[800px]">
           <DialogHeader>
             <div className='flex flex-row justify-between items-center '>
               <DialogTitle>Seleziona testo</DialogTitle>
@@ -200,13 +200,13 @@ export default function App({ onTextRecognized }: AppProps) {
               />
             </ReactCrop>
           )}
-          <div className='flex flex-col h-full justify-center items-center '>
+          <div className='flex flex-col justify-center items-center '>
             {!!completedCrop && (
-              !recognizedText ? (
+             
                 <div>
-                  <Button onClick={onSaveCropClick}>Save Taglio</Button>
+                  <Button onClick={onSaveCropClick}>Salva taglio</Button>
                 </div>
-              ) : (<></>)
+             
             )}
             {savedImgSrc && (
               <div className=' w-full space-y-3'>
