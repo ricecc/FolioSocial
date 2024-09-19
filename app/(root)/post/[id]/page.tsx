@@ -1,17 +1,22 @@
+
 import ImageDialog from "@/components/ImageDialog/ImageDialog";
 import WantToRead from "@/components/saveButton/PostWantToRead";
-import HeartToggle from "@/components/ui/HeartToggle";
 import LikeSection from "@/components/post/LikeSection";
 import SaveToggle from "@/components/ui/SaveToggle";
 
-import { fetchPostById, fetchSimilarPosts } from "@/lib/actions/posts.actions";
+import { fetchPostById, fetchPostsFeed } from "@/lib/actions/posts.actions";
 import { fetchUser } from "@/lib/actions/user.actions";
 import { currentUser } from "@clerk/nextjs";
 import CommentSection from "@/components/post/CommentSection";
 import Link from "next/link";
-import SimilarPostsFeed from "@/components/Feed/SimilarPostsFeed";
+import SimilarEntryPoint from "@/components/Feed/SimilarEntryPoint";
+import dynamic from 'next/dynamic'
+import { FeedProvider } from "@/context/FeedContext";
 
-// Funzione per la filtrazione degli utenti piuttosto che nel render
+const NavigationPosts = dynamic(() => import("@/components/post/NavigationPosts"), { ssr: false })
+
+
+
 function filterUserLiked(users: any) {
   return users.map((user: any) => ({
     _id: user._id.toString(),
@@ -23,7 +28,7 @@ function filterUserLiked(users: any) {
   }));
 }
 
-// Componente per gestire i dettagli dei post
+
 const PostDetails = ({ post, userInfo }: any) => {
   const elements = [
     ...post.quotes.map((quote: any) => ({ type: "quote", data: quote })),
@@ -43,7 +48,6 @@ const PostDetails = ({ post, userInfo }: any) => {
             <p className="font-montserrat font-light text-2xl">{post.book.author}</p>
           </div>
           <div className="flex flex-col items-end">
-
             <Link href={`/profile/${post.author.id}`} className="hover:text-hoverTag">{post.author.username}</Link>
           </div>
         </div>
@@ -125,31 +129,46 @@ const PostDetails = ({ post, userInfo }: any) => {
 };
 
 async function page({ params }: { params: { id: string } }) {
-  if (!params.id) return null;
+
 
   const user = await currentUser();
   if (!user) return null;
   const userInfo = await fetchUser(user.id);
   const post = await fetchPostById(params.id);
+  const initalPosts = await fetchPostsFeed(1, 3)
+  const currentUserInfo = {
+    imageCurrentUser: userInfo.image,
+    usernameViewer: userInfo.username,
+    postLiked: userInfo.postLiked,
+    userId: userInfo._id.toString()
+  };
+
+
 
   return (
-    <div className="h-full">
-      <div className="h-full flex-col flex justify-start items-center">
-        <PostDetails post={post} userInfo={userInfo} />
-        <section className="flex h-32 justify-center flex-col w-full bg-slate-950 text-zinc-50 mt-10 mb-10 ">
-          <div className="w-full flex justify-start items-center hover:bg-slate-900 hover:text-zinc-50 cursor-pointer h-1/2 px-8 ">
-            <p className="font-fontMain lg:text-2xl text-md">Compra</p>
-          </div>
-          <div className="w-full flex justify-start items-center cursor-pointer h-1/2">
-            <WantToRead userId={userInfo._id.toString()} bookId={post.book._id.toString()} saved={userInfo.savedBooks.includes(post.book._id)} />
-          </div>
-        </section>
+    <FeedProvider initialPosts={initalPosts.posts}>
+      <div className="h-full z-0">
+        <div className="h-full flex-col flex justify-start items-center">
+          <PostDetails post={post} userInfo={userInfo} />
+          <section className="flex h-32 justify-center flex-col w-full bg-slate-950 text-zinc-50 mt-10 mb-7 ">
+            <div className="w-full flex justify-start items-center hover:bg-slate-900 hover:text-zinc-50 cursor-pointer h-1/2 px-8 ">
+              <p className="font-fontMain lg:text-2xl text-md">Compra</p>
+            </div>
+            <div className="w-full flex justify-start items-center cursor-pointer h-1/2">
+              <WantToRead userId={userInfo._id.toString()} bookId={post.book._id.toString()} saved={userInfo.savedBooks.includes(post.book._id)} />
+            </div>
+          </section>
+          <section className="flex  w-full mb-7 mx-7 sticky bottom-0 z-10 bg-white">
+            <NavigationPosts currentPost={params.id} />
+          </section>
+          <section className="flex justify-center items-center mb-3">
+            <SimilarEntryPoint currentUserInfo={currentUserInfo} parentId={params.id} />
+          </section>
+        </div>
       </div>
-      <section className="w-full h-full  flex justify-center items-center">
-        {/**carosello post consigliati */}
-        <SimilarPostsFeed postId={post._id.toString()} />
-      </section>
-    </div>
+    </FeedProvider>
+
+
   );
 }
 

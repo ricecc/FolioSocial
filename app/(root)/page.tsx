@@ -1,14 +1,17 @@
-// app/page.tsx
-import HomePageFeed from "@/components/Feed/HomePageFeed";
+
+
 import { fetchPostsFeed } from "@/lib/actions/posts.actions";
 import { fetchUser } from "@/lib/actions/user.actions";
 import { currentUser } from "@clerk/nextjs";
 import { redirect, notFound } from "next/navigation";
 import { Suspense } from "react";
 import Loading from "./loading";
+import { FeedProvider } from "@/context/FeedContext";
+import MainFeedSection from "@/components/Feed/MainFeedSection";
 
 export default async function Home() {
   try {
+
     const user = await currentUser();
     if (!user) return notFound();
 
@@ -21,12 +24,15 @@ export default async function Home() {
       imageCurrentUser: userInfo.image,
       usernameViewer: userInfo.username,
       postLiked: userInfo.postLiked,
-      userId: userInfo._id.toString()
+      _idUser: userInfo._id.toString(),
+      idUsre: userInfo.id
     };
-
+   
     return (
       <Suspense fallback={<Loading></Loading>}>
-        <HomePageFeed initialPosts={initialFeed.posts} currentUserInfo={currentUserInfo} />
+        <FeedProvider initialPosts={initialFeed.posts}>
+          <MainFeedSection currentUserInfo={currentUserInfo} />
+        </FeedProvider>
       </Suspense>
     );
   } catch (error) {

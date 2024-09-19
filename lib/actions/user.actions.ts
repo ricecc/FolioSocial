@@ -86,12 +86,19 @@ export async function fetchUserInfoForProfile(userId: string) {
       .populate({
         path: 'posts',
         model: Post,
-        select: 'image',
-        populate: {
-          path: 'book',
-          model: Book,
-          select: 'title author'
-        }
+        select: 'image postImages',
+        populate: [
+          {
+            path: 'book',
+            model: Book,
+            select: 'title author'
+          },
+          {
+            path: 'quotes',
+            model: Quote,
+            select: 'quote'
+          }
+        ]
       })
       .populate({
         path: 'quoteSaved',
@@ -120,8 +127,9 @@ export async function fetchUserInfoForProfile(userId: string) {
       return null;
     }
 
+    const userToReturn = JSON.parse(JSON.stringify(user));
 
-    return user
+    return userToReturn
   } catch (error: any) {
     console.error('Error fetching user profile:', error.message);
     throw new Error(`Failed to fetch user profile: ${error.message}`);

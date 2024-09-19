@@ -157,36 +157,17 @@ export async function fetchPostsFeed(pageNumber = 1, pageSize = 3) {
 
     // Esegui la query
     const posts = await postsQuery.exec();
+     // Converti i post in plain objects
+     
 
     // Verifica se ci sono altri post disponibili per la pagina successiva
     const isNext = totalPostsCount > skipAmount + posts.length;
-    const jsonPosts = posts.map(post => ({
-      _id: post._id.toString(),
-      author: {
-        id: post.author._id.toString(),
-        username: post.author.username,
-        image: post.author.image,
-      },
-      book: post.book ? {
-        title: post.book.title,
-        author: post.book.author,
-      } : null,
-      like: post.like.map((user: any) => ({
-        id: user._id.toString(),
-        username: user.username,
-        image: user.image,
-      })),
-      quotes: post.quotes.map((quote: any) => ({
-        id: quote._id.toString(),
-        quote: quote.quote,
-      })),
-      comments: post.comments.length, // Include solo il conteggio dei commenti
-      postImages: post.postImages,
-      image: post.image,
-    }));
+   
+    const data = JSON.parse(JSON.stringify(posts))
     
     console.log("Posts fetched successfully");
-    return { posts: jsonPosts, isNext };
+
+    return { posts: data, isNext };
   } catch (error: any) {
     console.error("Error while fetching posts feed:", error.message);
     throw new Error("Unable to fetch posts");
@@ -236,7 +217,7 @@ export async function fetchSimilarPosts(postId: string) {
         model:Quote,
         select:'quote'
       })
-      .select('image postImages')
+      .select('image postImages like')
       .sort({ score: { $meta: "textScore" } }).limit(6).exec();
 
       const jsonPosts = JSON.parse(JSON.stringify(similarPosts));
@@ -407,7 +388,8 @@ export async function putLikeToPost({ fromUserId, toElement, path }: PropsLikeSa
     if (!updatedUser) {
       throw new Error('User faild')
     }
-    revalidatePath(path)
+    console.log("path",path)
+    
     return { success: true };
   } catch (error: any) {
     throw new Error(`Failed to put like: ${error.message}`);
@@ -439,7 +421,9 @@ export async function removeLikeToPost({ fromUserId, toElement, path }: PropsLik
     if (!updatedUser) {
       throw new Error('User faild')
     }
-    revalidatePath(path)
+    console.log("pat",path)
+    
+
     return { success: true };
   } catch (error: any) {
     throw new Error(`Failed to remove like: ${error.message}`);

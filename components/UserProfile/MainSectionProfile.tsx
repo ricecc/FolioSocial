@@ -5,7 +5,7 @@ import UserSaved from './UserSaved'
 import { usePathname } from 'next/navigation'
 
 interface posts {
-    id: string,
+    _id: string,
     book: {
         id: string,
         title: string,
@@ -34,7 +34,7 @@ interface savedBooks {
 }
 
 interface MainSectionProps {
-    posts: posts[],
+    posts: any[],
     quoteSaved: quoteSaved[],
     reviewSaved: reviewSaved[],
     savedBooks: savedBooks[],
@@ -49,6 +49,7 @@ const MainSectionProfile = ({ posts, quoteSaved, reviewSaved, savedBooks, imageS
     const handleTabChange = (tab: 'library' | 'saved') => {
         setActiveTab(tab);
     };
+
     return (
         <section className="flex flex-col w-full  h-auto flex items-center ">
             <div className='w-full flex justify-center items-center bg-slate-100  mb-16 '>
@@ -75,7 +76,7 @@ const MainSectionProfile = ({ posts, quoteSaved, reviewSaved, savedBooks, imageS
                     </div>
                 </div>
             </div>
-            <div className='lg:w-[1000px] w-auto '>
+            <div className=' w-auto '>
                 {activeTab === "library" ? (
                     <UserLibrary posts={posts} isYourPost={isOnYourPosts}></UserLibrary>
                 ) : (

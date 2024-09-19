@@ -1,114 +1,104 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import Autoplay from "embla-carousel-autoplay";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
-import { fetchSimilarPosts } from "@/lib/actions/posts.actions";
-import Image from "next/image";
-import Link from "next/link";
+import { useState, useCallback, useMemo } from "react";
+import { fetchPostsFeed, fetchSimilarPosts } from "@/lib/actions/posts.actions";
+import MainFeedSection from "@/components/Feed/MainFeedSection";
+import { Skeleton } from "../ui/skeleton";
+import SimilarFeedSection from "./SimilarFeedSection";
 
-interface SimilarPostParams {
-  postId: string;
+interface FeedClientProps {
+  initialPosts: any[];
+  currentUserInfo: any;
+  parentId:string;
 }
 
-const SimilarPostsFeed = ({ postId }: SimilarPostParams) => {
-  const [similarPosts, setSimilarPosts] = useState<any[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+const SimilarPostsFeed: React.FC<FeedClientProps> = ({ initialPosts, currentUserInfo,parentId }) => {
+  const [feed, setFeed] = useState(initialPosts);
+  const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
 
-  useEffect(() => {
-    if (!postId) return;
+  const loadMorePosts = useCallback(async () => {
+    if (loading || !hasMore) return;
 
-    const getSimilarPosts = async () => {
-      setIsLoading(true);
-      try {
-        const posts = await fetchSimilarPosts(postId);
-        setSimilarPosts(posts);
-      } catch (error) {
-        console.error("Error fetching similar posts:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+    setLoading(true);
+    try {
+      const newPage = page + 1;
+      const newFeed = await fetchSimilarPosts(parentId);
 
-    getSimilarPosts();
-  }, [postId]);
+      setHasMore(newFeed.posts.length >= 6);
+      setFeed((prevFeed) => [...prevFeed, ...newFeed.posts]);
+      setPage(newPage);
+    } catch (error) {
+      console.error("Error loading more posts:", error);
+    } finally {
+      setLoading(false);
+    }
+  }, [loading, hasMore, page]);
 
-  if (isLoading) {
-    return <p>Loading similar posts...</p>;
-  }
-
-  if (!similarPosts.length) {
-    return <p>No similar posts found</p>;
-  }
-
-
+  const filteredPosts = useMemo(() => feed.map((post) => ({
+    ...post,
+    usersLiked: post.like.map((user: any) => ({
+      _id: user._id,
+      id: user.id,
+      image: user.image,
+      username: user.username,
+      name: user.name,
+      lastName: user.lastName,
+    })),
+  })), [feed]);
 
   return (
-    <Carousel opts={{ align: "start" }} className="lg:w-5/6 w-[300px]">
-      <CarouselContent>
-        {similarPosts.map((post, index) => (
-          <CarouselItem key={post._id.toString()} className="md:basis-1/2 lg:basis-1/3">
-            <div className="flex flex-col cursor-pointer mb-10 w-[320px] sm:w-[250px] md:w-[400px] shadow-xl">
-              <div className="w-[320px] sm:w-[250px] md:w-[450px] h-[350px] flex justify-between flex-col items-center relative">
-                <div className="flex flex-row items-center space-x-2 p-3 h-1/6 w-full">
-                  <Image
-                    src={post.author.image}
-                    alt={post.author.username}
-                    width={28}
-                    height={28}
-                    className="object-cover rounded-full w-8 h-8"
-                  />
-                  <Link href={`/profile/${post.author.id}`}>
-                    <p>{post.author.username}</p>
-                  </Link>
-                </div>
-
-               
-                {index % 4 === 0 && post.quotes && post.quotes.length > 0 ? (
-                  <Link href={`/post/${postId}`} className="h-5/6 w-full">
-                    <div className="w-full flex justify-center items-center h-full">
-                      <p className="text-md font-fontMain p-5 text-slate-900 font-fontMain">
-                        "{post.quotes[0].quote.slice(0, 180)}..."
-                      </p>
-                    </div>
-                  </Link>
-                ) : index % 2 === 0 ? (
-                  <div className="flex justify-center items-center pt-2 pb-2 h-full">
-                    <img
-                      src={post.postImages && post.postImages.length > 0 ? post.postImages[0] : post.image}
-                      alt="Post"
-                      className="w-auto max-w-[380px] max-h-60 shadow-xl"
-                    />
-                  </div>
-                ) : (
-                  <div className="flex justify-center items-center bg-gradient-to-b from-white to-slate-200 h-full w-full">
-                    <img
-                      src={post.image}
-                      alt="Book Cover"
-                      className="w-auto max-h-60 h-64 max-w-[380px]"
-                    />
-                  </div>
-                )}
-              </div>
-              <div className="flex flex-col p-3">
-                <div>
-                  <p className="font-md font-medium hover:text-hoverTag">{post.book.title}</p>
-                  <p className="text-sm">{post.book.author}</p>
+    <>
+      <section className="h-full gap-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 mx-auto mt-3 flex justify-center">
+        {filteredPosts.length > 0 ? (
+          filteredPosts.map((post: any, index: number) => (
+            <SimilarFeedSection
+              key={post._id}
+              imageCurrentUser={currentUserInfo.imageCurrentUser}
+              numComment={post.comments}
+              usernameViewer={currentUserInfo.usernameViewer}
+              usersLiked={post.usersLiked}
+              isLiked={currentUserInfo.postLiked.includes(post._id.toString())}
+              index={index}
+              postId={post._id.toString()}
+              quote={post.quotes[0]?.quote || ""}
+              imagePost={post.postImages[0]}
+              bookCover={post.image}
+              bookTitle={post.book.title}
+              bookAuthor={post.book.author}
+              userImage={post.author.image}
+              userId={currentUserInfo.userId}
+              username={post.author.username}
+              postAuthorId={post.author.id}
+            />
+          ))
+        ) : (
+          <h1>Il feed è vuoto</h1>
+        )}
+      </section>
+      <section className="w-full h-16 flex justify-center items-center mb-14">
+        {filteredPosts.length > 0 && (
+          hasMore ? (
+            loading ? (
+              <div className="flex flex-row space-x-1 items-center justify-center">
+                <div className="flex space-x-2">
+                  <div className="w-2 h-2 bg-gray-200 rounded-full scaleAnimation"></div>
+                  <div className="w-2 h-2 bg-gray-200 rounded-full scaleAnimation"></div>
+                  <div className="w-2 h-2 bg-gray-200 rounded-full scaleAnimation"></div>
                 </div>
               </div>
-            </div>
-          </CarouselItem>
-        ))}
-      </CarouselContent>
-      <CarouselPrevious />
-      <CarouselNext />
-    </Carousel>
+            ) : (
+              <>
+                {/**<div onClick={loadMorePosts} className="text-black cursor-pointer flex flex-col justify-center items-center space-y-2">
+                <p>Load more</p>
+                <img src="/assets/loadMore.svg" className="animate-pulse" alt="plus" width={24} height={24} />
+              </div> */}
+              </>
+            )
+          ) : null
+        )}
+      </section>
+    </>
   );
 };
 

@@ -8,6 +8,9 @@ import Footer from "@/components/navigation/Footer";
 import { Toaster } from "@/components/ui/sonner"
 import { EdgeStoreProvider } from "@/lib/edgestore";
 import MobileTopNavBar from "@/components/navigation/MobileTopNavBar";
+import { Feather } from "lucide-react";
+import { FeedProvider } from "@/context/FeedContext";
+
 
 
 const inter = Inter({ subsets: ["latin"] });
@@ -26,16 +29,17 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en" data-theme="light">
         <head>
-        <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet"/>
-        <link href="https://fonts.googleapis.com/css2?family=Protest+Guerrilla&display=swap" rel="stylesheet"/>
+          <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet" />
+          <link href="https://fonts.googleapis.com/css2?family=Protest+Guerrilla&display=swap" rel="stylesheet" />
         </head>
         <body className={inter.className}>
           <main className="flex flex-col relative ">
-          <MobileTopNavBar/>
+            <MobileTopNavBar />
             <section className="main-container font-fontStrano">
               <EdgeStoreProvider>
+               
+                  {children}
              
-                {children}
                 <SpeedInsights />
                 <Analytics />
               </EdgeStoreProvider>

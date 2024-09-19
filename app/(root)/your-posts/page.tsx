@@ -13,51 +13,8 @@ async function Page() {
   if (!user) return null;
 
   const userData = await fetchUserInfoForProfile(user.id)
-
+ 
   if (!userData?.onboarded) redirect('/onboarding')
-
-
-  function filterUserPosts(posts: any) {
-    return posts.map((post: any) => (
-      {
-        id: post._id.toString(),
-        book: {
-          id: post.book._id.toString(),
-          title: post.book.title,
-          author: post.book.author,
-        },
-        image: post.image
-      }
-    ))
-  }
-
-  function filterQuoteLiked(quoteSaved: any) {
-    return quoteSaved.map((quote: any) => ({
-      id: quote._id.toString(),
-      page: quote.page,
-      quote: quote.quote
-    }))
-  }
-
-  function filterReviewLiked(reviewSaved: any) {
-    return reviewSaved.map((review: any) => ({
-      id: review._id.toString(),
-      title: review.title,
-      review: review.review
-    }))
-  }
-
-  function filterSavedBooks(savedBooks: any) {
-    return savedBooks.map((savedBook: any) => ({
-      id: savedBook._id.toString(),
-      title: savedBook.title,
-      author: savedBook.author,
-      largeImage: savedBook.largeImage
-
-    }))
-  }
-
-
 
   return (
     <div className="flex justify-center items-center w-screen flex-col ">
@@ -73,10 +30,10 @@ async function Page() {
         </div>
       </div>
         <MainSectionProfile
-          posts={filterUserPosts(userData.posts)}
-          quoteSaved={filterQuoteLiked(userData.quoteSaved)}
-          reviewSaved={filterReviewLiked(userData.reviewSaved)}
-          savedBooks={filterSavedBooks(userData.savedBooks)}
+          posts={userData.posts}
+          quoteSaved={userData.quoteSaved}
+          reviewSaved={userData.reviewSaved}
+          savedBooks={userData.savedBooks}
           imageSaved={userData.imageSaved} />
     </div>
   )
