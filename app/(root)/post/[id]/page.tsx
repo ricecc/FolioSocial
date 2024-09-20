@@ -59,7 +59,7 @@ const PostDetails = ({ post, userInfo }: any) => {
         {elements.map((element, index) => {
           if (element.type === "quote") {
             return (
-              <div key={index} className="col-span-1 p-4 min-h-48 border flex justify-between flex-col">
+              <div key={index} className="col-span-1 p-4 min-h-52 border flex justify-between flex-col">
                 <div className="flex flex-row justify-between">
                   <span className="text-sm text-hoverTag">Page {element.data.page}</span>
                   <SaveToggle fromUserId={userInfo._id.toString()} type={"quote"} toElement={element.data._id.toString()} isSaved={userInfo.quoteSaved.includes(element.data._id)} />
@@ -87,7 +87,7 @@ const PostDetails = ({ post, userInfo }: any) => {
             );
           } else if (element.type === "review") {
             return (
-              <div key={index} className="col-span-1 p-4 flex-col justify-between min-h-48 border border-gray-300 rounded space-y-4">
+              <div key={index} className="col-span-1 p-4 flex-col justify-between min-h-52 border border-gray-300 rounded space-y-4">
                 <div className="flex justify-start min-h-28 flex-col space-y-5 pt-2">
                   <div className="flex flex-row justify-between">
                     <h3 className="text-lg font-bold">{element.data.title}</h3>
