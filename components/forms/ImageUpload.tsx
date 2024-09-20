@@ -4,8 +4,6 @@ import ReactCrop, { centerCrop, makeAspectCrop, Crop, PixelCrop, convertToPixelC
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,

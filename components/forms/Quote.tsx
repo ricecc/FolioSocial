@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import Image from "next/image";
 import { Textarea } from "@/components/ui/textarea"
-import { Button } from "@/components/ui/button"
 
 import { Input } from "@/components/ui/input"
 import ImageUpload from './ImageUpload';
