@@ -16,7 +16,7 @@ async function page({ params }: { params: { id: string } }) {
     fromUser = await fetchUser(user?.id)
 
   const userToWatch = await fetchUserInfoForProfile(params.id)
-  console.log("userToWatch",userToWatch)
+
 
   function filterUserFollower(users: any) {
     return users.map((user: any) => (

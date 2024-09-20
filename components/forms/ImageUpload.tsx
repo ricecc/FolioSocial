@@ -18,6 +18,7 @@ import 'react-image-crop/dist/ReactCrop.css'
 import { useDebounceEffect } from './useDebounceEffect';
 import TextRecognition from './TextRecognition';
 import { IoIosQrScanner } from "react-icons/io";
+import { ScrollArea } from '@radix-ui/react-scroll-area';
 
 
 function centerAspectCrop(mediaWidth: number, mediaHeight: number, aspect: number) {
@@ -47,7 +48,8 @@ export default function App({ onTextRecognized }: AppProps) {
   const [crop, setCrop] = useState<Crop>()
   const [completedCrop, setCompletedCrop] = useState<PixelCrop>()
   const [aspect, setAspect] = useState<number | undefined>(undefined)
-  const [recognizedText, setRecognizedText] = useState('')  // Stato per il testo riconosciuto
+  const [recognizedText, setRecognizedText] = useState('')
+  const [language, setLanguage] = useState('ita');
 
   function onSelectFile(e: React.ChangeEvent<HTMLInputElement>) {
     if (e.target.files && e.target.files.length > 0) {
@@ -128,16 +130,28 @@ export default function App({ onTextRecognized }: AppProps) {
 
   // Funzione per salvare il testo riconosciuto
   function saveTextRecognized() {
-    onTextRecognized(recognizedText);  
-  } 
-  
-  const [language, setLanguage] = useState('ita');
+    onTextRecognized(recognizedText);
+  }
+
+
 
 
   const toggleLanguage = () => {
     setLanguage((prevLanguage) => (prevLanguage === 'ita' ? 'eng' : 'ita'));
   };
 
+  function handleNewClick() {
+    setImgSrc('') // Resetta l'immagine
+    setSavedImgSrc(null) // Resetta l'immagine salvata
+    setCrop(undefined) // Resetta il ritaglio
+    setCompletedCrop(undefined) // Resetta il ritaglio completato
+
+    // Resetta l'input file
+    const fileInput = document.getElementById('file-input') as HTMLInputElement
+    if (fileInput) {
+      fileInput.value = ''
+    }
+  }
   return (
     <div className="flex justify-center items-center flex-col">
 
@@ -165,7 +179,7 @@ export default function App({ onTextRecognized }: AppProps) {
           </div>
 
         </DialogTrigger>
-        <DialogContent className="max-w-[425px] max-h-screen lg:max-w-[800px]">
+        <DialogContent className="max-w-[425px] h-[650px] lg:max-w-[800px]">
           <DialogHeader>
             <div className='flex flex-row justify-between items-center '>
               <DialogTitle>Seleziona testo</DialogTitle>
@@ -178,52 +192,71 @@ export default function App({ onTextRecognized }: AppProps) {
                 </Label>
               </div>
             </div>
-
-            <DialogDescription>
-              Assicurati di selezionare interamente la parte desiderata senza includere altre frasi
-
-            </DialogDescription>
           </DialogHeader>
-          {!!imgSrc && (
-            <ReactCrop
-              crop={crop}
-              onChange={(_, percentCrop) => setCrop(percentCrop)}
-              onComplete={(c) => setCompletedCrop(c)}
-              aspect={aspect}
-              minHeight={10}
-            >
-              <img
-                ref={imgRef}
-                alt="Crop me"
-                src={imgSrc}
-                onLoad={onImageLoad}
-              />
-            </ReactCrop>
-          )}
-          <div className='flex flex-col justify-center items-center '>
-            {!!completedCrop && (
-             
-                <div>
-                  <Button onClick={onSaveCropClick}>Salva taglio</Button>
-                </div>
-             
-            )}
-            {savedImgSrc && (
-              <div className=' w-full space-y-3'>
+
+          {!!imgSrc ? (
+
+            !savedImgSrc ? (
+              <ReactCrop
+                crop={crop}
+                onChange={(_, percentCrop) => setCrop(percentCrop)}
+                onComplete={(c) => setCompletedCrop(c)}
+                aspect={aspect}
+                minHeight={10}
+              >
+                <img
+                  ref={imgRef}
+                  alt="Crop me"
+                  src={imgSrc}
+                  onLoad={onImageLoad}
+                  className=' w-full h-[500px]  object-contain'
+                />
+              </ReactCrop>
+            ) : (savedImgSrc && (
+              <div className=' w-full h-[320px] bg-red-100 space-y-3'>
                 <h3>Testo Riconosciuto</h3>
                 {/* Passa il testo riconosciuto a uno stato */}
                 <TextRecognition selectedImage={savedImgSrc} onTextRecognized={setRecognizedText} language={language} />
                 <Textarea
+                  rows={10}
                   placeholder="Type your message here."
                   value={recognizedText} // Popola l'area di testo con il testo riconosciuto
                   onChange={(e) => setRecognizedText(e.target.value)}
                 />
-                <div className='flex justify-end items-center'>
+                <div className='flex justify-between items-center'>
+                  <Button variant='outline' className='border' onClick={() => setSavedImgSrc(null)}>Annulla</Button>
                   <Button onClick={saveTextRecognized}>Salva frase</Button>
                 </div>
 
               </div>
-            )}
+            ))
+          ) : (
+            
+              <div className=' h-12  flex justify-center items-center'>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={onSelectFile}
+                  id="file-input"
+                  style={{ display: 'none' }}
+                />
+                <label htmlFor="file-input" className="cursor-pointer p-10 rounded-xl  border border-dashed border-slate-800">
+                  <IoIosQrScanner size={30} className="text-gray-400" />
+                </label>
+              </div>
+          
+          )}
+          <div className='flex flex-col justify-center items-center '>
+            {!completedCrop || !savedImgSrc ? (
+              <div className='w-full flex justify-between'>
+                <Button variant='outline' onClick={handleNewClick}>New</Button>
+                <Button onClick={onSaveCropClick}>Salva taglio</Button>
+              </div>
+
+
+
+            ) : (<></>)}
+
           </div>
         </DialogContent>
       </Dialog>
