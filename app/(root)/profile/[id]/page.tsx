@@ -3,6 +3,7 @@ import { fetchUser, fetchUserInfoForProfile, startFollow } from "@/lib/actions/u
 import MainSectionProfile from "@/components/UserProfile/MainSectionProfile";
 import FollowButton from "@/components/UserProfile/FollowButton";
 import DialogFollower from "@/components/UserProfile/DialogFollower"
+import Image from "next/image";
 
 async function page({ params }: { params: { id: string } }) {
   if (!params.id) return null;
@@ -78,7 +79,7 @@ async function page({ params }: { params: { id: string } }) {
       <div className="w-full  h-full  ">
         <div className="flex flex-col justify-center items-center  w-full  bg-slate-100 h-72 ">
           <div className="h-auto  flex flex-col justify-center items-center md:w-1/4 md:ml-8  mb-3 md:mb-0 bg-slate-100 ">
-            <img src={userToWatch.image} className="w-24 h-24 rounded-full object-cover  border-spacing-52" alt="" />
+            <img src={userToWatch.image} className="w-24 h-24 rounded-full object-cover  border-spacing-52" alt=""  />
             <div className="felx flex-col justify-center space-y-2">
               <div className="flex flex-col justify-center items-center  space-y-4">
                 {userToWatch.lastName ? (

@@ -32,6 +32,22 @@ const nextConfig = {
         protocol: "https",
         hostname: "placehold.co",
       },
+      {
+        protocol: "https",
+        hostname: "ibs.it",
+      },
+      {
+        protocol: "https",
+        hostname: "www.ibs.it",  // Aggiungi questo per il sottodominio
+      },
+      {
+        protocol:"https",
+        hostname:"files.edgestore.dev"
+      },
+      {
+        protocol:"https",
+        hostname:"www.files.edgestore.dev"
+      }
     ],
   },
 };

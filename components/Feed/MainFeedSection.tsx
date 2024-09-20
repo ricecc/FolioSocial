@@ -96,7 +96,7 @@ const MainFeedSection: React.FC<Props> = ({ currentUserInfo }) => {
           ) : (
             <div onClick={loadMorePosts} className="text-black cursor-pointer flex flex-col justify-center items-center space-y-2">
               <p>Load more</p>
-              <img src="/assets/loadMore.svg" className="animate-pulse" alt="plus" width={24} height={24} />
+              <Image src="/assets/loadMore.svg" className="animate-pulse" alt="plus" width={24} height={24} />
             </div>
           )
         )}

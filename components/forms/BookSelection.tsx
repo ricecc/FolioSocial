@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/command"
 import { Input } from "@/components/ui/input"
 import { FaSearch } from 'react-icons/fa';
+import Image from "next/image";
 
 interface Book {
     _id: string;

@@ -211,7 +211,7 @@ export default function App({ onTextRecognized }: AppProps) {
                 />
               </ReactCrop>
             ) : (savedImgSrc && (
-              <div className=' w-full h-[320px] bg-red-100 space-y-3'>
+              <div className=' w-full h-[320px]  space-y-3'>
                 <h3>Testo Riconosciuto</h3>
                 {/* Passa il testo riconosciuto a uno stato */}
                 <TextRecognition selectedImage={savedImgSrc} onTextRecognized={setRecognizedText} language={language} />
@@ -250,8 +250,6 @@ export default function App({ onTextRecognized }: AppProps) {
                 <Button variant='outline' onClick={handleNewClick}>New</Button>
                 <Button onClick={onSaveCropClick}>Salva taglio</Button>
               </div>
-
-
 
             ) : (<></>)}
 

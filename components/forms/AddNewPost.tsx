@@ -16,6 +16,7 @@ import Header from "./HeaderNewPosst";
 import TagsInput from "./TagsInput";
 import { createTag } from "@/lib/actions/tag.actions";
 import AlertNewPost from "./AlertNewPost";
+import Image from "next/image";
 
 
 interface DivData {
@@ -146,7 +147,9 @@ export default function AddNewPost({ idUser }: UserProps) {
 
                     </div>
                     <div className="bg-zinc-100 md:row-span-2 min-h-48 flex justify-center items-center">
-                        <img src={selectedBook?.largeImage} alt="" className="max-h-96" />
+                        {selectedBook&&(
+                            <img src={selectedBook.largeImage} alt="" className="max-h-96" />
+                        )}
                     </div>
                     {divs.map((div, index) => (
                         <div key={index} className={div.rowSpan ? "md:row-span-2 " : ""}>
