@@ -10,6 +10,7 @@ import { createTag } from './tag.actions';
 import Tag from '../models/tag.model';
 import Quote from '../models/quote.model';
 import Review from '../models/review.model';
+import Comment from '../models/comment.model';
 interface Params {
   author: string,
   book: string;
@@ -427,5 +428,46 @@ export async function removeLikeToPost({ fromUserId, toElement, path }: PropsLik
     return { success: true };
   } catch (error: any) {
     throw new Error(`Failed to remove like: ${error.message}`);
+  }
+}
+
+
+export async function deletePost(id: string, path: string): Promise<void> {
+  try {
+    // Connetti al database
+    await connectToDB();
+
+    // Trova il post da eliminare
+    const post = await Post.findById(id).populate("author");
+
+    if (!post) {
+      throw new Error("Post not found");
+    }
+
+    // Elimina le quote associate al post
+    const deleteQuotes = Quote.deleteMany({ _id: { $in: post.quotes } });
+
+    // Elimina le review associate al post
+    const deleteReviews = Review.deleteMany({ _id: { $in: post.reviews } });
+
+    // Elimina i commenti associati al post
+    const deleteComments = Comment.deleteMany({ _id: { $in: post.comments } });
+
+    // Rimuovi il post dall'array `posts` dell'autore
+    const updateUser = User.findByIdAndUpdate(
+      post.author._id,
+      { $pull: { posts: post._id } }, // Rimuovi il post dall'array posts
+      { new: true }
+    );
+
+    // Elimina il post
+    const deletePost = Post.findByIdAndDelete(id);
+
+    // Esegui tutte le eliminazioni in parallelo
+    await Promise.all([deleteQuotes, deleteReviews, deleteComments, updateUser, deletePost]);
+    revalidatePath(path)
+    console.log("Post and related entities deleted successfully, and user updated.");
+  } catch (error: any) {
+    throw new Error(`Failed to delete post: ${error.message}`);
   }
 }
