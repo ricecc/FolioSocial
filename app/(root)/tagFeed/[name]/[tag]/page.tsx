@@ -25,7 +25,7 @@ async function page({ params }: { params: { name: string, tag: string } }) {
                                 src={post.image}
                                 alt={`Image of ${post.book.title}`}
                                 userImage={post.author.image}
-                                link={`/post/${post._id.toString()}`}
+                                link={`/feed/${post._id.toString()}`}
                                 username={post.author.username}
                                 postAuthorId={post.author.id}
                                 postLike={post.like.length}

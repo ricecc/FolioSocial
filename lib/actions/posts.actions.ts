@@ -390,7 +390,7 @@ export async function putLikeToPost({ fromUserId, toElement, path }: PropsLikeSa
       throw new Error('User faild')
     }
     console.log("path",path)
-    
+
     return { success: true };
   } catch (error: any) {
     throw new Error(`Failed to put like: ${error.message}`);

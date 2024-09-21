@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { MdDelete } from 'react-icons/md';
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogFooter, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button"; // Assumendo che ci sia un bottone già stilizzato da shadcn
 import { deletePost } from '@/lib/actions/posts.actions'; // Funzione deletePost creata
-
+import { Badge } from "@/components/ui/badge"
 interface Params {
   postId: string;
 }
@@ -31,10 +30,7 @@ const DeletePost = ({ postId }: Params) => {
       {/* Trigger per aprire il dialog */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogTrigger asChild>
-          <MdDelete 
-            className='w-6 h-6 cursor-pointer hover:text-red-600' 
-            onClick={() => setIsDialogOpen(true)} 
-          />
+          <Badge onClick={() => setIsDialogOpen(true)} >Elimina</Badge>
         </DialogTrigger>
 
         {/* Dialog di conferma */}

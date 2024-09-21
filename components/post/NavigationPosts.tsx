@@ -3,7 +3,7 @@
 import React from 'react'
 import { useRouter } from 'next/navigation'; // Utilizza il router di Next.js
 import { Pagination, PaginationContent, PaginationItem, PaginationNext, PaginationPrevious } from '../ui/pagination';
-import { useFeed } from '@/context/FeedContext';
+import { useFeed } from '@/context/FeedContent';
 
 interface Params {
   currentPost: string;
@@ -23,7 +23,7 @@ const NavigationPosts = ({ currentPost }: Params) => {
  
   const goToPrevPost = () => {
     if (prevPost) {
-      router.push(`/post/${prevPost._id.toString()}`);
+      router.push(`/feed/${prevPost._id.toString()}`);
     } else if (!loading && hasMore) {
    
       loadMorePosts();
@@ -32,7 +32,7 @@ const NavigationPosts = ({ currentPost }: Params) => {
 
   const goToNextPost = () => {
     if (nextPost) {
-      router.push(`/post/${nextPost._id.toString()}`);
+      router.push(`/feed/${nextPost._id.toString()}`);
     } else if (!loading && hasMore) {
      
       loadMorePosts();
@@ -40,7 +40,6 @@ const NavigationPosts = ({ currentPost }: Params) => {
   };
 
   return (
-    
       <Pagination className="w-full">
         <PaginationContent className="w-full flex justify-between">
           <PaginationItem>
@@ -51,7 +50,6 @@ const NavigationPosts = ({ currentPost }: Params) => {
           </PaginationItem>
         </PaginationContent>
       </Pagination>
-    
   )
 }
 

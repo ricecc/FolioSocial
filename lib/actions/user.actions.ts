@@ -86,7 +86,7 @@ export async function fetchUserInfoForProfile(userId: string) {
       .populate({
         path: 'posts',
         model: Post,
-        select: 'image postImages',
+        select: 'image postImages like',
         populate: [
           {
             path: 'book',

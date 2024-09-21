@@ -8,8 +8,8 @@ import Footer from "@/components/navigation/Footer";
 import { Toaster } from "@/components/ui/sonner"
 import { EdgeStoreProvider } from "@/lib/edgestore";
 import MobileTopNavBar from "@/components/navigation/MobileTopNavBar";
-import { Feather } from "lucide-react";
-import { FeedProvider } from "@/context/FeedContext";
+
+
 
 
 

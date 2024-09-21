@@ -2,11 +2,11 @@
 import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import HeartToggle from '../ui/HeartToggle'
-import SaveToggle from '../ui/SaveToggle'
 import DialogLike from '../UserProfile/DialogLike'
 
+
 interface UserProps {
-    _id:string,
+    _id: string,
     id: string,
     image: string,
     name: string,
@@ -23,19 +23,21 @@ interface likedProps {
     liked: boolean
     type: "quote" | "post" | "review" | "picture"
     isSaved: boolean,
-    fromUserImage:string,
+    fromUserImage: string,
 }
 
-const LikeSection = ({ fromUserUsername, userLiked, numLike, fromUserId, toElement, liked, type, isSaved,fromUserImage }: likedProps) => {
-    const [count, setCount] = useState<number>(numLike) 
+const LikeSection = ({ fromUserUsername, userLiked, numLike, fromUserId, toElement, liked, type, isSaved, fromUserImage }: likedProps) => {
+    const [count, setCount] = useState<number>(numLike)
     const [likedList, setLikedList] = useState<UserProps[]>(userLiked)
-
-
+   
     const updateLikedList = (isLiked: boolean) => {
         if (isLiked) {
+
             setLikedList(likedList.filter(user => user._id !== fromUserId))
+           
         } else {
-            setLikedList([{ _id: fromUserId, username: fromUserUsername, image: fromUserImage, name: "", lastName: "",id:"" }, ...likedList])
+            setLikedList([{ _id: fromUserId, username: fromUserUsername, image: fromUserImage, name: "", lastName: "", id: "" }, ...likedList])
+            
         }
     }
     return (
@@ -45,9 +47,11 @@ const LikeSection = ({ fromUserUsername, userLiked, numLike, fromUserId, toEleme
                     <p className='text-sm'>
                         Piace a
                         <span className='font-semibold hover:text-hoverTag pl-1'>
-                            <Link href={`/profile/${likedList[0].id}`}>
-                                {likedList[0].username}
-                            </Link>
+                           
+                                <Link href={`/profile/${likedList[0].id}`}>
+                                    {likedList[0].username}
+                                </Link>
+                           
                         </span>
                     </p>
                 ) : count > 1 ? (
@@ -55,9 +59,11 @@ const LikeSection = ({ fromUserUsername, userLiked, numLike, fromUserId, toEleme
                         <p className='text-sm'>
                             Piace a
                             <span className='font-semibold hover:text-hoverTag pl-1'>
-                                <Link href={`/profile/${likedList[0].id}`}>
-                                    {likedList[0].username}
-                                </Link>
+                        
+                                    <Link href={`/profile/${likedList[0].id}`}>
+                                        {likedList[0].username}
+                                    </Link>
+                
                             </span>
                         </p>
                         <DialogLike userLiked={likedList} numLike={count - 1}></DialogLike>
@@ -73,12 +79,12 @@ const LikeSection = ({ fromUserUsername, userLiked, numLike, fromUserId, toEleme
                     toElement={toElement}
                     type={type}
                     liked={liked}
-                    setCount={setCount} 
+                    setCount={setCount}
                     count={count}
-                    updateLikedList={updateLikedList} 
+                    updateLikedList={updateLikedList}
                 />
 
-                
+
             </div>
         </div>
     )

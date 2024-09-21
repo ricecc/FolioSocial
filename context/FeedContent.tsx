@@ -1,5 +1,5 @@
 "use client";
-import React, { createContext, useState, useCallback, useContext, ReactNode } from 'react';
+import React, { createContext, useState, useCallback, useContext, useEffect, ReactNode } from 'react';
 import { fetchPostsFeed } from '@/lib/actions/posts.actions'; // Importa la funzione di fetch
 
 interface UserProps {
@@ -37,24 +37,24 @@ interface FeedContextType {
 
 interface FeedProviderProps {
   children: ReactNode;
-  initialPosts: any[]; // Tipo corretto per i post iniziali
 }
 
 const FeedContext = createContext<FeedContextType | undefined>(undefined);
 
-export const FeedProvider: React.FC<FeedProviderProps> = ({ children, initialPosts }) => {
-  const [feed, setFeed] = useState<any[]>(initialPosts); // Inizializza lo stato con i post iniziali
+export const FeedProvider: React.FC<FeedProviderProps> = ({ children }) => {
+  const [feed, setFeed] = useState<Post[]>([]); // Rimosso initialPosts
   const [page, setPage] = useState(1);
-  const [loading, setLoading] = useState(false); // Avvio con `false` poiché inizialmente non sta caricando
+  const [loading, setLoading] = useState(false); // Avvio con false poiché inizialmente non sta caricando
   const [hasMore, setHasMore] = useState(true);
 
+  // Funzione per caricare ulteriori post
   const loadMorePosts = useCallback(async () => {
     if (loading || !hasMore) return;
 
     setLoading(true);
     try {
       const newPage = page + 1;
-      const newFeed = await fetchPostsFeed(newPage, 6); // Presumo che `fetchPostsFeed` accetti pagina e limite
+      const newFeed = await fetchPostsFeed(newPage, 6); // Carica nuovi post
 
       setHasMore(newFeed.posts.length >= 6); // Se ci sono meno di 6 post, non ci sono più post da caricare
       setFeed((prevFeed) => [...prevFeed, ...newFeed.posts]); // Aggiungi nuovi post al feed
@@ -65,6 +65,24 @@ export const FeedProvider: React.FC<FeedProviderProps> = ({ children, initialPos
       setLoading(false);
     }
   }, [loading, hasMore, page]);
+
+  // Effetto per caricare i post iniziali
+  useEffect(() => {
+    const loadInitialPosts = async () => {
+      setLoading(true);
+      try {
+        const initialFeed = await fetchPostsFeed(1, 6); // Carica i post iniziali
+        setFeed(initialFeed.posts); // Imposta i post iniziali nello stato
+        setHasMore(initialFeed.posts.length >= 6); // Controlla se ci sono più post da caricare
+      } catch (error) {
+        console.error('Error loading initial posts:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadInitialPosts(); // Esegui la funzione all'avvio
+  }, []); // L'array vuoto assicura che venga eseguito solo al montaggio
 
   return (
     <FeedContext.Provider value={{ feed, loading, hasMore, loadMorePosts }}>
