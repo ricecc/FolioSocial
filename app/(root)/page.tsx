@@ -1,8 +1,8 @@
 
-
+"use client"
 import { fetchPostsFeed } from "@/lib/actions/posts.actions";
 import { fetchUser } from "@/lib/actions/user.actions";
-import { currentUser } from "@clerk/nextjs";
+import { currentUser, useAuth } from "@clerk/nextjs";
 import { redirect, notFound } from "next/navigation";
 import { Suspense } from "react";
 
@@ -13,6 +13,10 @@ import Image from "next/image";
 
 
 export default async function Home() {
+  const {userId} = useAuth()
+  if(userId){
+    redirect('/feed')
+  }
   return (
     <div className="h-screen w-screen">
       <div className="flex justify-center items-start  w-full h-full lg:flex-row flex-col">
