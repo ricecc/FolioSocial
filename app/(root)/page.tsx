@@ -20,7 +20,7 @@ export default async function Home() {
   return (
     <div className="h-screen w-screen">
       <div className="flex justify-center items-start  w-full h-full lg:flex-row flex-col">
-        <div className="h-full flex pt-32 flex-col lg:pl-0 pl-7  space-y-7  ">
+        <div className="h-full flex lg:pt-32 pt-14 flex-col lg:pl-0 pl-7  space-y-7  ">
           <h1 className="text-5xl   font-bold">Benveunto su Book Board</h1>
           <p className="text-xl lg:text-2xl">
             il tuo spazio creativo per vivere i libri
