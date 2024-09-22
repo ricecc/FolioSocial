@@ -1,34 +1,36 @@
 
 
-
+import { fetchPostsFeed } from "@/lib/actions/posts.actions";
 import { fetchUser } from "@/lib/actions/user.actions";
 import { currentUser } from "@clerk/nextjs";
 import { redirect, notFound } from "next/navigation";
+import { Suspense } from "react";
+
+
+import MainFeedSection from "@/components/Feed/MainFeedSection";
+import Image from "next/image";
+
 
 
 export default async function Home() {
-  try {
-
-    const user = await currentUser();
-    if (!user) return notFound();
-
-    const userInfo = await fetchUser(user.id);
-    if (!userInfo?.onboarded) {
-      redirect('/onboarding');
-    }
-
-
-
-
-
-    return (
-      <div className="h-screen flex justify-center items-start ">
-        <h1 className="text-6xl mt-20 text-slate-650 font-extrabold font-fontMain ">Welcome to Book Board</h1>
-        <p>{userInfo?.onboarded}</p>
+  return (
+    <div className="h-screen w-screen">
+      <div className="flex justify-center items-start  w-full h-full lg:flex-row flex-col">
+        <div className="h-full flex pt-32 flex-col lg:pl-0 pl-7  space-y-7  ">
+          <h1 className="text-5xl   font-bold">Benveunto su Book Board</h1>
+          <p className="text-xl lg:text-2xl">
+            il tuo spazio creativo per vivere i libri
+            <span className="block">come mai prima d’ora!</span>
+          </p>
+          <div className="p-3  border rounded-lg w-48 flex justify-center items-center">
+            <p>Come funziona?</p>
+          </div>
+        </div>
+        <div>
+          <Image src='/assets/homeSection.jpg' alt="home page" width={700} height={500}></Image>
+        </div>
       </div>
-    );
-  } catch (error) { 
-    console.error("Error loading page data:", error);
-    return <div>Error loading page data</div>;
-  }
+    </div>
+  )
+
 }

@@ -10,9 +10,6 @@ import { EdgeStoreProvider } from "@/lib/edgestore";
 import MobileTopNavBar from "@/components/navigation/MobileTopNavBar";
 
 
-
-
-
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -37,9 +34,7 @@ export default function RootLayout({
             <MobileTopNavBar />
             <section className="main-container font-fontStrano">
               <EdgeStoreProvider>
-               
                   {children}
-             
                 <SpeedInsights />
                 <Analytics />
               </EdgeStoreProvider>

@@ -71,9 +71,9 @@ export const FeedProvider: React.FC<FeedProviderProps> = ({ children }) => {
     const loadInitialPosts = async () => {
       setLoading(true);
       try {
-        const initialFeed = await fetchPostsFeed(1, 6); // Carica i post iniziali
+        const initialFeed = await fetchPostsFeed(1, 3); // Carica i post iniziali
         setFeed(initialFeed.posts); // Imposta i post iniziali nello stato
-        setHasMore(initialFeed.posts.length >= 6); // Controlla se ci sono più post da caricare
+        setHasMore(initialFeed.posts.length >= 3); // Controlla se ci sono più post da caricare
       } catch (error) {
         console.error('Error loading initial posts:', error);
       } finally {

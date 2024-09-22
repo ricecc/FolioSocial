@@ -1,8 +1,8 @@
 "use client";
 import { useState, useCallback, useMemo } from "react";
-import { fetchPostsFeed, fetchSimilarPosts } from "@/lib/actions/posts.actions";
-import MainFeedSection from "@/components/Feed/MainFeedSection";
-import { Skeleton } from "../ui/skeleton";
+import { fetchSimilarPosts } from "@/lib/actions/posts.actions";
+
+
 import SimilarFeedSection from "./SimilarFeedSection";
 
 interface FeedClientProps {
