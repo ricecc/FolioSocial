@@ -1,4 +1,6 @@
-import { FeedProvider } from "@/context/FeedContent";
+
+import { FeedProvider } from "@/context/FeedContext";
+import { usePathname } from "next/navigation";
 
 
 export default function Layout({ children }: { children: React.ReactNode }) {
@@ -6,5 +8,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <FeedProvider>
             {children}
         </FeedProvider>
+
+
     );
 }

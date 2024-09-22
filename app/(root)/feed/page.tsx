@@ -8,17 +8,17 @@ import { Suspense } from "react";
 
 
 import MainFeedSection from "@/components/Feed/MainFeedSection";
-import Loading from "../loading";
-
+import Loading from "./loading";
 
 export default async function page() {
   try {
-
     const user = await currentUser();
     if (!user) return notFound();
-    
     const userInfo = await fetchUser(user.id);
     if (!userInfo?.onboarded) redirect('/onboarding');
+    
+    const initialFeed = await fetchPostsFeed(1, 3);
+    
     const currentUserInfo = {
       imageCurrentUser: userInfo.image,
       usernameViewer: userInfo.username,
@@ -26,19 +26,13 @@ export default async function page() {
       _idUser: userInfo._id.toString(),
       idUsre: userInfo.id
     };
-   if(user){
+  
     return (
       <Suspense fallback={<Loading></Loading>}>
-          <MainFeedSection currentUserInfo={currentUserInfo} />
+          <MainFeedSection currentUserInfo={currentUserInfo} initalFeed={initialFeed.posts}/>
       </Suspense>
     );
-   }else{
-    return(
-      <div>
-        <p>home page</p>
-      </div>
-    )
-   }
+  
     
   } catch (error) {
     console.error("Error loading page data:", error);

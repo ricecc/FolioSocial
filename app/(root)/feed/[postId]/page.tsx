@@ -4,13 +4,15 @@ import WantToRead from "@/components/saveButton/PostWantToRead";
 import LikeSection from "@/components/post/LikeSection";
 import SaveToggle from "@/components/ui/SaveToggle";
 
-import { fetchPostById, fetchPostsFeed } from "@/lib/actions/posts.actions";
+import { fetchPostById } from "@/lib/actions/posts.actions";
 import { fetchUser } from "@/lib/actions/user.actions";
 import { currentUser } from "@clerk/nextjs";
 import CommentSection from "@/components/post/CommentSection";
 import Link from "next/link";
 import SimilarEntryPoint from "@/components/Feed/SimilarEntryPoint";
 import dynamic from 'next/dynamic'
+import PostHeader from "@/components/post/PostPageComponent/PostHeader";
+import PostImage from "@/components/post/PostPageComponent/PostImage";
 
 
 
@@ -44,18 +46,7 @@ const PostDetails = ({ post, userInfo }: any) => {
   return (
     <section className="flex h-auto justify-center flex-col w-full">
       <div className="w-full flex flex-col lg:flex-row lg:h-[374px]">
-        <div className="bg-zinc-50 min-h-48 pt-6 p-5 border flex flex-col justify-between lg:w-1/2">
-          <div className="pt-5 space-y-2">
-            <p className="font-montserrat font-medium lg:text-5xl text-3xl">{post.book.title}</p>
-            <p className="font-montserrat font-light text-2xl">{post.book.author}</p>
-          </div>
-          <div className="flex flex-col items-end">
-            <Link href={`/profile/${post.author.id}`} className="hover:text-hoverTag">{post.author.username}</Link>
-          </div>
-        </div>
-        <div className="bg-gradient-to-b from-white to-zinc-200 min-h-48 flex justify-center items-center p-5 lg:p-0 lg:w-1/2">
-          <img src={post.image} alt="" className="w-auto h-64 object-contain" />
-        </div>
+        <PostHeader title={post.book.title} author={post.book.author} authorId={post.author.id} authorUsername={post.author.username} postImage={post.image}/>
       </div>
       <div className="grid w-full md:grid-cols-2 grid-cols-1">
         {elements.map((element, index) => {
@@ -120,12 +111,7 @@ const PostDetails = ({ post, userInfo }: any) => {
             );
           } else if (element.type === "image") {
             return (
-              <div key={index} className="row-span-2 flex justify-center relative">
-                <ImageDialog imageSrc={element.data} />
-                <div className="absolute bottom-3 right-3 bg-white rounded-full p-2 flex flex-row space-x-2">
-                  <SaveToggle fromUserId={userInfo._id.toString()} type={"picture"} toElement={element.data} isSaved={userInfo.imageSaved.includes(element.data._id)} />
-                </div>
-              </div>
+              <PostImage imageUrl={element.data} userId={userInfo._id.toString()} imageId={element.data} isSaved={userInfo.imageSaved.includes(element.data._id)}/>
             );
           }
         })}
@@ -135,13 +121,10 @@ const PostDetails = ({ post, userInfo }: any) => {
 };
 
 async function page({ params }: { params: { postId: string } }) {
-
-
   const user = await currentUser();
   if (!user) return null;
   const userInfo = await fetchUser(user.id);
   const post = await fetchPostById(params.postId);
-  console.log(params.postId)
   const currentUserInfo = {
     imageCurrentUser: userInfo.image,
     usernameViewer: userInfo.username,
@@ -165,7 +148,7 @@ async function page({ params }: { params: { postId: string } }) {
           </div>
         </section>
         <section className="flex  w-full mb-7 mx-7 sticky bottom-0 z-10 h-14 bg-zinc-50">
-          <NavigationPosts currentPost={params.postId} />
+          <NavigationPosts currentPost={params.postId}></NavigationPosts>
         </section>
         <section className="flex justify-center items-center mb-3">
           <SimilarEntryPoint currentUserInfo={currentUserInfo} parentId={params.postId} />

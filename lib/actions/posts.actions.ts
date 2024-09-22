@@ -109,7 +109,9 @@ export async function fetchPostById(postId: string) {
 
       })
       .exec();
-    return post
+      const data = JSON.parse(JSON.stringify(post))
+     
+    return data
 
   } catch (error: any) {
     console.error("Error while fetching post:", error.message);

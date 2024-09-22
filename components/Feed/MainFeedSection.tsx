@@ -1,29 +1,34 @@
 "use client";
-import React, { memo, useRef, useEffect, useCallback } from 'react';
+import React, { memo, useRef, useEffect, useCallback, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useFeed } from '@/context/FeedContent';
+
 import QuotePreview from './QuotePreview';
 import ImagePostPreview from './ImagePostPreview';
 import BookCoverPreview from './BookCoverPreview';
 import LikeSection from '../post/LikeSection';
 import Image from 'next/image';
+import { fetchPostsFeed } from '@/lib/actions/posts.actions';
+import { useFeed } from '@/context/FeedContext';
 
 
 
 
 interface Props {
   currentUserInfo: any;
+  initalFeed:any[]
 }
 
-const MainFeedSection: React.FC<Props> = ({ currentUserInfo }) => {
-  const { feed, loading, hasMore, loadMorePosts } = useFeed();
+const MainFeedSection: React.FC<Props> = ({ currentUserInfo,initalFeed }) => {
+  const [feed, setFeed] = useState<any[]>(initalFeed); 
+  const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+  const {setPosts} = useFeed()
   const pathname = usePathname();
 
-
-
   const observerRef = useRef<HTMLDivElement | null>(null);
-
+  
 
   const handleObserver = useCallback(
     (entries: IntersectionObserverEntry[]) => {
@@ -32,8 +37,28 @@ const MainFeedSection: React.FC<Props> = ({ currentUserInfo }) => {
         loadMorePosts();
       }
     },
-    [hasMore, loading, loadMorePosts]
+    [hasMore, loading]
   );
+  const loadMorePosts = useCallback(async () => {
+    if (loading || !hasMore) return;
+
+    setLoading(true);
+    try {
+      const newPage = page + 1;
+      const newFeed = await fetchPostsFeed(newPage, 6); 
+
+      setHasMore(newFeed.posts.length >= 6); 
+      setFeed((prevFeed) => [...prevFeed, ...newFeed.posts]); 
+
+      setPosts(newFeed.posts)
+
+      setPage(newPage);
+    } catch (error) {
+      console.error('Error loading more posts:', error);
+    } finally {
+      setLoading(false);
+    }
+  }, [loading, hasMore, page]);
 
 
   useEffect(() => {
@@ -123,4 +148,4 @@ const MainFeedSection: React.FC<Props> = ({ currentUserInfo }) => {
   );
 };
 
-export default memo(MainFeedSection);
+export default MainFeedSection;

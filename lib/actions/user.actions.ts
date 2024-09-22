@@ -66,11 +66,12 @@ export async function fetchUser(userId: string) {
   try {
     connectToDB()
 
-    return await User.findOne({ id: userId })
+    const user= await User.findOne({ id: userId })
     /*.populate({
        path: 'Communities',
        model: Community
     })*/
+   return JSON.parse(JSON.stringify(user))
   } catch (error: any) {
     throw new Error(`Failed to fetch user: ${error.message}`)
   }
