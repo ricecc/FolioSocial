@@ -70,7 +70,9 @@ export async function createPost({
 }
 
 export async function fetchPostById(postId: string) {
-  console.log("Start fetchPostById")
+  console.log("Start fetchPostById");
+  const startTime = Date.now(); // Inizio del timer
+
   try {
     connectToDB();
     const post = await Post.findById(postId)
@@ -91,33 +93,36 @@ export async function fetchPostById(postId: string) {
         path: 'quotes',
         model: Quote,
         select: "quote page comments",
-        populate:{
-          path:'like',
-          model:User,
-          select:'id image username name lastName'
+        populate: {
+          path: 'like',
+          model: User,
+          select: 'id image username name lastName'
         }
       })
       .populate({
         path: 'reviews',
         model: Review,
         select: "review title comments",
-        populate:{
-          path:'like',
-          model:User,
-          select:'id image username name lastName'
+        populate: {
+          path: 'like',
+          model: User,
+          select: 'id image username name lastName'
         }
-
       })
       .exec();
-      const data = JSON.parse(JSON.stringify(post))
-     
-    return data
+
+    const data = JSON.parse(JSON.stringify(post));
+
+    const endTime = Date.now(); // Fine del timer
+
+    return data;
 
   } catch (error: any) {
     console.error("Error while fetching post:", error.message);
     throw new Error("Unable to fetch thread");
   }
 }
+
 
 export async function fetchPostsFeed(pageNumber = 1, pageSize = 3) {
   console.log("Start fetchPostsFeed");

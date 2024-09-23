@@ -1,13 +1,12 @@
 
 "use client"
-import { fetchPostsFeed } from "@/lib/actions/posts.actions";
-import { fetchUser } from "@/lib/actions/user.actions";
-import { currentUser, useAuth } from "@clerk/nextjs";
-import { redirect, notFound } from "next/navigation";
-import { Suspense } from "react";
+
+import { useAuth } from "@clerk/nextjs";
+import { redirect } from "next/navigation";
 
 
-import MainFeedSection from "@/components/Feed/MainFeedSection";
+
+
 import Image from "next/image";
 
 

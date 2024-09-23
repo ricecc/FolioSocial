@@ -60,6 +60,27 @@ export async function updateUser({
     throw new Error(`Failed to create/update user: ${error.message}`);
   }
 }
+interface UpdateImageParams{
+  userId:string,
+  image:string
+}
+export async function updateImageUser({userId, image}:UpdateImageParams){
+  try {
+    connectToDB();
+    
+   await User.findOneAndUpdate(
+      { id: userId },
+      {
+        image,
+        onboarded: true,
+      },
+      { upsert: true }
+    );
+    
+  } catch (error:any) {
+    throw new Error(`Failed to update image user: ${error.message}`);
+  }
+}
 
 export async function fetchUser(userId: string) {
   console.log("Start fetchUser")

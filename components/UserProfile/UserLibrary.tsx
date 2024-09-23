@@ -16,7 +16,7 @@ interface Post {
     author: string;
   };
   image: string;
-  like:string[]
+  like: string[]
 }
 
 interface Props {
@@ -37,8 +37,17 @@ const UserLibrary = ({ posts, isYourPost }: Props) => {
               <div className="flex flex-row items-center justify-end space-x-2 p-3 h-1/6 w-full">
 
                 <div className='flex flex-row items-center'>
-                  <DeletePost postId={post._id} />
-                  <Badge variant="secondary">Modifica</Badge>
+                  {isYourPost ? (
+                    <>
+                      <DeletePost postId={post._id} />
+                      <Badge variant="secondary">Modifica</Badge>
+                    </>
+                  ) : (
+                    <>
+                    
+                    </>
+                  )}
+
                 </div>
               </div>
               <Link
@@ -51,7 +60,7 @@ const UserLibrary = ({ posts, isYourPost }: Props) => {
             <div className="flex flex-col p-3">
               <div className="flex flex-col items-end justify-end pt-2 pb-2">
                 <Badge className='flex flex-row space-x-1 items-center '>
-                  <FaHeart /> {post.like.length}
+                  <FaHeart /> {post.like ? post.like.length : 0}
                 </Badge>
               </div>
               <div>

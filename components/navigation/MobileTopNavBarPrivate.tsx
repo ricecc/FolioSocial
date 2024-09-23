@@ -83,7 +83,7 @@ function MobileTopNavBarPrivate() {
                                 className="cursor-pointer"
                                 onClick={handleCloseMenu}
                             >
-                                <Link href="/" className="flex flex-row items-center">
+                                <Link href="/feed" className="flex flex-row items-center">
                                     <LibraryBig className="mr-2 h-4 w-4" />
                                     <span>Home</span>
                                 </Link>

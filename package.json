@@ -53,6 +53,7 @@
     "snappy": "^7.2.2",
     "sonner": "^1.5.0",
     "supports-color": "^9.4.0",
+    "svix": "^1.35.0",
     "tailwind-merge": "^2.5.2",
     "tailwindcss-animate": "^1.0.7",
     "tesseract.js": "^5.1.1",

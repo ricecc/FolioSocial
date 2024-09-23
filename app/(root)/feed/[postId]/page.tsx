@@ -1,6 +1,4 @@
 
-import ImageDialog from "@/components/ImageDialog/ImageDialog";
-import WantToRead from "@/components/saveButton/PostWantToRead";
 import LikeSection from "@/components/post/LikeSection";
 import SaveToggle from "@/components/ui/SaveToggle";
 
@@ -8,17 +6,18 @@ import { fetchPostById } from "@/lib/actions/posts.actions";
 import { fetchUser } from "@/lib/actions/user.actions";
 import { currentUser } from "@clerk/nextjs";
 import CommentSection from "@/components/post/CommentSection";
-import Link from "next/link";
 import SimilarEntryPoint from "@/components/Feed/SimilarEntryPoint";
 import dynamic from 'next/dynamic'
 import PostHeader from "@/components/post/PostPageComponent/PostHeader";
 import PostImage from "@/components/post/PostPageComponent/PostImage";
+import { Suspense } from "react";
+import Loading from "./loading";
 
 
 
 
 const NavigationPosts = dynamic(() => import("@/components/post/NavigationPosts"), { ssr: false })
-
+const WantToRead = dynamic(() => import('@/components/saveButton/PostWantToRead'), { ssr: false });
 
 
 function filterUserLiked(users: any) {
@@ -46,7 +45,7 @@ const PostDetails = ({ post, userInfo }: any) => {
   return (
     <section className="flex h-auto justify-center flex-col w-full">
       <div className="w-full flex flex-col lg:flex-row lg:h-[374px]">
-        <PostHeader title={post.book.title} author={post.book.author} authorId={post.author.id} authorUsername={post.author.username} postImage={post.image}/>
+        <PostHeader title={post.book.title} author={post.book.author} authorId={post.author.id} authorUsername={post.author.username} postImage={post.image} />
       </div>
       <div className="grid w-full md:grid-cols-2 grid-cols-1">
         {elements.map((element, index) => {
@@ -62,19 +61,19 @@ const PostDetails = ({ post, userInfo }: any) => {
                 </div>
 
                 <div className="flex flex-col">
-                
-                    <LikeSection
-                      fromUserImage={userInfo.image}
-                      fromUserUsername={userInfo.username}
-                      userLiked={filterUserLiked(element.data.like)}
-                      numLike={element.data.like.length}
-                      fromUserId={userInfo._id.toString()}
-                      toElement={element.data._id.toString()}
-                      liked={userInfo.quoteLiked.includes(element.data._id.toString())}
-                      isSaved={userInfo.quoteSaved.includes(element.data._id)}
-                      type="quote"
-                    />
-             
+
+                  <LikeSection
+                    fromUserImage={userInfo.image}
+                    fromUserUsername={userInfo.username}
+                    userLiked={filterUserLiked(element.data.like)}
+                    numLike={element.data.like.length}
+                    fromUserId={userInfo._id.toString()}
+                    toElement={element.data._id.toString()}
+                    liked={userInfo.quoteLiked.includes(element.data._id.toString())}
+                    isSaved={userInfo.quoteSaved.includes(element.data._id)}
+                    type="quote"
+                  />
+
                   <CommentSection numComment={element.data.comments ? element.data.comments.length : 0} _idCurrentUser={userInfo._id.toString()} refId={element.data._id.toString()} refType="Quote" imageCurrentUser={userInfo.image} />
                 </div>
 
@@ -91,19 +90,18 @@ const PostDetails = ({ post, userInfo }: any) => {
                   <p>{element.data.review}</p>
                 </div>
                 <div className="flex flex-col">
-                
-                    <LikeSection
-                      fromUserImage={userInfo.image}
-                      fromUserUsername={userInfo.username}
-                      userLiked={filterUserLiked(element.data.like)}
-                      numLike={element.data.like.length}
-                      fromUserId={userInfo._id.toString()}
-                      toElement={element.data._id.toString()}
-                      liked={userInfo.reviewLiked.includes(element.data._id)}
-                      isSaved={userInfo.reviewSaved.includes(element.data._id)}
-                      type="review"
-                    />
-                 
+                  <LikeSection
+                    fromUserImage={userInfo.image}
+                    fromUserUsername={userInfo.username}
+                    userLiked={filterUserLiked(element.data.like)}
+                    numLike={element.data.like.length}
+                    fromUserId={userInfo._id.toString()}
+                    toElement={element.data._id.toString()}
+                    liked={userInfo.reviewLiked.includes(element.data._id)}
+                    isSaved={userInfo.reviewSaved.includes(element.data._id)}
+                    type="review"
+                  />
+
                   <CommentSection numComment={element.data.comments ? element.data.comments.length : 0} _idCurrentUser={userInfo._id.toString()} refId={element.data._id.toString()} refType="Review" imageCurrentUser={userInfo.image} />
                 </div>
 
@@ -111,7 +109,7 @@ const PostDetails = ({ post, userInfo }: any) => {
             );
           } else if (element.type === "image") {
             return (
-              <PostImage imageUrl={element.data} userId={userInfo._id.toString()} imageId={element.data} isSaved={userInfo.imageSaved.includes(element.data._id)}/>
+              <PostImage imageUrl={element.data} userId={userInfo._id.toString()} imageId={element.data} isSaved={userInfo.imageSaved.includes(element.data._id)} />
             );
           }
         })}
@@ -138,7 +136,9 @@ async function page({ params }: { params: { postId: string } }) {
 
     <div className="h-full z-0">
       <div className="h-full flex-col flex justify-start items-center">
-        <PostDetails post={post} userInfo={userInfo} />
+        <Suspense fallback={<p>ciaosss</p>}>
+          <PostDetails post={post} userInfo={userInfo} />
+        </Suspense>
         <section className="flex h-32 justify-center flex-col w-full bg-slate-950 text-zinc-50 mt-10 mb-7 ">
           <div className="w-full flex justify-start items-center hover:bg-slate-900 hover:text-zinc-50 cursor-pointer h-1/2 px-8 ">
             <p className="font-fontMain lg:text-2xl text-md">Compra</p>

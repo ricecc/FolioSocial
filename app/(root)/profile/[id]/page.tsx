@@ -3,7 +3,7 @@ import { fetchUser, fetchUserInfoForProfile, startFollow } from "@/lib/actions/u
 import MainSectionProfile from "@/components/UserProfile/MainSectionProfile";
 import FollowButton from "@/components/UserProfile/FollowButton";
 import DialogFollower from "@/components/UserProfile/DialogFollower"
-import Image from "next/image";
+
 
 async function page({ params }: { params: { id: string } }) {
   if (!params.id) return null;
@@ -19,57 +19,7 @@ async function page({ params }: { params: { id: string } }) {
   const userToWatch = await fetchUserInfoForProfile(params.id)
 
 
-  function filterUserFollower(users: any) {
-    return users.map((user: any) => (
-      {
-        id: user.id,
-        _id: user._id.toString(),
-        image: user.image,
-        username: user.username
-      }
-    ))
-  }
-
-
-  function filterUserPosts(posts: any) {
-    return posts.map((post: any) => (
-      {
-        id: post._id.toString(),
-        book: {
-          id: post.book._id.toString(),
-          title: post.book.title,
-          author: post.book.author,
-        },
-        image: post.image
-      }
-    ))
-  }
-
-  function filterQuoteLiked(quoteSaved: any) {
-    return quoteSaved.map((quote: any) => ({
-      id: quote._id.toString(),
-      page: quote.page,
-      quote: quote.quote
-    }))
-  }
-
-  function filterReviewLiked(reviewSaved: any) {
-    return reviewSaved.map((review: any) => ({
-      id: review._id.toString(),
-      title: review.title,
-      review: review.review
-    }))
-  }
-
-  function filterSavedBooks(savedBooks: any) {
-    return savedBooks.map((savedBook: any) => ({
-      id: savedBook._id.toString(),
-      title: savedBook.title,
-      author: savedBook.author,
-      largeImage: savedBook.largeImage
-
-    }))
-  }
+  
   const isFollowing = userToWatch.follower.some(
     (follower: any) => follower._id.toString() === fromUser._id.toString()
   );
@@ -91,7 +41,7 @@ async function page({ params }: { params: { id: string } }) {
               </div>
               <div className="flex flex-row space-x-1">
                 <p className="text-sm font-sans pb-2">@{userToWatch.username} -</p>
-                <DialogFollower numFollower={userToWatch.follower.length} followerUsers={filterUserFollower(userToWatch.follower)} />
+                <DialogFollower numFollower={userToWatch.follower.length} followerUsers={userToWatch.follower} />
               </div>
 
             </div>
@@ -99,10 +49,10 @@ async function page({ params }: { params: { id: string } }) {
         </div>
       </div>
       <MainSectionProfile
-        posts={filterUserPosts(userToWatch.posts)}
-        quoteSaved={filterQuoteLiked(userToWatch.quoteSaved)}
-        reviewSaved={filterReviewLiked(userToWatch.reviewSaved)}
-        savedBooks={filterSavedBooks(userToWatch.savedBooks)}
+        posts={userToWatch.posts}
+        quoteSaved={userToWatch.quoteSaved}
+        reviewSaved={userToWatch.reviewSaved}
+        savedBooks={userToWatch.savedBooks}
         imageSaved={userToWatch.imageSaved} />
     </div>
   )

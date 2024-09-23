@@ -4,7 +4,8 @@ import { Suspense, useState, lazy } from "react";
 
 
 import { fetchSimilarPosts } from '@/lib/actions/posts.actions';
-import Loading from '@/app/(root)/loading';
+import Loading from '@/app/(root)/feed/loading';
+
 const SimilarPostsFeed = lazy(() => import("@/components/Feed/SimilarPostsFeed"));
 interface Params{
     parentId:string;

@@ -39,7 +39,7 @@ function MobileTopNavBarPublic() {
                     <SheetContent side='left'>
                         <div className="flex flex-col">
                             <Link href="" className="flex h-16  flex-row items-center">
-                                <span className="text-2xl">About us</span>
+                                <span className="text-xl">About us</span>
                             </Link>
                             <Link href="" className="flex   h-16 flex-row items-center">
                                 <span className="text-2xl">Contact</span>

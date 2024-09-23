@@ -14,13 +14,14 @@ export default async function page() {
   try {
     const user = await currentUser();
     if (!user) return notFound();
+    
     const userInfo = await fetchUser(user.id);
     if (!userInfo?.onboarded) redirect('/onboarding');
     
     const initialFeed = await fetchPostsFeed(1, 3);
     
     const currentUserInfo = {
-      imageCurrentUser: userInfo.image,
+      imageCurrentUser: user.imageUrl,
       usernameViewer: userInfo.username,
       postLiked: userInfo.postLiked,
       _idUser: userInfo._id.toString(),
