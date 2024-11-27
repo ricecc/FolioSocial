@@ -79,6 +79,7 @@ const MainFeedSection: React.FC<Props> = ({ currentUserInfo, initalFeed }) => {
     };
   }, [handleObserver]);
 
+
   return (
     <>
       <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mx-auto mt-3">
@@ -95,7 +96,12 @@ const MainFeedSection: React.FC<Props> = ({ currentUserInfo, initalFeed }) => {
                   </div>
                   <Link href={{
                     pathname: `/feed/${post._id}`,
-                    query: { title: post.book.title, author: post.book.author, bookCover:post.image,authorId:post.author.id,authorImage:post.author.image,authorUsername:post.author.username },
+                    query: { title: post.book.title,
+                       author: post.book.author, 
+                       bookCover:post.image,authorId:post.author.id,
+                       authorImage:post.author.image,
+                       authorUsername:post.author.username 
+                      },
                   }}
                     className='h-5/6 w-full'>
                     {index % 4 === 0 && post.quotes.length > 0 ? (

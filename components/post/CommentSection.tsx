@@ -17,8 +17,8 @@ const CommentSection = ({refType, numComment, _idCurrentUser, refId, imageCurren
     const [comments, setComments] = useState<any[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [hasMore, setHasMore] = useState(true);
-    const [page, setPage] = useState(1); // Stato per la paginazione
-    const [isClicked, setIsClicked] = useState(false); // Stato per il dialogo
+    const [page, setPage] = useState(1); 
+    const [isClicked, setIsClicked] = useState(false); 
     
     const loadComments = async (pageNum: number) => {
         if (isLoading) return;
@@ -28,7 +28,7 @@ const CommentSection = ({refType, numComment, _idCurrentUser, refId, imageCurren
            
             setComments(prevComments => [...prevComments, ...newComments]);
             setHasMore(isNext);
-            setPage(pageNum + 1); // Incrementa la pagina
+            setPage(pageNum + 1); 
             
         } catch (error) {
             console.error("Failed to fetch comments:", error);

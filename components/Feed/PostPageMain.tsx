@@ -13,23 +13,25 @@ export default async function PostPageMain({ postId }: { postId: string }) {
     if (!user) return (<p>utente non trovato</p>);
     const userInfo = await fetchUser(user.id)
 
-    console.log(post)
+  
     const elements = [
         ...post.quotes.map((quote: any) => ({ type: "quote", data: quote })),
         ...post.reviews.map((review: any) => ({ type: "review", data: review })),
         ...post.postImages.map((image: any) => ({ type: "image", data: image })),
     ];
+
+
     return (
         <section className="flex h-auto justify-center flex-col w-full mt-5 mb-7">
             <div className="grid w-full gap-16 px-10 md:grid-cols-2 grid-cols-1">
                 {elements.map((element, index) => {
                     if (element.type === "quote") {
                         return (
-                            <div className='flex flex-col space-y-3'>
-                                <div key={index} className="col-span-1 p-8 min-h-[299px] shadow-md  flex justify-between flex-col rounded-[15px]  w-[741px] bg-white" >
-                                    <p className='text-[17px]'>{element.data.quote}</p>
+                            <div className='flex flex-col space-y-3 justify-center items-center'>
+                                <div key={index} className="col-span-1 p-8 min-h-[299px] shadow-md  flex justify-center items-center flex-col rounded-[15px]  w-[441px] lg:w-[741px] bg-white" >
+                                    <p className='text-[17px] font-montserrat'>{element.data.quote}</p>
                                 </div>
-                                <div className='pl-5'>
+                                <div className=' w-full px-8'>
                                     <LikeSection
                                         fromUserImage={userInfo.image}
                                         fromUserUsername={userInfo.username}
@@ -47,14 +49,14 @@ export default async function PostPageMain({ postId }: { postId: string }) {
                         );
                     } else if (element.type === "review") {
                         return (
-                            <div className='flex flex-col space-y-3'>
-                                <div key={index} className="col-span-1 p-8 min-h-[299px] shadow-md  rounded-[15px]  w-[741px] bg-white" >
+                            <div className='flex flex-col space-y-3 justify-center items-center'>
+                                <div key={index} className="col-span-1 p-8 min-h-[299px] shadow-md  rounded-[15px]  w-[441px] lg:w-[741px] bg-white justify-center items-center " >
                                     <div className='flex flex-col justify-center space-y-6'>
                                         <h2 className='font-semibold'>{element.data.title}</h2>
                                         <p className='text-[17px]'>{element.data.review}</p>
                                     </div>
                                 </div>
-                                <div className='pl-5'>
+                                <div className='w-full px-8'>
                                     <LikeSection
                                         fromUserImage={userInfo.image}
                                         fromUserUsername={userInfo.username}

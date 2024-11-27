@@ -41,7 +41,7 @@ const LikeSection = ({ fromUserUsername, userLiked, numLike, fromUserId, toEleme
         }
     }
     return (
-        <div className="flex flex-row justify-between items-center w-full ">
+        <div className="flex flex-row justify-between items-center ">
             <div>
                 {count === 1 ? (
                     <p className='text-sm'>

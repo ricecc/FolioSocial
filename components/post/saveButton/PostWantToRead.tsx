@@ -63,7 +63,7 @@ const WantToRead = ({ userId, bookId, saved }: SaveButtonProps) => {
 
     return (
         <div
-            className="hover:bg-slate-900 hover:text-zinc-50 w-full h-full flex items-center justify-start cursor-pointer px-8"
+            className="hover:bg-slate-900 hover:text-zinc-50 w-full h-[70px] flex items-center justify-start cursor-pointer px-8"
             onClick={handleClick}
         >
             <p className="font-fontMain lg:text-2xl text-md">
