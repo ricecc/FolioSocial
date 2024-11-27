@@ -1,3 +1,4 @@
+"use client"
 import React, { useState } from 'react';
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogFooter, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button"; // Assumendo che ci sia un bottone già stilizzato da shadcn

@@ -43,7 +43,7 @@ const SimilarFeedSection: React.FC<Props> = ({
     imageCurrentUser, numComment, usersLiked, isLiked, postId, quote, bookTitle, bookAuthor, bookCover, userImage, userId, username, postAuthorId, usernameViewer, imagePost, index
 }) => {
     const pathname = usePathname();
-    const isOnYourPosts = pathname === '/your-posts';
+
 
     const content = index % 4 === 0 && quote
         ? <QuotePreview quote={quote} />

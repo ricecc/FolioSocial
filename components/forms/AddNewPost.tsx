@@ -118,7 +118,7 @@ export default function AddNewPost({ idUser }: UserProps) {
                 }
             })
         );
-        router.push('/your-posts');
+        router.push(`/profile/${idUser}/library`);
     };
 
 

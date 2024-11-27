@@ -73,7 +73,7 @@ const LikeSection = ({ fromUserUsername, userLiked, numLike, fromUserId, toEleme
                 ) : (<></>)}
             </div>
 
-            <div className="flex flex-row items-center space-x-3">
+            <div className="flex flex-row items-center">
                 <HeartToggle
                     fromUserId={fromUserId}
                     toElement={toElement}

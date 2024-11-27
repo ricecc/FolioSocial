@@ -82,7 +82,7 @@ export async function updateImageUser({userId, image}:UpdateImageParams){
   }
 }
 
-export async function fetchUser(userId: string) {
+export async function fetchUser(userId:string) {
   console.log("Start fetchUser")
   try {
     connectToDB()

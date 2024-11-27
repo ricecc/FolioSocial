@@ -17,7 +17,7 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { User, Plus, LibraryBig } from "lucide-react";
-import { UserButton } from "@clerk/nextjs";
+import { useAuth, UserButton } from "@clerk/nextjs";
 
 
 interface User {
@@ -65,7 +65,7 @@ function MobileTopNavBarPrivate() {
     function handleCloseMenu() {
         setIsOpen(false);
     }
-  
+    const {userId} = useAuth()
         return (
             <section className="flex w-full flex-row items-center justify-between bg-zinc-50 p-3 sticky top-0 z-10">
                 <div className="m-3 items-center justify-center">
@@ -92,7 +92,7 @@ function MobileTopNavBarPrivate() {
                                 className="cursor-pointer"
                                 onClick={handleCloseMenu}
                             >
-                                <Link href="/your-posts" className="flex flex-row items-center">
+                                <Link href={`/profile/${userId}`} className="flex flex-row items-center">
                                     <User className="mr-2 h-4 w-4" />
                                     <span>Profilo</span>
                                 </Link>

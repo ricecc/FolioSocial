@@ -1,3 +1,4 @@
+"use client"
 import React, { useState } from 'react';
 import ImageDialog from '../ImageDialog/ImageDialog';
 import BookPreview from '../BookPreview/BookPreview';

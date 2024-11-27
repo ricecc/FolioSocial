@@ -23,7 +23,7 @@ const Post = ({ src, alt, userImage, bookId, userId, link, username, postAuthorI
 
     const router = useRouter()
     const pathname = usePathname();
-    const isOnYourPosts = pathname === '/your-posts';
+
 
 
     const redirectToLink = () => {

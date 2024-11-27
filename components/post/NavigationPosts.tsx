@@ -24,14 +24,18 @@ const NavigationPosts = ({ currentPost }: Params) => {
  
   const goToPrevPost = () => {
     if (prevPost) {
-      router.push(`/feed/${prevPost._id.toString()}`);
-    } 
+      router.push(
+        `/feed/${prevPost._id.toString()}?title=${encodeURIComponent(prevPost.book.title)}&author=${encodeURIComponent(prevPost.book.author)}&bookCover=${encodeURIComponent(prevPost.image)}&authorId=${encodeURIComponent(prevPost.author.id)}`
+      );
+    }
   };
-
+  
   const goToNextPost = () => {
     if (nextPost) {
-      router.push(`/feed/${nextPost._id.toString()}`);
-    } 
+      router.push(
+        `/feed/${nextPost._id.toString()}?title=${encodeURIComponent(nextPost.book.title)}&author=${encodeURIComponent(nextPost.book.author)}&bookCover=${encodeURIComponent(nextPost.image)}&authorId=${encodeURIComponent(nextPost.author.id)}`
+      );
+    }
   };
 
   return (

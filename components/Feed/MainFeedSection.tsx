@@ -16,19 +16,19 @@ import { useFeed } from '@/context/FeedContext';
 
 interface Props {
   currentUserInfo: any;
-  initalFeed:any[]
+  initalFeed: any[]
 }
 
-const MainFeedSection: React.FC<Props> = ({ currentUserInfo,initalFeed }) => {
-  const [feed, setFeed] = useState<any[]>(initalFeed); 
+const MainFeedSection: React.FC<Props> = ({ currentUserInfo, initalFeed }) => {
+  const [feed, setFeed] = useState<any[]>(initalFeed);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
-  const {setPosts} = useFeed()
+  const { setPosts } = useFeed()
   const pathname = usePathname();
 
   const observerRef = useRef<HTMLDivElement | null>(null);
-  
+
 
   const handleObserver = useCallback(
     (entries: IntersectionObserverEntry[]) => {
@@ -45,10 +45,10 @@ const MainFeedSection: React.FC<Props> = ({ currentUserInfo,initalFeed }) => {
     setLoading(true);
     try {
       const newPage = page + 1;
-      const newFeed = await fetchPostsFeed(newPage, 6); 
+      const newFeed = await fetchPostsFeed(newPage, 6);
 
-      setHasMore(newFeed.posts.length >= 6); 
-      setFeed((prevFeed) => [...prevFeed, ...newFeed.posts]); 
+      setHasMore(newFeed.posts.length >= 6);
+      setFeed((prevFeed) => [...prevFeed, ...newFeed.posts]);
 
       setPosts(newFeed.posts)
 
@@ -89,11 +89,15 @@ const MainFeedSection: React.FC<Props> = ({ currentUserInfo,initalFeed }) => {
                 <div className="w-[320px] sm:w-[250px] md:w-[450px] h-[350px] flex justify-between flex-col items-center relative">
                   <div className='flex flex-row items-center space-x-2 p-3 h-1/6 w-full'>
                     <Image src={post.author.image} alt={post.author.username} width={28} height={28} className="object-cover rounded-full w-8 h-8" />
-                    <Link href={`/profile/${post.author.id}`}>
+                    <Link href={`/profile/${post.author.id}/library`}>
                       <p>{post.author.username}</p>
                     </Link>
                   </div>
-                  <Link href={`/feed/${post._id}`} className='h-5/6 w-full'>
+                  <Link href={{
+                    pathname: `/feed/${post._id}`,
+                    query: { title: post.book.title, author: post.book.author, bookCover:post.image,authorId:post.author.id,authorImage:post.author.image,authorUsername:post.author.username },
+                  }}
+                    className='h-5/6 w-full'>
                     {index % 4 === 0 && post.quotes.length > 0 ? (
                       <QuotePreview quote={post.quotes[0].quote} />
                     ) : index % 2 === 0 ? (
@@ -105,19 +109,19 @@ const MainFeedSection: React.FC<Props> = ({ currentUserInfo,initalFeed }) => {
                 </div>
                 <div className='flex flex-col p-3'>
                   <div className='flex flex-col space-y-1 justify-between pt-2 pb-2'>
-                    
-                      <LikeSection
-                        fromUserImage={currentUserInfo.imageCurrentUser}
-                        fromUserUsername={currentUserInfo.usernameViewer}
-                        userLiked={post.like}
-                        numLike={post.like.length}
-                        fromUserId={currentUserInfo._idUser}
-                        toElement={post._id}
-                        liked={currentUserInfo.postLiked.includes(post._id.toString())}
-                        isSaved={false}
-                        type="post"
-                      />
-                 
+
+                    <LikeSection
+                      fromUserImage={currentUserInfo.imageCurrentUser}
+                      fromUserUsername={currentUserInfo.usernameViewer}
+                      userLiked={post.like}
+                      numLike={post.like.length}
+                      fromUserId={currentUserInfo._idUser}
+                      toElement={post._id}
+                      liked={currentUserInfo.postLiked.includes(post._id.toString())}
+                      isSaved={false}
+                      type="post"
+                    />
+
                   </div>
                   <div>
                     <p className='font-md font-medium hover:text-hoverTag'>{post.book.title}</p>
